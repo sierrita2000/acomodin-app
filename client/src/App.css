@@ -1,0 +1,39 @@
+:root {
+  --Crimson: "Crimson Pro", serif;
+  --Montserrat: "Montserrat", sans-serif;
+  --Indie:"Indie Flower", cursive;
+  --azulClaro: rgb(163, 214, 227);
+  --azulOscuro: rgb(58, 82, 135);
+  --verdeClaro: rgb(113, 161, 108);
+  --verdeGastado: rgb(158, 192, 153);
+  --verdeOscuro: rgb(110, 145, 104);
+  --marron: rgb(143, 124, 96);
+  --negro: rgb(40, 40, 40);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+button {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  padding: .5rem 1rem;
+  cursor: pointer;
+  transition: all .1s ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.1);
+}
+
+button:active {
+  transform: scale(1);
+}

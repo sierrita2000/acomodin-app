@@ -1,0 +1,185 @@
+.login {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+}
+
+/* LOGIN IZQUIERDA */
+
+.login__izq {
+    height: 100%;
+    width: 50%;
+    background-color: var(--azulClaro);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.login__izq > img {
+    height: 8rem;
+}
+
+.login__izq > h1 {
+    font-family: var(--Crimson);
+    font-size: 35px;
+    color: var(--azulOscuro);
+    margin: 0 0 2rem;
+}
+
+.login__izq__formulario {
+    height: fit-content;
+    width: 60%;
+    background-color: var(--azulOscuro);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.login__izq__formulario img {
+    height: 8rem;
+    filter: invert(95%);
+}
+
+.login__izq__formulario form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: whitesmoke;
+    font-family: var(--Crimson);
+}
+
+.login__izq__formulario form div {
+    width: 80%;
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin: 2rem 0;
+}
+
+.login__izq__formulario form div label {
+    position: absolute;
+    top: -1.8rem;
+    left: 0;
+    font-weight: bold;
+    font-size: 25px;
+    transition: all .3s ease-in-out;
+}
+
+.login__izq__formulario form div input {
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    border-bottom: 2px solid whitesmoke;
+    padding: .3rem 0;
+    color: whitesmoke;
+    font-family: var(--Crimson);
+    font-style: italic;
+    font-size: 20px;
+}
+
+.login__form__password button {
+    position: absolute;
+    padding: .5rem 0;
+    right: 0;
+}
+
+.login__form__password button i {
+    font-size: 18px;
+    color: whitesmoke;
+}
+
+/* AVERIGUAR CÓMO HACER PARA QUE SE MANTENAGA ARRIBA TANTO SI HACES FOCUS COMO SI TIENE ALGO ESCRITO */
+.login__izq__formulario form div input:focus ~ label{
+    top: -1.8rem;
+}
+
+.login__btn__iniciar {
+    width: 80%;
+    font-size: 24px;
+    font-weight: bolder;
+    font-family: var(--Crimson);
+    letter-spacing: 2px;
+    background-color: whitesmoke;
+    color: var(--azulOscuro);
+}
+
+.login__btn__iniciar:hover {
+    transform: scale(1.05);
+}
+
+/* FIN LOGIN IZQUIERDA */
+
+/* LOGIN DERECHA */
+
+.login__der {
+    height: 100%;
+    width: 50%;
+    background: url("../../fondo-login.png") no-repeat;
+    background-size: cover;
+    padding: 4rem 6rem;
+    box-shadow: rgba(0, 0, 0, 0.25) -14px 0 28px, rgba(0, 0, 0, 0.22) -10px 0 10px;
+}
+
+.login__der > div {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    background-color: var(--verdeClaro);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    text-align: center;
+    color: whitesmoke;
+}
+
+.login__der > div h2 {
+    font-size: 40px;
+    font-family: var(--Crimson);
+    margin: 0 2rem;
+    filter: drop-shadow(0 0 1px black);
+}
+
+.login__der > div a {
+    text-decoration: none;
+    color: whitesmoke;
+    cursor: pointer;
+    padding: 1.5rem 3rem;
+    border: 4px solid whitesmoke;
+    border-radius: 50%;
+    background-color: var(--azulOscuro);
+    font-size: 30px;
+    margin: 2rem 0;
+    box-shadow: rgba(0, 0, 0, 0.45) 0px 5px 15px;
+    transition: all .3s ease-in-out;
+}
+
+.login__der > div a:hover {
+    transform: scale(1.05);
+    box-shadow: rgba(0, 0, 0, 0.45) 4px 12px 20px;
+}
+
+.login__der > div p {
+    margin: 0 4rem;
+    font-size: 22px;
+    font-style: italic;
+    font-weight: bold;
+    z-index: 1;
+    filter: drop-shadow(0 0 1px black);
+}
+
+.login__der > div img {
+    position: absolute;
+    bottom: 2rem;
+    width: 100%;
+    filter: invert(95%) opacity(40%);
+}
+
+/* FIN LOGIN DERECHA */

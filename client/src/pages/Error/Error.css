@@ -1,0 +1,58 @@
+.error {
+    height: 100vh;
+    width: 100%;
+    background: url("../../fondo.png") no-repeat;
+    background-size: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.error__dibujo {
+    display: flex;
+    align-items: center;
+}
+
+.error__dibujo p {
+    font-family: var(--Montserrat);
+    font-size: 350px;
+    font-weight: bolder;
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.8));
+    color: var(--negro);
+}
+
+.error__dibujo img {
+    height: 20rem;
+    margin: 0 2rem;
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.8));
+}
+
+.error h1 {
+    font-family: var(--Crimson);
+    font-size: 40px;
+    color: var(--negro);
+}
+
+.error > p {
+    font-size: 24px;
+    font-family: var(--Crimson);
+    font-style: italic;
+    margin: 1.5rem 0;
+    color: var(--negro);
+}
+
+.error a {
+    font-family: var(--Montserrat);
+    font-size: 30px;
+    font-weight: bolder;
+    text-decoration: none;
+    color: whitesmoke;
+    padding: 1rem 6rem;
+    background-color: var(--negro);
+    transition: all .3s ease-in-out;
+}
+
+.error a:hover {
+    transform: scale(1.05);
+}

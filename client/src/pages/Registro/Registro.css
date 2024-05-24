@@ -1,0 +1,66 @@
+.registro {
+    min-height: 100vh;
+    width: 100%;
+    background: url('../../fondo.png') no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* CABECERA */
+
+.registro__cabecera {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.registro__cabecera img {
+    height: 5rem;
+}
+
+.registro__cabecera h1 {
+    font-family: var(--Crimson);
+    font-size: 28px;
+    color: var(--azulOscuro);
+    margin: 0 0 1.5rem;
+}
+
+.registro__cabecera__pasos {
+    width: 85%;
+    display: flex;
+}
+
+.registro__cabecera__pasos .pasos__paso {
+    width: 20%;
+    display: flex;
+    justify-content: center;
+    border: 4px solid var(--azulOscuro);
+    background-color: var(--verdeGastado);
+    transition: all .3s ease-in-out;
+}
+
+.registro__cabecera__pasos .pasos__paso .pasos__paso__boton {
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+    font-family: var(--Montserrat);
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: var(--azulOscuro);
+    transition: all .3s ease-in-out;
+}
+
+.registro__cabecera__pasos .pasos__paso__activo {
+    width: 40%;
+    background-color: var(--verdeOscuro);
+}
+
+.registro__cabecera__pasos .pasos__paso__activo .pasos__paso__boton {
+    font-size: 20px;
+}
+/* FIN CABECERA */
