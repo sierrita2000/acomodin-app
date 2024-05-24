@@ -1,0 +1,108 @@
+.datos_camping {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+}
+
+.datos_camping__form {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 5% 0 0;
+}
+
+.datos_camping form {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.datos_camping form div {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    margin: .6rem 0;
+}
+
+.datos_camping form div label {
+    font-size: 22px;
+    font-family: var(--Crimson);
+    font-weight: bold;
+    margin: 0 1rem 0 0;
+    color: var(--azulOscuro);
+}
+
+.datos_camping form div input {
+    width: inherit;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    border-bottom: 2px solid var(--azulOscuro);
+    padding: .3rem 0;
+    font-family: var(--Crimson);
+    color: var(--azulOscuro);
+    font-style: italic;
+    font-size: 20px;
+}
+
+.datos_camping__form__password {
+    position: relative;
+}
+
+.datos_camping__form__password button {
+    position: absolute;
+    right: 0;
+    padding: .5rem 0;
+}
+
+.datos_camping__form__password button i {
+    font-size: 16px;
+    color: var(--azulOscuro);
+}
+
+.datos_camping__form__logo input {
+    display: none;
+}
+
+.datos_camping__form__logo label .camping_logo__input {
+    height: 8rem;
+    width: 8rem;
+    border: 2px solid var(--azulOscuro);
+    background-color: var(--azulOscuro);
+    font-size: 80px;
+    font-weight: bolder;
+    color: whitesmoke;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.datos_camping__form__logo label .camping_logo__input img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.datos_camping__form__logo label .camping_logo__input i {
+    transition: transform .3s ease-in-out;
+}
+
+.datos_camping__form__logo label .camping_logo__input:hover i {
+    transform: rotate(90deg);
+}
+
+.datos_camping .datos_camping__imagen {
+    width: 50%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 0 0 0 5%;
+}
+
+.datos_camping .datos_camping__imagen img {
+    height: 22rem;
+    filter: drop-shadow(0 15px 10px rgba(0, 0, 0, 0.5));
+}

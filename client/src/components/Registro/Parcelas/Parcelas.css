@@ -1,0 +1,191 @@
+.parcelas {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+}
+
+.parcelas__imagen {
+    position: sticky;
+    top: 20vh;
+    height: fit-content;
+    width: 40%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 4rem 0 0;
+}
+
+.parcelas__imagen img {
+    height: 22rem;
+    filter: drop-shadow(0 15px 10px rgba(0, 0, 0, 0.5));
+}
+
+.parcelas__caracteristicas {
+    height: fit-content;
+    width: 60%;
+    padding: 2rem;
+    text-align: center;
+}
+
+/* TAMAÑOS */
+
+.parcelas__caracteristicas__tamanos {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.tamanos__tabla {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 2px;
+}
+
+.tamanos__tabla > div:nth-child(n+2) {
+    padding: .3rem;
+    border: 2px solid var(--azulOscuro);
+}
+
+.tamanos__tabla__titulo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    font-family: var(--Crimson);
+    font-style: italic;
+    font-weight: bold;
+    color: whitesmoke;
+    background-color: var(--azulOscuro);
+}
+
+.parcelas__caracteristicas__tamanos > p {
+    font-family: var(--Crimson);
+    font-weight: bold;
+    color: var(--negro);
+    margin: 1rem 3rem;
+}
+
+/* BOTONES TAMAÑOS */
+
+.tamanos__tabla__botones {
+    display: flex;
+}
+
+.tamanos__tabla__botones:nth-child(odd) {
+    background-color: whitesmoke;
+}
+
+.tamanos__tabla__botones:nth-child(even) {
+    background-color: var(--azulClaro);
+}
+
+.tamanos__tabla__botones input {
+    width: 8rem;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    padding: .2rem;
+    color: var(--azulOscuro);
+    font-family: var(--Crimson);
+    font-size: 28px;
+}
+
+.tamanos__tabla__botones div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.tamanos__tabla__botones div button {
+    padding: 0;
+}
+
+.tamanos__tabla__botones div button i {
+    color: var(--azulOscuro);
+    font-size: 22px;
+}
+
+/* FIN BOTONES TAMAÑOS */
+
+/* FIN TAMAÑOS */
+
+.parcelas__caracteristicas h4 {
+    font-size: 24px;
+    font-family: var(--Crimson);
+    color: var(--azulOscuro);
+    align-self: flex-start;
+}
+
+/* TIPOS */
+
+.parcelas__caracteristicas__tipos {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.parcelas__caracteristicas__tipos .tipos__tipos {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* FIGURAS */
+
+.figura {
+    position: relative;
+    height: fit-content;
+    cursor: pointer;
+    margin: 1.5rem;
+}
+
+.figura .figura__imagen {
+    height: 5rem;
+    filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.5)) grayscale(95%);
+    transition: height .3s ease-in-out, transform .2s ease-in-out;
+}
+
+.figura__imagen__activada .figura__imagen {
+    height: 6rem;
+    filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.5)) grayscale(0%);
+}
+
+.figura .figura__imagen:hover {
+    transform: scale(1.1);
+}
+
+.figura h6 {
+    font-size: 24px;
+    font-family: var(--Crimson);
+    color: var(--negro);
+    font-weight: bold;
+    margin: 1rem 0 0;
+}
+
+.figura__check {
+    display: none;
+    position: absolute;
+    top: -1rem;
+    right: 0;
+    height: 2rem;
+    width: 2rem;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 2px solid var(--verdeGastado);
+    background-color: var(--verdeClaro);
+    color: var(--verdeGastado);
+}
+
+.figura__imagen__activada .figura__check {
+display: flex;
+}
+
+/* FIN FIGURAS */
+
+/* FIN TIPOS */

@@ -1,11 +1,29 @@
 import { useState } from 'react'
 import './Registro.css'
+import DatosCamping from '../../components/Registro/Datos-camping/DatosCamping'
+import Parcelas from '../../components/Registro/Parcelas/Parcelas'
 
 export default function Registro () {
 
     const pasos = [ "Datos del camping", "Parcelas", "Zonas", "Acomodadores", "Resumen" ]
 
     const [ paso, setPaso ] = useState(pasos[0])
+
+    /* Atributos Datos camping */
+    const [ imagen, setImagen ] = useState(null)
+    const [ usuario, setUsuario ] = useState(null)
+    const [ password, setPassword ] = useState(null)
+    const [ correo, setCorreo ] = useState(null)
+    const [ nombre, setNombre ] = useState(null)
+
+    /* Atributos Parcelas */
+    const [ pequenaAncho, setPequenaAncho ] = useState(0)
+    const [ pequenaLargo, setPequenaLargo ] = useState(0)
+    const [ mediaAncho, setMediaAncho ] = useState(0)
+    const [ mediaLargo, setMediaLargo ] = useState(0)
+    const [ grandeAncho, setGrandeAncho ] = useState(0)
+    const [ grandeLargo, setGrandeLargo ] = useState(0)
+    const [ tipos, setTipos ] = useState(new Array())
 
     return(
         <div className="registro">
@@ -20,13 +38,14 @@ export default function Registro () {
                     <div className={`pasos__paso ${paso === pasos[4] && 'pasos__paso__activo'}`}><button className='pasos__paso__boton' value={pasos[4]} onClick={(e) => setPaso(e.target.value)}>{pasos[4]}</button></div>
                 </div>
             </div>
-            <div className="registro__outlet">
-                {/* Renderizado condicional --> Cada componente de paso */}
+            <div className="registro__pasos">
+                { paso === pasos[0] && <DatosCamping imagen={imagen} setImagen={setImagen} usuario={usuario} setUsuario={setUsuario} password={password} setPassword={setPassword} correo={correo} setCorreo={setCorreo} nombre={nombre} setNombre={setNombre} /> } 
+                { paso === pasos[1] && <Parcelas pequenaAncho={pequenaAncho} setPequenaAncho={setPequenaAncho} mediaAncho={mediaAncho} setMediaAncho={setMediaAncho} grandeAncho={grandeAncho} setGrandeAncho={setGrandeAncho} pequenaLargo={pequenaLargo} setPequenaLargo={setPequenaLargo} mediaLargo={mediaLargo} setMediaLargo={setMediaLargo} grandeLargo={grandeLargo} setGrandeLargo={setGrandeLargo} tipos={tipos} setTipos={setTipos} /> }
             </div>
             <div className="registro__botones">
-                <button>anterior</button>
-                <button>siguiente</button>
-                <button>finalizar</button>
+                { paso != pasos[0] && <button className='registro__botones__boton' onClick={() => setPaso(pasos[pasos.indexOf(paso) - 1])}>anterior</button> }
+                { paso != pasos[4] && <button className='registro__botones__boton' onClick={() => setPaso(pasos[pasos.indexOf(paso) + 1])}>siguiente</button> }
+                { paso === pasos[4] && <button className='registro__botones__boton'>finalizar</button> }
             </div>
         </div>
     )
