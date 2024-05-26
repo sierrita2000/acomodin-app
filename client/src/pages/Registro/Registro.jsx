@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './Registro.css'
 import DatosCamping from '../../components/Registro/Datos-camping/DatosCamping'
 import Parcelas from '../../components/Registro/Parcelas/Parcelas'
+import Zonas from '../../components/Registro/Zonas/Zonas'
 
 export default function Registro () {
 
@@ -44,6 +45,7 @@ export default function Registro () {
             <div className="registro__pasos">
                 { paso === pasos[0] && <DatosCamping imagen={imagen} setImagen={setImagen} usuario={usuario} setUsuario={setUsuario} password={password} setPassword={setPassword} correo={correo} setCorreo={setCorreo} nombre={nombre} setNombre={setNombre} /> } 
                 { paso === pasos[1] && <Parcelas pequenaAncho={pequenaAncho} setPequenaAncho={setPequenaAncho} mediaAncho={mediaAncho} setMediaAncho={setMediaAncho} grandeAncho={grandeAncho} setGrandeAncho={setGrandeAncho} pequenaLargo={pequenaLargo} setPequenaLargo={setPequenaLargo} mediaLargo={mediaLargo} setMediaLargo={setMediaLargo} grandeLargo={grandeLargo} setGrandeLargo={setGrandeLargo} tipos={tipos} setTipos={setTipos} caracteristicas={caracteristicas} setCaracteristicas={setCaracteristicas} /> }
+                { paso === pasos[2] && <Zonas /> }
             </div>
             <div className="registro__botones">
                 { paso != pasos[0] && <button className='registro__botones__boton' onClick={() => setPaso(pasos[pasos.indexOf(paso) - 1])}>anterior</button> }

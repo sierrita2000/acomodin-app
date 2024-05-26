@@ -1,0 +1,120 @@
+.zonas {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+}
+
+.zonas__zonas {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.zonas__zonas div:nth-child(1) {
+    display: flex;
+    align-items: center;
+}
+
+.zonas__zonas div:nth-child(1) p {
+    font-size: 22px;
+    font-family: var(--Crimson);
+    color: var(--azulOscuro);
+    font-weight: bold;
+    margin: 0 1rem 0 0;
+    letter-spacing: 1px;
+}
+
+/* CHECKBOX href = https://uiverse.io/ErzenXz/weak-falcon-28 */
+
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 40px;
+    cursor: pointer;
+  }
+  
+  .toggle-switch input[type="checkbox"] {
+    display: none;
+  }
+  
+  .toggle-switch-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #ddd;
+    border-radius: 20px;
+    box-shadow: inset 0 0 0 2px #ccc;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .toggle-switch-handle {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 30px;
+    height: 30px;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .toggle-switch::before {
+    content: "";
+    position: absolute;
+    top: -25px;
+    right: -35px;
+    font-size: 12px;
+    font-weight: bold;
+    color: #aaa;
+    text-shadow: 1px 1px #fff;
+    transition: color 0.3s ease-in-out;
+  }
+  
+  .toggle-switch input[type="checkbox"]:checked + .toggle-switch-handle {
+    transform: translateX(45px);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2), 0 0 0 3px var(--verdeClaro);
+  }
+  
+  .toggle-switch input[type="checkbox"]:checked + .toggle-switch-background {
+    background-color: var(--verdeClaro);
+    box-shadow: inset 0 0 0 2px var(--verdeClaro);
+  }
+  
+  .toggle-switch input[type="checkbox"]:checked + .toggle-switch:before {
+    content: "On";
+    color: var(--verdeClaro);
+    right: -15px;
+  }
+  
+  .toggle-switch input[type="checkbox"]:checked + .toggle-switch-background .toggle-switch-handle {
+    transform: translateX(40px);
+  }
+  
+
+/* FIN CHECKBOX */
+
+.zonas__zonas__raya {
+    height: 4px;
+    width: 100%;
+    border-radius: 90px;
+    background-color: var(--azulOscuro);
+    margin: 2rem 0;
+}
+
+.zonas__imagen {
+    width: 40%;
+    display: flex;
+    justify-content: flex-start;
+    padding: 0 0 0 2rem;
+}
+ 
+.zonas__imagen img {
+    height: 25rem;
+    filter: drop-shadow(0 15px 10px rgba(0, 0, 0, 0.5));
+}
