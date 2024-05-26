@@ -60,7 +60,7 @@
     background-color: var(--azulOscuro);
 }
 
-.parcelas__caracteristicas__tamanos > p {
+.parcelas .informacion {
     font-family: var(--Crimson);
     font-weight: bold;
     color: var(--negro);
@@ -86,7 +86,7 @@
     border: none;
     background-color: transparent;
     outline: none;
-    padding: .2rem;
+    padding: .2rem 0 .2rem 1rem;
     color: var(--azulOscuro);
     font-family: var(--Crimson);
     font-size: 28px;
@@ -135,57 +135,97 @@
     justify-content: center;
 }
 
-/* FIGURAS */
+/* FIN TIPOS */
 
-.figura {
-    position: relative;
-    height: fit-content;
-    cursor: pointer;
-    margin: 1.5rem;
+/* CARACTERISTICAS */
+
+.parcelas__caracteristicas__caracteristicas {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.figura .figura__imagen {
-    height: 5rem;
-    filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.5)) grayscale(95%);
-    transition: height .3s ease-in-out, transform .2s ease-in-out;
+.caracteristicas__input {
+    width: 50%;
+    display: flex;
+    margin: 1rem 0;
 }
 
-.figura__imagen__activada .figura__imagen {
-    height: 6rem;
-    filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.5)) grayscale(0%);
-}
-
-.figura .figura__imagen:hover {
-    transform: scale(1.1);
-}
-
-.figura h6 {
+.caracteristicas__input input {
+    width: 100%;
+    background-color: whitesmoke;
+    outline: none;
+    border: 2px solid var(--azulOscuro);
+    padding: .5rem 1rem;
     font-size: 24px;
     font-family: var(--Crimson);
-    color: var(--negro);
-    font-weight: bold;
-    margin: 1rem 0 0;
+    color: var(--azulOscuro);
 }
 
-.figura__check {
-    display: none;
-    position: absolute;
-    top: -1rem;
-    right: 0;
-    height: 2rem;
-    width: 2rem;
+.caracteristicas__input input:placeholder-shown {
+    font-style: italic;
+}
+
+.caracteristicas__input button {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    background-color: var(--azulOscuro);
+    margin: 0 0 0 1rem;
+    display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 50%;
-    border: 2px solid var(--verdeGastado);
-    background-color: var(--verdeClaro);
-    color: var(--verdeGastado);
+    filter: drop-shadow(0 4px 2px rgba(0, 0, 0, 0.5));
 }
 
-.figura__imagen__activada .figura__check {
-display: flex;
+.caracteristicas__input button i {
+    color: whitesmoke;
+    font-size: 24px;
 }
 
-/* FIN FIGURAS */
+.caracteristicas__caracteristicas {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
 
-/* FIN TIPOS */
+/* CARACTERISTICA */
+
+.caracteristica {
+    width: fit-content;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: .5rem 1rem;
+    background-color: var(--azulClaro);
+    margin: 1rem;
+    border: 2px solid var(--negro);
+    border-radius: 10px;
+    filter: drop-shadow(4px 4px 2px rgb(0, 0, 0, 0.5));
+}
+
+.caracteristica p {
+    color: var(--negro);
+    font-size: 22px;
+    font-family: var(--Crimson);
+    font-weight: bold;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
+.caracteristica button {
+    position: absolute;
+    bottom: -1.2rem;
+    right: -1.8rem;
+}
+
+.caracteristica button i {
+    font-size: 25px;
+    color: var(--negro);
+}
+
+/* CARACTERISTICA */
+
+/* FIN CARACTERISTICAS */

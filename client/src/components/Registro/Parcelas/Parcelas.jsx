@@ -1,4 +1,5 @@
 import './Parcelas.css'
+import Figura from '../../BotonFigura/Figura'
 
 export default function Parcelas ( props ) {
 
@@ -11,6 +12,22 @@ export default function Parcelas ( props ) {
         ['autocaravanas', '../../../figura-autocaravana.png'],
         ['carros tienda', '../../../figura-carro.png'],
     ]
+
+    const otras_figuras = [
+        ['coches', '../../../figura-coche.png'],
+        ['motos', '../../../figura-moto.png'],
+        ['mascotas', '../../../figura-perro.png'],
+        ['electricidad', '../../../figura-luz.png']
+    ]
+
+    const anadirCaracteristica = () => {
+        const caracteristica = document.getElementById('input_caracteristicas')
+
+        if (caracteristica.value) {
+            props.setCaracteristicas(props.caracteristicas.concat(caracteristica.value))
+            caracteristica.value = ''
+        }
+    }
 
     return(
         <div className="parcelas">
@@ -34,7 +51,7 @@ export default function Parcelas ( props ) {
                         <Botones tamano={props.grandeAncho} setTamano={props.setGrandeaAncho} />
                         <Botones tamano={props.grandeLargo} setTamano={props.setGrandeLargo} />
                     </div>
-                    <p>* Se recomienda fijar los tamaños máximos para cada tipo. De este modo, al buscar una parcela para un modo de acampada del que conocemos sus medidas, nos resultará más fácil</p>
+                    <p className='informacion'>* Se recomienda fijar los tamaños máximos para cada tipo. De este modo, al buscar una parcela para un modo de acampada del que conocemos sus medidas, nos resultará más fácil</p>
                 </div>
                 <div className="parcelas__caracteristicas__tipos">
                     <h4>TIPOS:</h4>
@@ -45,6 +62,33 @@ export default function Parcelas ( props ) {
                             })
                         }
                     </div>
+                    <p className='informacion'>* Elegir los modos de acampada que permite el camping</p>
+                </div>
+                <div className="parcelas__caracteristicas__tipos">
+                    <h4>OTROS CONCEPTOS:</h4>
+                    <div className="tipos__tipos">
+                        {
+                            otras_figuras.map(figura => {
+                                return <Figura imagen={figura[1]} titulo={figura[0]} tipos={props.tipos} setTipos={props.setTipos} />
+                            })
+                        }
+                    </div>
+                    <p className='informacion'>* Incluir otros conceptos que tu camping registre en las estancias.<br/>Los adultos y los niños vienen incluidos por defecto.</p>
+                </div>
+                <div className="parcelas__caracteristicas__caracteristicas">
+                    <h4>CARACTERÍSTICAS:</h4>
+                    <div className="caracteristicas__input">
+                        <input type="text" name="input_caracteristicas" id="input_caracteristicas" placeholder='Añade una característica' />
+                        <button  onClick={anadirCaracteristica}><i className="fa-solid fa-plus"></i></button>
+                    </div>
+                    <div className="caracteristicas__caracteristicas">
+                        {
+                            props.caracteristicas.map(caracteristica => {
+                                return <Caracteristica caracteristica={caracteristica} caracteristicas={props.caracteristicas} setCaracteristicas={props.setCaracteristicas} />
+                            })
+                        }
+                    </div>
+                    <p className='informacion'>* Aquí podrás añadir características que podrán utilizar tus acomodadores como filtros para encontrar parcelas. Las características que puedes ver arriba de este texto están incluidas por defecto, pero puedes quitarlas de la lista en este paso.</p>
                 </div>
             </div>
         </div>
@@ -57,35 +101,23 @@ function Botones ({ tamano, setTamano }) {
         <div className='tamanos__tabla__botones'>
             <input type="text" disabled value={tamano} />
             <div>
-                <button onClick={() => setTamano(tamano++)}><i className="fa-solid fa-caret-up"></i></button>
-                <button onClick={() => tamano > 0 && setTamano(tamano--)}><i className="fa-solid fa-caret-down"></i></button>
+                <button onClick={() => setTamano(tamano + 1)}><i className="fa-solid fa-caret-up"></i></button>
+                <button onClick={() => tamano > 0 && setTamano(tamano - 1)}><i className="fa-solid fa-caret-down"></i></button>
             </div>
         </div>
     )
 }
 
-function Figura ({ imagen, titulo, tipos, setTipos }) {
+function Caracteristica ({ caracteristica, caracteristicas, setCaracteristicas }) {
 
-    const clickTipo = () => {
-        let copia_tipos = tipos
-        const figura = document.getElementById(`img_figura_${titulo}`)
-
-        figura.classList.toggle('figura__imagen__activada')
-
-        if (tipos.includes(titulo)) {
-            copia_tipos.splice(tipos.indexOf(titulo), 1)
-            setTipos(copia_tipos)
-        } else {
-            copia_tipos.push(titulo)
-            setTipos(copia_tipos)
-        }
+    const eliminarCaracteristica = () => {
+        setCaracteristicas(caracteristicas.filter(c => c != caracteristica))
     }
 
-    return(
-        <div id={`img_figura_${titulo}`} className={`figura ${tipos.includes(titulo) && 'figura__imagen__activada'}`} onClick={clickTipo}>
-            <img className='figura__imagen' src={imagen} alt={`FIGURA-${titulo.toUpperCase()}`} />
-            <h6>{titulo.toUpperCase()}</h6>
-            <div className='figura__check'><i className="fa-solid fa-check"></i></div>
+    return (
+        <div className="caracteristica">
+            <p>{caracteristica}</p>
+            <button onClick={eliminarCaracteristica}><i className="fa-solid fa-trash"></i></button>
         </div>
     )
 }

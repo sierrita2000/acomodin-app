@@ -1,0 +1,48 @@
+.figura {
+    position: relative;
+    height: fit-content;
+    cursor: pointer;
+    margin: 1.5rem;
+}
+
+.figura .figura__imagen {
+    height: 5rem;
+    filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.5)) grayscale(95%);
+    transition: height .3s ease-in-out, transform .2s ease-in-out;
+}
+
+.figura__imagen__activada .figura__imagen {
+    height: 6rem;
+    filter: drop-shadow(0 10px 5px rgba(0, 0, 0, 0.5)) grayscale(0%);
+}
+
+.figura .figura__imagen:hover {
+    transform: scale(1.1);
+}
+
+.figura h6 {
+    font-size: 24px;
+    font-family: var(--Crimson);
+    color: var(--negro);
+    font-weight: bold;
+    margin: 1rem 0 0;
+}
+
+.figura__check {
+    display: none;
+    position: absolute;
+    top: -1rem;
+    right: 0;
+    height: 2rem;
+    width: 2rem;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 2px solid var(--verdeGastado);
+    background-color: var(--verdeClaro);
+    color: var(--verdeGastado);
+}
+
+.figura__imagen__activada .figura__check {
+display: flex;
+}
