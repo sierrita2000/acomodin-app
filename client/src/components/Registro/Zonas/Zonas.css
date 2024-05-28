@@ -5,19 +5,28 @@
 }
 
 .zonas__zonas {
-    width: 60%;
+    width: 65%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0 2rem;
+    padding: 0 2rem 0 4rem;
 }
 
-.zonas__zonas div:nth-child(1) {
+.zonas__zonas P {
+  font-size: 18px;
+  font-family: var(--Montserrat);
+  color: var(--negro);
+  font-weight: bolder;
+  text-align: center;
+  margin: 0 0 1rem;
+}
+
+.zonas__zonas__pregunta {
     display: flex;
     align-items: center;
 }
 
-.zonas__zonas div:nth-child(1) p {
+.zonas__zonas__pregunta p {
     font-size: 22px;
     font-family: var(--Crimson);
     color: var(--azulOscuro);
@@ -100,21 +109,109 @@
 /* FIN CHECKBOX */
 
 .zonas__zonas__raya {
-    height: 4px;
+    height: 2px;
     width: 100%;
     border-radius: 90px;
     background-color: var(--azulOscuro);
     margin: 2rem 0;
 }
 
+/* ZONAS */
+
+.zonas__zonas .zonas__zonas__lista {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: fit-content;
+  width: 100%;
+}
+
+/* FIN ZONAS */
+
+.zonas__zonas__lista__boton_anadir {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.zonas__zonas__lista__boton_anadir button {
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 50%;
+  background-color: var(--azulOscuro);
+  font-size: 18px;
+  color: whitesmoke;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.zonas__zonas__lista__boton_anadir p {
+  color: var(--azulOscuro);
+  font-family: var(--Crimson);
+  font-size: 18px;
+}
+
 .zonas__imagen {
+  width: 35%;
+    position: sticky;
+    top: 20vh;
+    height: fit-content;
     width: 40%;
     display: flex;
-    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
     padding: 0 0 0 2rem;
 }
  
 .zonas__imagen img {
-    height: 25rem;
+    height: 20rem;
     filter: drop-shadow(0 15px 10px rgba(0, 0, 0, 0.5));
+}
+
+.zonas__imagen button {
+  position: relative;
+  font-size: 26px;
+  font-family: var(--Montserrat);
+  font-weight: bolder;
+  color: whitesmoke;
+  background-color: var(--verdeClaro);
+  margin: 2rem 0 0;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: .5rem 2.5rem;
+}
+
+.zonas__imagen button div {
+  position: absolute;
+  top: -2rem;
+  right: -2rem;
+  height: 3.5rem;
+  width: 3.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: aparecer-mano 2s ease-in-out forwards;
+}
+
+@keyframes aparecer-mano {
+  0% {
+    transform: scale(0) rotate(-40deg);
+  }
+  20% {
+    transform: scale(1);
+  }
+  80% {
+    transform: scale(1);
+    filter: opacity(100%);
+  }
+  100% {
+    transform: scale(0);
+    filter: opacity(0);
+  }
+}
+
+.zonas__imagen button div i {
+  color: var(--azulOscuro);
+  font-size: 38px;
 }

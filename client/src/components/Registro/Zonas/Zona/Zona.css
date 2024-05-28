@@ -1,0 +1,179 @@
+.zona {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 0 1.5rem;
+}
+
+/* CAJA ZONA */
+
+.zona__zona {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 1rem;
+}
+
+.zona__zona > button {
+  margin: 0 1rem 0 0;
+}
+
+.zona__zona > button i {
+  font-size: 30px;
+  color: var(--azulOscuro);
+  transition: all 0.15s ease-in-out;
+}
+
+.girar__icono {
+  transform: rotate(-90deg);
+}
+
+.zona__zona .zona__info {
+  height: 7.2rem;
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--azulGastado);
+  border: 2px solid var(--azulOscuro);
+}
+
+.zona__info input[type="text"] {
+  background-color: whitesmoke;
+  border: none;
+  outline: none;
+  padding: 0.8rem 0.4rem;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  font-size: 16px;
+  font-family: var(--Crimson);
+  color: var(--negro);
+  margin: 0 1rem;
+}
+
+.zona__info input[type="text"]::placeholder {
+  font-style: italic;
+}
+
+.zona__zona .zona__info .zona__info__tipos {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  background-color: var(--azulClaro);
+  border-right: 2px solid var(--azulOscuro);
+  border-left: 2px solid var(--azulOscuro);
+  padding: 0 0.5rem;
+  overflow-x: scroll;
+  scrollbar-width: thin;
+}
+
+.zona__zona .zona__info .zona__info__tipos .figura {
+  margin: 1.5rem;
+}
+
+.zona__zona .zona__info .zona__info__tipos .figura .figura__imagen {
+  height: 3.5rem;
+}
+
+.zona__zona .zona__info .zona__info__tipos .figura h6 {
+  display: none;
+}
+
+.zona__info__total {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.1rem 0.3rem;
+}
+
+.zona__info__total p {
+  font-family: var(--Crimson);
+  color: var(--negro);
+  font-weight: bolder;
+}
+
+.zona__info__total div {
+  padding: 0.5rem;
+  font-family: var(--Crimson);
+  color: var(--negro);
+  font-weight: bolder;
+  font-size: 24px;
+  background-color: whitesmoke;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.zona__info__boton__borrar {
+  height: 100%;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  background-color: var(--azulClaro);
+  border-left: 2px solid var(--azulOscuro);
+}
+
+.zona__info .zona__info__boton__borrar button i {
+  font-size: 25px;
+  color: var(--negro);
+}
+
+/* ZONA PARCELAS */
+
+.zona__parcelas {
+  height: fit-content;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.desplegar_parcelas {
+  height: 0rem;
+}
+
+.zona__parcelas__anadir {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+}
+
+.zona__parcelas__anadir p {
+  font-size: 18px;
+  font-family: var(--Crimson);
+  color: var(--negro);
+}
+
+.zona__parcelas__anadir input {
+  min-width: 4rem;
+  width: 4rem;
+  padding: 0.5rem;
+  border: 1px solid var(--negro);
+  margin: 0 1rem;
+  background-color: whitesmoke;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  outline: none;
+  font-family: var(--Crimson);
+  color: var(--negro);
+  font-size: 22px;
+}
+
+.zona__parcelas__anadir button {
+  padding: 0;
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  background-color: var(--negro);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: whitesmoke;
+  font-size: 18px;
+  margin: 0 0 0 1rem;
+}
+
+/* ZONA PARCELAS */
+
+/* FIN CAJA ZONA */

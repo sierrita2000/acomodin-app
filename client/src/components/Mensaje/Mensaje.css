@@ -1,0 +1,55 @@
+.mensaje {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.4);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.mensaje__modal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: whitesmoke;
+    border-radius: 5px;
+}
+
+.mensaje__modal div:nth-child(1) {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    background-color: var(--azulGastado);
+}
+
+.mensaje__modal div:nth-child(1) button {
+    font-size: 22px;
+}
+
+.mensaje__modal div:nth-child(2) p {
+    font-family: var(--Crimson);
+    font-size: 22px;
+    margin: 2rem 1rem;
+    color: var(--azulOscuro);
+}
+
+.mensaje__modal__botones {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 0 0 1.5rem;
+}
+
+.mensaje__modal__botones button {
+    background-color: var(--azulOscuro);
+    color: whitesmoke;
+    font-family: var(--Montserrat);
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0 1rem;
+}

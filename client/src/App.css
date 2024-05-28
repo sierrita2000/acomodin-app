@@ -3,6 +3,7 @@
   --Montserrat: "Montserrat", sans-serif;
   --Indie:"Indie Flower", cursive;
   --azulClaro: rgb(196, 221, 233);
+  --azulGastado: rgb(143, 165, 185);
   --azulOscuro: rgb(58, 82, 135);
   --verdeClaro: rgb(113, 161, 108);
   --verdeGastado: rgb(158, 192, 153);
@@ -36,4 +37,11 @@ button:hover {
 
 button:active {
   transform: scale(1);
+}
+
+input[type="text"] {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-family: var(--Crimson);
 }

@@ -3,6 +3,9 @@
     height: fit-content;
     cursor: pointer;
     margin: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .figura .figura__imagen {

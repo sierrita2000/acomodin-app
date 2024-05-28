@@ -69,7 +69,7 @@ export default function Parcelas ( props ) {
                     <div className="tipos__tipos">
                         {
                             otras_figuras.map(figura => {
-                                return <Figura imagen={figura[1]} titulo={figura[0]} tipos={props.tipos} setTipos={props.setTipos} />
+                                return <Figura imagen={figura[1]} titulo={figura[0]} tipos={props.conceptosGenerales} setTipos={props.setConceptosGenerales} />
                             })
                         }
                     </div>
