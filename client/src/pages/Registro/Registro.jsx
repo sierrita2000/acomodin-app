@@ -11,11 +11,11 @@ export default function Registro () {
     const [ paso, setPaso ] = useState(pasos[0])
 
     /* Atributos Datos camping */
-    const [ imagen, setImagen ] = useState(null)
-    const [ usuario, setUsuario ] = useState(null)
-    const [ password, setPassword ] = useState(null)
-    const [ correo, setCorreo ] = useState(null)
-    const [ nombre, setNombre ] = useState(null)
+    const [ imagen, setImagen ] = useState("")
+    const [ usuario, setUsuario ] = useState("")
+    const [ password, setPassword ] = useState("")
+    const [ correo, setCorreo ] = useState("")
+    const [ nombre, setNombre ] = useState("")
 
     /* Atributos Parcelas */
     const [ pequenaAncho, setPequenaAncho ] = useState(0)
@@ -35,8 +35,6 @@ export default function Registro () {
 
     const [ zonas, setZonas ] = useState([ { id: 0, nombre: '', tipos: [], parcelas: [] } ])
 
-    console.log("ZONAS DESDE REGISTRO.JSX : \n", zonas)
-
     return(
         <div className="registro">
             <div className="registro__cabecera">
@@ -53,7 +51,7 @@ export default function Registro () {
             <div className="registro__pasos">
                 { paso === pasos[0] && <DatosCamping imagen={imagen} setImagen={setImagen} usuario={usuario} setUsuario={setUsuario} password={password} setPassword={setPassword} correo={correo} setCorreo={setCorreo} nombre={nombre} setNombre={setNombre} /> } 
                 { paso === pasos[1] && <Parcelas pequenaAncho={pequenaAncho} setPequenaAncho={setPequenaAncho} mediaAncho={mediaAncho} setMediaAncho={setMediaAncho} grandeAncho={grandeAncho} setGrandeAncho={setGrandeAncho} pequenaLargo={pequenaLargo} setPequenaLargo={setPequenaLargo} mediaLargo={mediaLargo} setMediaLargo={setMediaLargo} grandeLargo={grandeLargo} setGrandeLargo={setGrandeLargo} tipos={tipos} setTipos={setTipos} conceptosGenerales={conceptosGenerales} setConceptosGenerales={setConceptosGenerales} caracteristicas={caracteristicas} setCaracteristicas={setCaracteristicas} /> }
-                { paso === pasos[2] && <Zonas zonas={zonas} setZonas={setZonas} tipos={tipos} /> }
+                { paso === pasos[2] && <Zonas zonas={zonas} setZonas={setZonas} tipos={tipos} caracteristicas={caracteristicas} luzCamping={conceptosGenerales.includes('electricidad')} /> }
             </div>
             <div className="registro__botones">
                 { paso != pasos[0] && <button className='registro__botones__boton' onClick={() => setPaso(pasos[pasos.indexOf(paso) - 1])}>anterior</button> }

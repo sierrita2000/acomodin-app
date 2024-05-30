@@ -9,7 +9,7 @@ export default function Zonas ( props ) {
 
     const guardarCambios = () => {
         setGuardar(true)
-        setTimeout(() => setGuardar(false), 2000)
+        setTimeout(() => setGuardar(false), 1000)
     }
 
     const crearNuevaZona = () => {
@@ -42,8 +42,7 @@ export default function Zonas ( props ) {
                 <div className='zonas__zonas__lista'>
                     {
                         props?.zonas.map(zona => {
-                            console.log("zona en forEach: ", zona)
-                            return <Zona key={zona.id} guardar={guardar} { ...zona } tiposCamping={props?.tipos} setZonas={props.setZonas} zonas={props.zonas} handleGuardarCambios={guardarCambios} />
+                            return <Zona key={zona.id} guardar={guardar} { ...zona } tiposCamping={props?.tipos} setZonas={props.setZonas} zonas={props.zonas} handleGuardarCambios={guardarCambios} caracteristicasCamping={props.caracteristicas} luzCamping={props.luzCamping} />
                         })
                     }
                     <div className="zonas__zonas__lista__boton_anadir">
@@ -54,7 +53,7 @@ export default function Zonas ( props ) {
             </div>
             <div className="zonas__imagen">
                 <img src="../../../figura-bungalow-cesped.png" alt="FIGURA-BUNGALOW" />
-                <button onClick={guardarCambios}>GUARDAR CAMBIOS{ guardar && <div><i className="fa-solid fa-thumbs-up"></i></div> }</button>
+                <button onClick={guardarCambios}><p>GUARDAR CAMBIOS</p>{ guardar && <div><i className="fa-solid fa-thumbs-up"></i></div> }</button>
             </div>
         </div>
     )

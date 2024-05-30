@@ -2,15 +2,16 @@ import './Zona.css'
 import { useEffect, useRef, useState } from 'react'
 import Figura from '../../../BotonFigura/Figura'
 import Mensaje from '../../../Mensaje/Mensaje'
+import Parcela from '../Parcela/Parcela'
 
-export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCamping, setZonas, zonas, handleGuardarCambios }) {
+export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCamping, setZonas, zonas, handleGuardarCambios, caracteristicasCamping, luzCamping }) {
 
     const [ nombreZona, setNombreZona ] = useState(nombre)
     const [ tiposZona, setTiposZona ] = useState(tipos)
+    const [ parcelasZona, setParcelasZona ] = useState(parcelas)
 
     const [ borrar, setBorrar ] = useState(false)
 
-    const refZona = useRef(null)
     const refParcelas = useRef(null)
 
     const figuras = [
@@ -30,15 +31,9 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
         let zonas_copia = zonas
         const posicion = zonas.findIndex(z => z.id === id)
 
-        console.log("***************************")
-        console.log("POSICION : ", posicion)
-        console.log("NOMBRE QUE LLEGA : ", nombre)
-        console.log("NOMBRE QUE SE PONE : ", nombreZona)
-        console.log("ELEMENTO : ", refZona.current)
-        console.log("***************************")
-
         zonas_copia[posicion].nombre = nombreZona
         zonas_copia[posicion].tipos = tiposZona
+        zonas_copia[posicion].parcelas = parcelasZona
 
         setZonas(zonas_copia)
     }
@@ -67,20 +62,63 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
         refParcelas.current.classList.toggle('desplegar_parcelas')
     }
 
+    /**
+     * Handler del botón para crear parcelas.
+     * @param {Number} cantidad_parcelas 
+     */
+    const crearParcelas = (elemento) => {
+        let cantidad_parcelas = elemento.value
+        const parcelas_nuevas = new Array()
+
+        elemento.value = 0
+
+        if (cantidad_parcelas > 0) {
+            let id_parcela = parcelasZona.length > 0 ? parcelasZona[parcelasZona.length - 1].id + 1 : 0
+
+            while (cantidad_parcelas != 0) {
+                const obj_parcela = {
+                    id: id_parcela,
+                    nombre: `${nombreZona}-${id_parcela}`,
+                    tamano: 'pequena',
+                    tipos: [],
+                    luz: false,
+                    caracteristicas: []
+                }
+
+                parcelas_nuevas.push(obj_parcela)
+
+                id_parcela++
+                cantidad_parcelas--
+            }
+
+            setParcelasZona(parcelasZona.concat(parcelas_nuevas))
+
+            let zonas_copia = zonas
+            const posicion = zonas.findIndex(z => z.id === id)
+
+            zonas_copia[posicion].parcelas = parcelasZona.concat(parcelas_nuevas)
+            setZonas(zonas_copia)
+            
+            handleGuardarCambios()
+        } else {
+            alert("Tienes que marcar el número de parcelas que deseas crear.")
+        }
+    }
+
     useEffect(() => {
         guardar && guardarCambios()
     }, [guardar])
 
     return(
-        <div id={`zona-${id}`} ref={refZona} className="zona">
+        <div id={`zona-${id}`} className="zona">
             <div className="zona__zona">
                 <button onClick={e => abrirCerrarParcelas(e)}><i className="fa-solid fa-caret-down"></i></button>
                 <div className="zona__info">
                     <input type="text" placeholder='Nombre zona...' value={nombreZona} onChange={e => setNombreZona(e.target.value)} />
                     <div className='zona__info__tipos'>
                         {
-                            figuras.map(figura => {
-                                if (tiposCamping.includes(figura[0])) return <Figura imagen={figura[1]} titulo={figura[0]} tipos={tiposZona} setTipos={setTiposZona}/>
+                            figuras.map((figura, indice) => {
+                                if (tiposCamping.includes(figura[0])) return <Figura key={indice} imagen={figura[1]} titulo={figura[0]} tipos={tiposZona} setTipos={setTiposZona}/>
                             })
                         }
                     </div>
@@ -98,13 +136,17 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
             
             <div ref={refParcelas} className="zona__parcelas">
                 <div className="zona__parcelas__parcelas">
-
+                        {
+                            parcelasZona?.map((parcela, indice) => {
+                                return <Parcela key={`parcela-${indice}`} guardar={guardar} { ...parcela } tiposZona={tiposZona} caracteristicasCamping={caracteristicasCamping} handleGuardarCambios={handleGuardarCambios} zonas={zonas} setZonas={setZonas} posicionZona={zonas.findIndex(z => z.id === id)} luzCamping={luzCamping} parcelasZona={parcelasZona} setParcelasZona={setParcelasZona} />
+                            })
+                        }
                 </div>
                 <div className="zona__parcelas__anadir">
                     <p>añadir</p>
-                    <input type="number" name="parcelas_anadir" id="parcelas_anadir" min={0} />
+                    <input type="number" name="parcelas_anadir" id={`parcelas_anadir-${id}`} min={0} defaultValue={0} />
                     <p>parcelas</p>
-                    <button><i className="fa-solid fa-plus"></i></button>
+                    <button onClick={() => crearParcelas(document.getElementById(`parcelas_anadir-${id}`))}><i className="fa-solid fa-plus"></i></button>
                 </div>
             </div>           
         </div>

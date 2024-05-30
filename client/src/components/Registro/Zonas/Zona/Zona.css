@@ -129,6 +129,13 @@
   overflow: hidden;
 }
 
+.zona__parcelas__parcelas {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
 .desplegar_parcelas {
   height: 0rem;
 }

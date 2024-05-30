@@ -87,7 +87,7 @@
 .inicio__presentacion__izq h2 {
     font-size: 40px;
     margin: 2rem 0;
-    color: var(--marron);
+    color: var(--marron2);
     filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
 }
 
@@ -170,7 +170,7 @@
 .inicio__servicios__pasos h2 {
     font-family: var(--Indie);
     font-size: 60px;
-    color: var(--marron);
+    color: var(--marron2);
     filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
 }
 
@@ -248,7 +248,7 @@
 .inicio__servicios__procesos h2 {
     font-family: var(--Indie);
     font-size: 60px;
-    color: var(--marron);
+    color: var(--marron2);
     filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.3));
     margin: 0 0 2rem;
 }

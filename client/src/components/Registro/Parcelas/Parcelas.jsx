@@ -57,8 +57,8 @@ export default function Parcelas ( props ) {
                     <h4>TIPOS:</h4>
                     <div className="tipos__tipos">
                         {
-                            figuras.map(figura => {
-                                return <Figura imagen={figura[1]} titulo={figura[0]} tipos={props.tipos} setTipos={props.setTipos} />
+                            figuras.map((figura, indice) => {
+                                return <Figura key={indice} imagen={figura[1]} titulo={figura[0]} tipos={props.tipos} setTipos={props.setTipos} />
                             })
                         }
                     </div>
@@ -68,8 +68,8 @@ export default function Parcelas ( props ) {
                     <h4>OTROS CONCEPTOS:</h4>
                     <div className="tipos__tipos">
                         {
-                            otras_figuras.map(figura => {
-                                return <Figura imagen={figura[1]} titulo={figura[0]} tipos={props.conceptosGenerales} setTipos={props.setConceptosGenerales} />
+                            otras_figuras.map((figura, indice) => {
+                                return <Figura key={indice} imagen={figura[1]} titulo={figura[0]} tipos={props.conceptosGenerales} setTipos={props.setConceptosGenerales} />
                             })
                         }
                     </div>
@@ -83,8 +83,8 @@ export default function Parcelas ( props ) {
                     </div>
                     <div className="caracteristicas__caracteristicas">
                         {
-                            props.caracteristicas.map(caracteristica => {
-                                return <Caracteristica caracteristica={caracteristica} caracteristicas={props.caracteristicas} setCaracteristicas={props.setCaracteristicas} />
+                            props.caracteristicas.map((caracteristica, indice) => {
+                                return <Caracteristica key={indice} caracteristica={caracteristica} caracteristicas={props.caracteristicas} setCaracteristicas={props.setCaracteristicas} />
                             })
                         }
                     </div>
