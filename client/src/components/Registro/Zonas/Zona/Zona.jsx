@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import Figura from '../../../BotonFigura/Figura'
 import Mensaje from '../../../Mensaje/Mensaje'
 import Parcela from '../Parcela/Parcela'
+import { useFetch } from '../../../../hooks/useFetch'
 
 export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCamping, setZonas, zonas, handleGuardarCambios, caracteristicasCamping, luzCamping }) {
 
@@ -14,15 +15,8 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
 
     const refParcelas = useRef(null)
 
-    const figuras = [
-        ['tipis', '../../../figura-tipi.png'],
-        ['bungalows', '../../../figura-bungalow.png'],
-        ['tiendas', '../../../figura-tienda.png'],
-        ['caravanas', '../../../figura-caravana.png'],
-        ['campers', '../../../figura-camper.png'],
-        ['autocaravanas', '../../../figura-autocaravana.png'],
-        ['carros tienda', '../../../figura-carro.png'],
-    ]
+    const [ data ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
+    const figuras = data?.results.filter(f => tiposCamping.includes(f.nombre))
 
     /**
      * Almacena los datos de las zonas en su estado.
@@ -117,8 +111,8 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
                     <input type="text" placeholder='Nombre zona...' value={nombreZona} onChange={e => setNombreZona(e.target.value)} />
                     <div className='zona__info__tipos'>
                         {
-                            figuras.map((figura, indice) => {
-                                if (tiposCamping.includes(figura[0])) return <Figura key={indice} imagen={figura[1]} titulo={figura[0]} tipos={tiposZona} setTipos={setTiposZona}/>
+                            figuras?.map((figura, indice) => {
+                                return <Figura key={indice} imagen={figura?.imagen} titulo={figura?.nombre} tipos={tiposZona} setTipos={setTiposZona}/>
                             })
                         }
                     </div>

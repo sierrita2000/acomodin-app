@@ -1,24 +1,18 @@
 import './Parcelas.css'
 import Figura from '../../BotonFigura/Figura'
+import { useFetch } from '../../../hooks/useFetch'
 
 export default function Parcelas ( props ) {
 
-    const figuras = [
-        ['tipis', '../../../figura-tipi.png'],
-        ['bungalows', '../../../figura-bungalow.png'],
-        ['tiendas', '../../../figura-tienda.png'],
-        ['caravanas', '../../../figura-caravana.png'],
-        ['campers', '../../../figura-camper.png'],
-        ['autocaravanas', '../../../figura-autocaravana.png'],
-        ['carros tienda', '../../../figura-carro.png'],
-    ]
+    const [ data ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
 
-    const otras_figuras = [
-        ['coches', '../../../figura-coche.png'],
-        ['motos', '../../../figura-moto.png'],
-        ['mascotas', '../../../figura-perro.png'],
-        ['electricidad', '../../../figura-luz.png']
-    ]
+    console.log(data?.results)
+
+    const tipos = ['tipis', 'bungalows', 'tiendas', 'caravanas', 'campers', 'autocaravanas', 'carros tienda']
+    const figuras = data?.results.filter(f => tipos.includes(f.nombre))
+
+    const otros_tipos = ['coches', 'motos', 'mascotas', 'electricidad']
+    const otras_figuras = data?.results.filter(f => otros_tipos.includes(f.nombre))
 
     const anadirCaracteristica = () => {
         const caracteristica = document.getElementById('input_caracteristicas')
@@ -57,8 +51,8 @@ export default function Parcelas ( props ) {
                     <h4>TIPOS:</h4>
                     <div className="tipos__tipos">
                         {
-                            figuras.map((figura, indice) => {
-                                return <Figura key={indice} imagen={figura[1]} titulo={figura[0]} tipos={props.tipos} setTipos={props.setTipos} />
+                            figuras?.map((figura, indice) => {
+                                return <Figura key={indice} imagen={figura?.imagen} titulo={figura?.nombre} tipos={props.tipos} setTipos={props.setTipos} />
                             })
                         }
                     </div>
@@ -68,8 +62,8 @@ export default function Parcelas ( props ) {
                     <h4>OTROS CONCEPTOS:</h4>
                     <div className="tipos__tipos">
                         {
-                            otras_figuras.map((figura, indice) => {
-                                return <Figura key={indice} imagen={figura[1]} titulo={figura[0]} tipos={props.conceptosGenerales} setTipos={props.setConceptosGenerales} />
+                            otras_figuras?.map((figura, indice) => {
+                                return <Figura key={indice} imagen={figura?.imagen} titulo={figura?.nombre} tipos={props.conceptosGenerales} setTipos={props.setConceptosGenerales} />
                             })
                         }
                     </div>

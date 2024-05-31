@@ -5,8 +5,8 @@ const zonaSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    id_tipos: {
-        type: mongoose.ObjectId,
+    tipos: {
+        type: Array,
         required: true
     },
     id_camping: {

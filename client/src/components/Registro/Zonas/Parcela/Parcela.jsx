@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import './Parcela.css'
 import Figura from '../../../BotonFigura/Figura'
 import Mensaje from '../../../Mensaje/Mensaje'
+import { useFetch } from '../../../../hooks/useFetch'
 
 export default function Parcela ({ guardar, id, nombre, tamano, tipos, luz, caracteristicas, tiposZona, caracteristicasCamping, handleGuardarCambios, zonas, setZonas, posicionZona, luzCamping, parcelasZona, setParcelasZona }) {
 
@@ -15,15 +16,9 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, luz, cara
 
     const refParcela = useRef(null)
 
-    const figuras = [
-        ['tipis', '../../../figura-tipi.png'],
-        ['bungalows', '../../../figura-bungalow.png'],
-        ['tiendas', '../../../figura-tienda.png'],
-        ['caravanas', '../../../figura-caravana.png'],
-        ['campers', '../../../figura-camper.png'],
-        ['autocaravanas', '../../../figura-autocaravana.png'],
-        ['carros tienda', '../../../figura-carro.png'],
-    ]
+    const [ data ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
+
+    const figuras = data?.results.filter(f => tiposZona.includes(f.nombre))
 
     const borrarParcela = () => {
         const posicion = parcelasZona.findIndex(p => p.id === id)
@@ -89,8 +84,8 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, luz, cara
             </div>
             <div className='parcela__tipos'>
                 {
-                    figuras.map((figura, indice) => {
-                        if (tiposZona.includes(figura[0])) return <Figura key={indice} imagen={figura[1]} titulo={figura[0]} tipos={tiposParcela} setTipos={setTiposParcela}/>
+                    figuras?.map((figura, indice) => {
+                        return <Figura key={indice} imagen={figura?.imagen} titulo={figura?.nombre} tipos={tiposParcela} setTipos={setTiposParcela}/>
                     })
                 }
             </div>
@@ -107,7 +102,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, luz, cara
                 }
             </div>
             <div className={`parcela__luz ${!luzCamping && 'sin__luz'}`}>
-                <button onClick={() => luzCamping && setLuzParcela(!luzParcela)}><img src="../../../figura-luz.png" alt="FIGURA-LUZ" className={ luzParcela && 'luz__activada' } /></button>
+                <button onClick={() => luzCamping && setLuzParcela(!luzParcela)}><img src={`${import.meta.env.VITE_API_HOST}static/figura-luz.png`} alt="FIGURA-LUZ" className={ luzParcela && 'luz__activada' } /></button>
             </div>
             <div className="parcela__boton__eliminar">
                 <button onClick={() => setBorrar(true)}><i className="fa-solid fa-trash"></i></button>

@@ -12,6 +12,8 @@ app.use(express.json())
 app.use(cors())
 app.use(express.urlencoded({ extended: false }))
 
+app.use('/static', express.static( __dirname + '/public'))
+
 app.get('/', (req, res, next) => {
     res.send("<h1>API ACOMODIN</h1>")
     next()

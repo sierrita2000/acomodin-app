@@ -26,8 +26,11 @@ const campingSchema = new mongoose.Schema({
     tamanos: {
         type: Array
     },
-    id_conceptos: {
-        type: mongoose.ObjectId
+    caracteristicas: {
+        type: Array
+    },
+    conceptos: {
+        type: Array
     }
 })
 

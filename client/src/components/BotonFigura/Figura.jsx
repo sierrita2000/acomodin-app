@@ -22,7 +22,7 @@ export default function Figura ({ imagen, titulo, tipos, setTipos }) {
 
     return(
         <div ref={imagenRef} id={`img_figura_${titulo}`} className={`figura ${tipos.includes(titulo) && 'figura__imagen__activada'}`} onClick={clickTipo}>
-            <img className='figura__imagen' src={imagen} alt={`FIGURA-${titulo.toUpperCase()}`} />
+            <img className='figura__imagen' src={`${import.meta.env.VITE_API_HOST}static/${imagen}`} alt={`FIGURA-${titulo.toUpperCase()}`} />
             <h6>{titulo.toUpperCase()}</h6>
             <div className='figura__check'><i className="fa-solid fa-check"></i></div>
         </div>

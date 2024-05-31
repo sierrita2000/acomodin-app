@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import './Zonas.css'
 import Zona from './Zona/Zona'
 
 export default function Zonas ( props ) {
-
-    const [ dividir, setDividir ] = useState(false)
     const [ guardar, setGuardar ] = useState(false)
 
     const guardarCambios = () => {

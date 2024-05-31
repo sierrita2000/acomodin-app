@@ -1,9 +1,16 @@
 const mongoose = require('mongoose')
 
-const conceptosSchema = new mongoose.Schema({
-    
+const conceptoSchema = new mongoose.Schema({
+    nombre: {
+        type: String,
+        required: true
+    },
+    imagen: {
+        type: String,
+        required: true
+    }
 })
 
-const Conceptos = mongoose.model('Conceptos', conceptosSchema)
+const Concepto = mongoose.model('Concepto', conceptoSchema)
 
-module.exports = { Conceptos }
+module.exports = { Concepto }
