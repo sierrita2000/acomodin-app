@@ -22,6 +22,12 @@ const campingSchema = new mongoose.Schema({
     logo: {
         type: String,
         required: true
+    },
+    tamanos: {
+        type: Array
+    },
+    id_conceptos: {
+        type: mongoose.ObjectId
     }
 })
 
