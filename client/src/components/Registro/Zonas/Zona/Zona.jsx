@@ -78,10 +78,10 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
             while (cantidad_parcelas != 0) {
                 const obj_parcela = {
                     id: id_parcela,
-                    nombre: `${nombreZona}-${id_parcela}`,
+                    nombre: `${nombreZona}-${id_parcela+1}`,
                     tamano: 'pequena',
-                    tipos: [],
-                    luz: false,
+                    tipos: tiposCamping,
+                    luz: luzCamping ? true : false,
                     caracteristicas: []
                 }
 

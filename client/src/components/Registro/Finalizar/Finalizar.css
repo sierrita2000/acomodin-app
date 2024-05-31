@@ -1,0 +1,32 @@
+.finalizar {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.finalizar img {
+    height: 15rem;
+    filter: drop-shadow(0 15px 10px rgba(0, 0, 0, 0.5));
+}
+
+.finalizar p {
+    font-size: 30px;
+    font-family: var(--Crimson);
+    font-weight: bolder;
+    color: var(--negro);
+    margin: 2rem 0;
+}
+
+.finalizar button {
+    padding: .5rem 5rem;
+    background-color: var(--verdeOscuro);
+    font-size: 40px;
+    font-family: var(--Crimson);
+    font-weight: bolder;
+    letter-spacing: 2px;
+    color: whitesmoke;
+    filter: drop-shadow(0 15px 10px rgba(0, 0, 0, 0.5));
+}

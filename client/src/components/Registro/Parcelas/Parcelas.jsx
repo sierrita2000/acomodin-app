@@ -48,7 +48,7 @@ export default function Parcelas ( props ) {
                         <Botones tamano={props.mediaAncho} setTamano={props.setMediaAncho} />
                         <Botones tamano={props.mediaLargo} setTamano={props.setMediaLargo} />
                         <div className='tamanos__tabla__titulo'><p>grande</p></div>
-                        <Botones tamano={props.grandeAncho} setTamano={props.setGrandeaAncho} />
+                        <Botones tamano={props.grandeAncho} setTamano={props.setGrandeAncho} />
                         <Botones tamano={props.grandeLargo} setTamano={props.setGrandeLargo} />
                     </div>
                     <p className='informacion'>* Se recomienda fijar los tamaños máximos para cada tipo. De este modo, al buscar una parcela para un modo de acampada del que conocemos sus medidas, nos resultará más fácil</p>
@@ -77,10 +77,10 @@ export default function Parcelas ( props ) {
                 </div>
                 <div className="parcelas__caracteristicas__caracteristicas">
                     <h4>CARACTERÍSTICAS:</h4>
-                    <div className="caracteristicas__input">
+                    <form className="caracteristicas__input">
                         <input type="text" name="input_caracteristicas" id="input_caracteristicas" placeholder='Añade una característica' />
-                        <button  onClick={anadirCaracteristica}><i className="fa-solid fa-plus"></i></button>
-                    </div>
+                        <button onClick={e => {e.preventDefault(); anadirCaracteristica()}}><i className="fa-solid fa-plus"></i></button>
+                    </form>
                     <div className="caracteristicas__caracteristicas">
                         {
                             props.caracteristicas.map((caracteristica, indice) => {

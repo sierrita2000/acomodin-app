@@ -1,0 +1,173 @@
+.acomodadores {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+}
+
+/* DIV IMAGEN */
+
+.acomodadores__imagen {
+    position: sticky;
+    top: 18vh;
+    height: fit-content;
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.acomodadores__imagen img {
+    height: 20rem;
+    filter: drop-shadow(0 15px 10px rgba(0, 0, 0, 0.5));
+}
+
+.acomodadores__imagen button {
+    position: relative;
+    font-size: 26px;
+    font-family: var(--Montserrat);
+    font-weight: bolder;
+    color: whitesmoke;
+    background-color: var(--verdeClaro);
+    margin: 2rem 0;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    padding: .5rem 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.acomodadores__imagen button div {
+    position: absolute;
+    top: -2rem;
+    right: -2rem;
+    height: 3.5rem;
+    width: 3.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: aparecer-mano 1s ease-in-out forwards;
+}
+  
+@keyframes aparecer-mano {
+    0% {
+      transform: scale(0) rotate(-40deg);
+    }
+    20% {
+      transform: scale(1);
+    }
+    80% {
+      transform: scale(1);
+      filter: opacity(100%);
+    }
+    100% {
+      transform: scale(0);
+      filter: opacity(0);
+    }
+}
+  
+.acomodadores__imagen button div i {
+    color: var(--negro);
+    font-size: 38px;
+}
+
+/* FIN DIV IMAGEN */
+
+/* DIV CONTENIDO */
+
+.acomodadores__contenido {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 2rem 2rem 0;
+}
+
+/* ACOMODADOR */
+
+.acomodador {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    font-family: var(--Crimson);
+    color: var(--negro);
+}
+
+.acomodador h4 {
+    font-size: 24px;
+    font-weight: bolder;
+}
+
+.acomodador__info {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0 2rem;
+}
+
+.acomodador__info__info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0 1rem;
+    width: 40%;
+}
+
+.acomodador__info__info label {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.acomodador__info__info input {
+    padding: .4rem;
+    font-size: 18px;
+    font-style: italic;
+    color: var(--negro);
+    border: 2px solid var(--azulOscuro);
+    background-color: var(--azulClaro);
+    margin: .5rem 0 0;
+}
+
+.acomodador__info button i {
+    font-size: 30px;
+}
+
+/* FIN ACOMODADOR */
+
+.acomodadores__contenido__anadir {
+    display: flex;
+    align-items: center;
+}
+
+.acomodadores__contenido__anadir p {
+    font-family: var(--Crimson);
+    font-size: 18px;
+}
+
+.acomodadores__contenido__anadir input[type="number"] {
+    width: 4rem;
+    padding: .4rem;
+    font-size: 20px;
+    font-family: var(--Crimson);
+    margin: 0 .5rem;
+    border-radius: none;
+    border: 2px solid var(--negro);
+    outline: none;
+    background-color: whitesmoke;
+}
+
+.acomodadores__contenido__anadir button {
+    height: 2.5rem;
+    width: 2.5rem;
+    border-radius: 50%;
+    background-color: var(--negro);
+    margin: 0 .5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.acomodadores__contenido__anadir button i {
+    color: whitesmoke;
+    font-size: 20px;
+}
+
+/* FIN DIV CONTENIDO */

@@ -112,7 +112,7 @@
     height: 2px;
     width: 100%;
     border-radius: 90px;
-    background-color: var(--azulOscuro);
+    background-color: var(--negro);
     margin: 2rem 0;
 }
 
@@ -154,7 +154,6 @@
 }
 
 .zonas__imagen {
-  width: 35%;
     position: sticky;
     top: 20vh;
     height: fit-content;

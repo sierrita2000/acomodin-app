@@ -28,15 +28,6 @@ export default function Zonas ( props ) {
     return(
         <div className="zonas">
             <div className="zonas__zonas">
-                <div className='zonas__zonas__pregunta'>
-                    <p>¿Quieres dividir tu camping por zonas?</p>
-                    <label className="toggle-switch">
-                        <input type="checkbox" onChange={() => setDividir(!dividir)} />
-                        <div className="toggle-switch-background">
-                            <div className="toggle-switch-handle"></div>
-                        </div>
-                    </label>
-                </div>
                 <div className="zonas__zonas__raya"></div>
                 <p>¡ES MUY IMPORTANTE GUARDAR LOS CAMBIOS ANTES DE PASAR O RETROCEDER ALGÚN PASO!</p>
                 <div className='zonas__zonas__lista'>
