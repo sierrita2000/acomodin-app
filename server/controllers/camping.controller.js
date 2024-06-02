@@ -13,26 +13,27 @@ const bcrypt = require('bcrypt')
  */
 const registrarCamping = async (req, res, next) => {
     try {
-        const { camping, zonas, acomodadores } = req.body
+        const { tamanos, tipos, caracteristicas } = req.body
+        const logoCamping = req.file.filename
 
-        bcrypt.hash(camping?.password, 10)
+        const datosCamping = JSON.parse(req.body.datosCamping)
+
+        bcrypt.hash(datosCamping.password, 10)
             .then(async passwordHash => {
                 const new_camping = new Camping({ 
-                    usuario: camping.usuario,
+                    usuario: datosCamping.usuario,
                     password: passwordHash,
-                    correo: camping.correo,
-                    nombre: camping.nombre,
-                    logo: camping.logo || "",
-                    tamanos: camping.tamanos,
-                    caracteristicas: camping.caracteristicas,
-                    conceptos: camping.conceptos
+                    correo: datosCamping.correo,
+                    nombre: datosCamping.nombre,
+                    logo: logoCamping,
+                    tamanos: tamanos.split(','),
+                    caracteristicas: caracteristicas.split(','),
+                    conceptos: tipos.split(',')
                 })
 
                 await new_camping.save()
-                    .then(resultsCamping => {
-                        const id_camping = resultsCamping._id
-
-                        zonas.forEach(async zona => {
+                    .then(resultsCamping => { res.status(200).send(new ResponseAPI('ok', 'Camping creado correctamente', resultsCamping))
+                        /*zonas.forEach(async zona => {
                             const new_zona = new Zona({ 
                                 nombre: zona.nombre,
                                 tipos: zona.tipos,
@@ -64,20 +65,23 @@ const registrarCamping = async (req, res, next) => {
                             const usuario_acomodador = `${acomodador.nombre}_${camping.nombre}`
                             const password_acomodador = crearPasswordAleatorio()
 
-                            const new_acomodador = new Acomodador({
-                                usuario: usuario_acomodador,
-                                password: password_acomodador,
-                                nombre: acomodador.nombre,
-                                correo: acomodador.correo
-                            })
+                            bcrypt.hash(password_acomodador, 10)
+                                .then(async password_acomodador_encriptada => {
+                                    const new_acomodador = new Acomodador({
+                                        usuario: usuario_acomodador,
+                                        password: password_acomodador_encriptada,
+                                        nombre: acomodador.nombre,
+                                        correo: acomodador.correo,
+                                        id_camping: id_camping
+                                    })
 
-                            await new_acomodador.save()
-                                .catch(error => { throw new Error(error) })
-                        })
+                                    await new_acomodador.save()
+                                        .catch(error => { throw new Error(error) })
+                                })
+                        })*/
                     })
                     .catch(error => { throw new Error(error) })
             })
-            .catch(error => { throw new Error(error) })  
     } catch(error) {
         next(error)
     }
