@@ -30,7 +30,7 @@ const crearConceptos = async (req, res, next) => {
  * @param {Response} res 
  * @param {Function} next 
  */
-const devolverConceptos = async (req, res, next) => {
+const devolverTodosLosConceptos = async (req, res, next) => {
     try {
         await Concepto.find().exec()
             .then(results => res.status(200).send(new ResponseAPI('ok', 'Conceptos', results)))
@@ -40,4 +40,4 @@ const devolverConceptos = async (req, res, next) => {
     }
 }
 
-module.exports = { crearConceptos,devolverConceptos }
+module.exports = { crearConceptos, devolverTodosLosConceptos }

@@ -1,7 +1,7 @@
 const { Router } = require('express')
 const { connection } = require('../connection/connection')
 const { registrarCamping } = require('../controllers/camping.controller')
-const { crearConceptos, devolverConceptos } = require('../controllers/conceptos.controller')
+const { crearConceptos, devolverTodosLosConceptos } = require('../controllers/conceptos.controller')
 
 connection()
 const router = Router()
@@ -10,13 +10,13 @@ const router = Router()
 router.post("/registrar-camping", registrarCamping)
 
 // RUTAS DE ZONA
-router.post("/registrar-camping")
+
+// RUTAS DE PARCELA
 
 // RUTAS DE ACOMODADOR
-router.post("/registrar-camping")
 
 // RUTAS DE CONCEPTOS
-router.get("/conceptos/devolver-conceptos", devolverConceptos)
+router.get("/conceptos/devolver-conceptos", devolverTodosLosConceptos)
 
 router.post("/conceptos/crear-conceptos", crearConceptos)
 
@@ -24,9 +24,5 @@ router.post("/conceptos/crear-conceptos", crearConceptos)
 
 
 // RUTAS DE ESTANCIAS_ACCION
-
-
-// RUTAS DE PARCELA
-router.post("/registrar-camping")
 
 module.exports = { router }

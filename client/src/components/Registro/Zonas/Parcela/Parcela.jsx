@@ -4,12 +4,12 @@ import Figura from '../../../BotonFigura/Figura'
 import Mensaje from '../../../Mensaje/Mensaje'
 import { useFetch } from '../../../../hooks/useFetch'
 
-export default function Parcela ({ guardar, id, nombre, tamano, tipos, luz, caracteristicas, tiposZona, caracteristicasCamping, handleGuardarCambios, zonas, setZonas, posicionZona, luzCamping, parcelasZona, setParcelasZona }) {
+export default function Parcela ({ guardar, id, nombre, tamano, tipos, electricidad, caracteristicas, tiposZona, caracteristicasCamping, handleGuardarCambios, zonas, setZonas, posicionZona, luzCamping, parcelasZona, setParcelasZona }) {
 
     const [ nombreParcela, setNombreParcela ] = useState(nombre)
     const [ tamanoParcela, setTamanoParcela ] = useState(tamano)
     const [ tiposParcela, setTiposParcela ] = useState(tipos)
-    const [ luzParcela, setLuzParcela ] = useState(luz)
+    const [ electricidadParcela, setElectricidadParcela ] = useState(electricidad)
     const [ caracteristicasParcela, setCaracteristicasParcela ] = useState(caracteristicas)
 
     const [ borrar, setBorrar ] = useState(false)
@@ -35,7 +35,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, luz, cara
         zonas_copia[posicionZona].parcelas[posicion].nombre = nombreParcela
         zonas_copia[posicionZona].parcelas[posicion].tamano = tamanoParcela
         zonas_copia[posicionZona].parcelas[posicion].tipos = tiposParcela
-        zonas_copia[posicionZona].parcelas[posicion].luz = luzParcela
+        zonas_copia[posicionZona].parcelas[posicion].electricidad = electricidadParcela
         zonas_copia[posicionZona].parcelas[posicion].caracteristicas = caracteristicasParcela
 
         setZonas(zonas_copia)
@@ -59,7 +59,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, luz, cara
         setTamanoParcela(tamano)
         setTiposParcela(tipos)
         setCaracteristicasParcela(caracteristicas)
-        luzCamping ? setLuzParcela(luz) : setLuzParcela(false)
+        luzCamping ? setElectricidadParcela(electricidad) : setElectricidadParcela(false)
 
         refParcela.current.querySelectorAll(`input[type="checkbox"]`).forEach(checkbox => {
             if (caracteristicas.includes(checkbox.value)) checkbox.checked = true 
@@ -76,7 +76,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, luz, cara
                 <div className="parcela__cuadro_1__tamano">
                     <p>tamaño:</p>
                     <select name="parcela_tamano" id="parcela_tamano" onChange={e => setTamanoParcela(e.target.value)} >
-                        <option value="pequena">pequeña</option>
+                        <option value="pequena">pequeña</option> 
                         <option value="media">media</option>
                         <option value="grande">grande</option>
                     </select>
@@ -85,7 +85,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, luz, cara
             <div className='parcela__tipos'>
                 {
                     figuras?.map((figura, indice) => {
-                        return <Figura key={indice} imagen={figura?.imagen} titulo={figura?.nombre} tipos={tiposParcela} setTipos={setTiposParcela}/>
+                        return <Figura key={indice} id={figura?._id} imagen={figura?.imagen} titulo={figura?.nombre} tipos={tiposParcela} setTipos={setTiposParcela}/>
                     })
                 }
             </div>
@@ -102,7 +102,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, luz, cara
                 }
             </div>
             <div className={`parcela__luz ${!luzCamping && 'sin__luz'}`}>
-                <button onClick={() => luzCamping && setLuzParcela(!luzParcela)}><img src={`${import.meta.env.VITE_API_HOST}static/figura-luz.png`} alt="FIGURA-LUZ" className={ luzParcela && 'luz__activada' } /></button>
+                <button onClick={() => electricidadCamping && setElectricidadParcela(!electricidadParcela)}><img src={`${import.meta.env.VITE_API_HOST}static/figura-luz.png`} alt="FIGURA-LUZ" className={ electricidadParcela && 'luz__activada' } /></button>
             </div>
             <div className="parcela__boton__eliminar">
                 <button onClick={() => setBorrar(true)}><i className="fa-solid fa-trash"></i></button>

@@ -16,7 +16,7 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
     const refParcelas = useRef(null)
 
     const [ data ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
-    const figuras = data?.results.filter(f => tiposCamping.includes(f.nombre))
+    const figuras = data?.results.filter(f => tiposCamping.includes(f._id))
 
     /**
      * Almacena los datos de las zonas en su estado.
@@ -75,7 +75,7 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
                     nombre: `${nombreZona}-${id_parcela+1}`,
                     tamano: 'pequena',
                     tipos: tiposCamping,
-                    luz: luzCamping ? true : false,
+                    electricidad: luzCamping ? true : false,
                     caracteristicas: []
                 }
 
@@ -112,7 +112,7 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
                     <div className='zona__info__tipos'>
                         {
                             figuras?.map((figura, indice) => {
-                                return <Figura key={indice} imagen={figura?.imagen} titulo={figura?.nombre} tipos={tiposZona} setTipos={setTiposZona}/>
+                                return <Figura key={indice} id={figura?._id} imagen={figura?.imagen} titulo={figura?.nombre} tipos={tiposZona} setTipos={setTiposZona}/>
                             })
                         }
                     </div>

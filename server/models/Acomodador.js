@@ -3,7 +3,8 @@ const mongoose = require('mongoose')
 const acomodadorSchema = new mongoose.Schema({
     usuario: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
@@ -19,16 +20,19 @@ const acomodadorSchema = new mongoose.Schema({
         required: true
     },
     apellidos: {
-        type: String
+        type: String,
+        default: ''
     },
     telefono: {
         type: String,
         minLength: 9,
         maxLength: 9,
-        match: /^[0-9]+$/
+        match: /^[0-9]+$/,
+        default: '000000000'
     },
     imagen: {
-        type: String
+        type: String,
+        default: ''
     },
     id_camping: {
         type: mongoose.ObjectId,

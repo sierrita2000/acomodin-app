@@ -52,7 +52,7 @@ export default function Parcelas ( props ) {
                     <div className="tipos__tipos">
                         {
                             figuras?.map((figura, indice) => {
-                                return <Figura key={indice} imagen={figura?.imagen} titulo={figura?.nombre} tipos={props.tipos} setTipos={props.setTipos} />
+                                return <Figura key={indice} id={figura._id} imagen={figura?.imagen} titulo={figura?.nombre} tipos={props.tipos} setTipos={props.setTipos} />
                             })
                         }
                     </div>
@@ -63,7 +63,7 @@ export default function Parcelas ( props ) {
                     <div className="tipos__tipos">
                         {
                             otras_figuras?.map((figura, indice) => {
-                                return <Figura key={indice} imagen={figura?.imagen} titulo={figura?.nombre} tipos={props.conceptosGenerales} setTipos={props.setConceptosGenerales} />
+                                return <Figura key={indice} id={figura._id} imagen={figura?.imagen} titulo={figura?.nombre} tipos={props.conceptosGenerales} setTipos={props.setConceptosGenerales} />
                             })
                         }
                     </div>
