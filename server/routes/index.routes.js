@@ -3,6 +3,8 @@ const { connection } = require('../connection/connection')
 const { registrarCamping } = require('../controllers/camping.controller')
 const { crearConceptos, devolverTodosLosConceptos } = require('../controllers/conceptos.controller')
 const multer = require('multer')
+const { registrarZonas } = require('../controllers/zona.controller')
+const { registrarAcomodadores } = require('../controllers/acomodador.controller')
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -19,13 +21,15 @@ connection()
 const router = Router()
 
 // RUTAS DE USUARIO CAMPING
-router.post("/registrar-camping", upload.single('logoCamping'), registrarCamping)
+router.post("/camping/registrar-camping", upload.single('logoCamping'), registrarCamping)
 
 // RUTAS DE ZONA
+router.post("/zonas/registrar-zonas", registrarZonas)
 
 // RUTAS DE PARCELA
 
 // RUTAS DE ACOMODADOR
+router.post("/acomodadores/registrar-acomodadores", registrarAcomodadores)
 
 // RUTAS DE CONCEPTOS
 router.get("/conceptos/devolver-conceptos", devolverTodosLosConceptos)

@@ -8,7 +8,7 @@ import { useFetch } from '../../../../hooks/useFetch'
 export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCamping, setZonas, zonas, handleGuardarCambios, caracteristicasCamping, luzCamping }) {
 
     const [ nombreZona, setNombreZona ] = useState(nombre)
-    const [ tiposZona, setTiposZona ] = useState(tipos)
+    const [ tiposZona, setTiposZona ] = useState(tipos.filter(t => tiposCamping.includes(t)))
     const [ parcelasZona, setParcelasZona ] = useState(parcelas)
 
     const [ borrar, setBorrar ] = useState(false)
@@ -73,8 +73,8 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
                 const obj_parcela = {
                     id: id_parcela,
                     nombre: `${nombreZona}-${id_parcela+1}`,
-                    tamano: 'pequena',
-                    tipos: tiposCamping,
+                    tamano: 'pequeña',
+                    tipos: tiposZona,
                     electricidad: luzCamping ? true : false,
                     caracteristicas: []
                 }

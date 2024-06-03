@@ -4,6 +4,7 @@ import Inicio from './pages/Inicio/Inicio'
 import Login from './pages/Login/Login'
 import Registro from './pages/Registro/Registro'
 import Error from './pages/Error/Error'
+import Completado from './components/Registro/PantallaCompletado/Completado'
 
 const router = createBrowserRouter([
   {
@@ -17,7 +18,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/registro-camping',
-    element: <Registro />
+    element: <Registro />,
+    children: [
+      {
+        path: '/registro-camping/completado',
+        element: <Completado />
+      }
+    ]
   }
 ])
 

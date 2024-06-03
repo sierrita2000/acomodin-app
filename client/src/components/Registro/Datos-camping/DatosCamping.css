@@ -25,6 +25,22 @@
     margin: .6rem 0;
 }
 
+.datos_camping_error {
+    color: red;
+    font-size: 18px;
+    font-family: var(--Crimson);
+    font-style: italic;
+    margin: 0 0 1.5rem;
+    animation: aparecer-error .5s ease-in-out;
+}
+
+.datos_camping form div .asterisco_error {
+    color: red;
+    position: relative;
+    top: -.5rem;
+    margin: 0 .2rem 0 0;
+}
+
 .datos_camping form div label {
     font-size: 22px;
     font-family: var(--Crimson);
@@ -33,17 +49,21 @@
     color: var(--azulOscuro);
 }
 
-.datos_camping form div input {
+.datos_camping form div .datos_camping__form__input {
     width: inherit;
     outline: none;
     border: none;
     background-color: transparent;
     border-bottom: 2px solid var(--azulOscuro);
-    padding: .3rem 0;
+    padding: .3rem .5rem;
     font-family: var(--Crimson);
     color: var(--azulOscuro);
     font-style: italic;
     font-size: 20px;
+}
+
+.datos_camping form div .input_incorrecto {
+    border: 2px solid red;
 }
 
 .datos_camping__form__password {
@@ -52,7 +72,7 @@
 
 .datos_camping__form__password button {
     position: absolute;
-    right: 0;
+    right: .3rem;
     padding: .5rem 0;
 }
 

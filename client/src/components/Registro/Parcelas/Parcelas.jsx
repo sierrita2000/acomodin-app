@@ -6,8 +6,6 @@ export default function Parcelas ( props ) {
 
     const [ data ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
 
-    console.log(data?.results)
-
     const tipos = ['tipis', 'bungalows', 'tiendas', 'caravanas', 'campers', 'autocaravanas', 'carros tienda']
     const figuras = data?.results.filter(f => tipos.includes(f.nombre))
 
@@ -48,7 +46,9 @@ export default function Parcelas ( props ) {
                     <p className='informacion'>* Se recomienda fijar los tamaños máximos para cada tipo. De este modo, al buscar una parcela para un modo de acampada del que conocemos sus medidas, nos resultará más fácil</p>
                 </div>
                 <div className="parcelas__caracteristicas__tipos">
+                    {(props.errorPaso && props.tipos.length === 0) && <p className='asterisco_error_parcelas'>*</p>}
                     <h4>TIPOS:</h4>
+                    {(props.errorPaso && props.tipos.length === 0) && <p className='frase_error'>* Debes escoger al menos un tipo de acomodación para tu camping</p>}
                     <div className="tipos__tipos">
                         {
                             figuras?.map((figura, indice) => {

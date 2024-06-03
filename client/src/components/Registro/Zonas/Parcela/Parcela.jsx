@@ -8,7 +8,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, electrici
 
     const [ nombreParcela, setNombreParcela ] = useState(nombre)
     const [ tamanoParcela, setTamanoParcela ] = useState(tamano)
-    const [ tiposParcela, setTiposParcela ] = useState(tipos)
+    const [ tiposParcela, setTiposParcela ] = useState(tipos.filter(t => tiposZona.includes(t)))
     const [ electricidadParcela, setElectricidadParcela ] = useState(electricidad)
     const [ caracteristicasParcela, setCaracteristicasParcela ] = useState(caracteristicas)
 
@@ -18,7 +18,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, electrici
 
     const [ data ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
 
-    const figuras = data?.results.filter(f => tiposZona.includes(f.nombre))
+    const figuras = data?.results.filter(f => tiposZona.includes(f._id))
 
     const borrarParcela = () => {
         const posicion = parcelasZona.findIndex(p => p.id === id)
@@ -57,7 +57,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, electrici
     useEffect(() => {
         setNombreParcela(nombre)
         setTamanoParcela(tamano)
-        setTiposParcela(tipos)
+        setTiposParcela(tipos.filter(t => tiposZona.includes(t)))
         setCaracteristicasParcela(caracteristicas)
         luzCamping ? setElectricidadParcela(electricidad) : setElectricidadParcela(false)
 
@@ -70,13 +70,13 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, electrici
     }, [id])
 
     return(
-        <div ref={refParcela} className="parcela">
+        <div id={`parcela-${id}`} ref={refParcela} className="parcela">
             <div className="parcela__cuadro_1">
                 <input type="text" name="parcela_nombre" id="parcela_nombre" value={nombreParcela} onChange={e => setNombreParcela(e.target.value)} />
                 <div className="parcela__cuadro_1__tamano">
                     <p>tamaño:</p>
                     <select name="parcela_tamano" id="parcela_tamano" onChange={e => setTamanoParcela(e.target.value)} >
-                        <option value="pequena">pequeña</option> 
+                        <option value="pequeña">pequeña</option> 
                         <option value="media">media</option>
                         <option value="grande">grande</option>
                     </select>
@@ -102,7 +102,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, electrici
                 }
             </div>
             <div className={`parcela__luz ${!luzCamping && 'sin__luz'}`}>
-                <button onClick={() => electricidadCamping && setElectricidadParcela(!electricidadParcela)}><img src={`${import.meta.env.VITE_API_HOST}static/figura-luz.png`} alt="FIGURA-LUZ" className={ electricidadParcela && 'luz__activada' } /></button>
+                <button onClick={() => luzCamping && setElectricidadParcela(!electricidadParcela)}><img src={`${import.meta.env.VITE_API_HOST}static/figura-luz.png`} alt="FIGURA-LUZ" className={ electricidadParcela && 'luz__activada' } /></button>
             </div>
             <div className="parcela__boton__eliminar">
                 <button onClick={() => setBorrar(true)}><i className="fa-solid fa-trash"></i></button>

@@ -5,12 +5,15 @@ import Parcelas from '../../components/Registro/Parcelas/Parcelas'
 import Zonas from '../../components/Registro/Zonas/Zonas'
 import Acomodadores from '../../components/Registro/Acomodadores/Acomodadores'
 import Finalizar from '../../components/Registro/Finalizar/Finalizar'
+import { Outlet } from 'react-router-dom'
 
 export default function Registro () {
 
     const pasos = [ "Datos del camping", "Parcelas", "Zonas", "Acomodadores", "Finalizar" ]
 
     const [ paso, setPaso ] = useState(pasos[0])
+
+    const [ errorPaso, setErrorPaso ] = useState(false)
 
     /* Atributos Datos camping */
     const [ imagen, setImagen ] = useState("")
@@ -41,12 +44,15 @@ export default function Registro () {
 
     const [ acomodadores, setAcomodadores ] = useState([{ id: 1, correo: "", nombre: "" }])
 
+    /* Atributos finalizar */
+
+    const [ procesoFinalizado, setProcesoFinalizado ] = useState(false)
+    
     const pasoDatosCampingCorrecto = () => {
         if (usuario && password && correo && nombre) {
             return true
         } 
 
-        alert("Los campos de usuario, contraseña, correo y nombre del camping son obligatorios.")
         return false
     }
 
@@ -55,7 +61,6 @@ export default function Registro () {
             return true
         }
 
-        alert("Debes seleccionar al menos un tipo de acomodación para tu camping.")
         return false
     }
 
@@ -87,15 +92,12 @@ export default function Registro () {
 
     const pasoAcomodadoresCorrecto = () => {
         let resultado = true
-        let mensaje = ""
         acomodadores.forEach(acomodador => {
             if(acomodador.correo === '' || acomodador.nombre === '') {
-                mensaje = "Debes rellenar los campos nombre y correo de todos los acomodadores que crees."
                 resultado = false
             }
         })
         
-        !resultado && alert(mensaje + " Recuerda guardar los cambios")
         return resultado
     }
 
@@ -135,28 +137,36 @@ export default function Registro () {
 
     return(
         <div className="registro">
-            <div className="registro__cabecera">
-                <img src="../../figura-logo-circulo.png" alt="LOGO-ACOMODIN" />
-                <h1>ACOMODIN</h1>
-                <div className="registro__cabecera__pasos">
-                    <div className={`pasos__paso ${paso === pasos[0] && 'pasos__paso__activo'}`}><button className='pasos__paso__boton' value={pasos[0]} onClick={(e) => setPaso(e.target.value)}>{pasos[0]}</button></div>
-                    <div className={`pasos__paso ${paso === pasos[1] && 'pasos__paso__activo'}`}><button className='pasos__paso__boton' value={pasos[1]} onClick={(e) => comprobarSiguientePaso(1) && setPaso(e.target.value)}>{pasos[1]}</button></div>
-                    <div className={`pasos__paso ${paso === pasos[2] && 'pasos__paso__activo'}`}><button className='pasos__paso__boton' value={pasos[2]} onClick={(e) => comprobarSiguientePaso(2) && setPaso(e.target.value)}>{pasos[2]}</button></div>
-                    <div className={`pasos__paso ${paso === pasos[3] && 'pasos__paso__activo'}`}><button className='pasos__paso__boton' value={pasos[3]} onClick={(e) => comprobarSiguientePaso(3) && setPaso(e.target.value)}>{pasos[3]}</button></div>
-                    <div className={`pasos__paso ${paso === pasos[4] && 'pasos__paso__activo'}`}><button className='pasos__paso__boton' value={pasos[4]} onClick={(e) => comprobarSiguientePaso(4) && setPaso(e.target.value)}>{pasos[4]}</button></div>
-                </div>
-            </div>
-            <div className="registro__pasos">
-                { paso === pasos[0] && <DatosCamping imagen={imagen} setImagen={setImagen} usuario={usuario} setUsuario={setUsuario} password={password} setPassword={setPassword} correo={correo} setCorreo={setCorreo} nombre={nombre} setNombre={setNombre} /> } 
-                { paso === pasos[1] && <Parcelas pequenaAncho={pequenaAncho} setPequenaAncho={setPequenaAncho} mediaAncho={mediaAncho} setMediaAncho={setMediaAncho} grandeAncho={grandeAncho} setGrandeAncho={setGrandeAncho} pequenaLargo={pequenaLargo} setPequenaLargo={setPequenaLargo} mediaLargo={mediaLargo} setMediaLargo={setMediaLargo} grandeLargo={grandeLargo} setGrandeLargo={setGrandeLargo} tipos={tipos} setTipos={setTipos} conceptosGenerales={conceptosGenerales} setConceptosGenerales={setConceptosGenerales} caracteristicas={caracteristicas} setCaracteristicas={setCaracteristicas} /> }
-                { paso === pasos[2] && <Zonas zonas={zonas} setZonas={setZonas} tipos={tipos} caracteristicas={caracteristicas} luzCamping={conceptosGenerales.includes('electricidad')} /> }
-                { paso === pasos[3] && <Acomodadores acomodadores={acomodadores} setAcomodadores={setAcomodadores} /> }
-                { paso === pasos[4] && <Finalizar /> }
-            </div>
-            <div className="registro__botones">
-                { paso != pasos[0] && <button className='registro__botones__boton' onClick={() => setPaso(pasos[pasos.indexOf(paso) - 1])}>anterior</button> }
-                { paso != pasos[4] && <button className='registro__botones__boton' onClick={() => comprobarSiguientePaso(pasos.indexOf(paso) + 1) && setPaso(pasos[pasos.indexOf(paso) + 1])}>siguiente</button> }
-            </div>
+            {
+                !procesoFinalizado ? (
+                    <>
+                        <div className="registro__cabecera">
+                            <img src="../../figura-logo-circulo.png" alt="LOGO-ACOMODIN" />
+                            <h1>ACOMODIN</h1>
+                            <div className="registro__cabecera__pasos">
+                                <div className={`pasos__paso ${paso === pasos[0] && 'pasos__paso__activo'}`}><button className='pasos__paso__boton' value={pasos[0]} onClick={(e) => setPaso(e.target.value)}>{pasos[0]}</button></div>
+                                <div className={`pasos__paso ${paso === pasos[1] && 'pasos__paso__activo'}`}><button className='pasos__paso__boton' value={pasos[1]} onClick={(e) => {if (comprobarSiguientePaso(1)) {setPaso(e.target.value); setErrorPaso(false)} else {setErrorPaso(true)}}}>{pasos[1]}</button></div>
+                                <div className={`pasos__paso ${paso === pasos[2] && 'pasos__paso__activo'}`}><button className='pasos__paso__boton' value={pasos[2]} onClick={(e) => {if (comprobarSiguientePaso(2)) {setPaso(e.target.value); setErrorPaso(false)} else {setErrorPaso(true)}}}>{pasos[2]}</button></div>
+                                <div className={`pasos__paso ${paso === pasos[3] && 'pasos__paso__activo'}`}><button className='pasos__paso__boton' value={pasos[3]} onClick={(e) => {if (comprobarSiguientePaso(3)) {setPaso(e.target.value); setErrorPaso(false)} else {setErrorPaso(true)}}}>{pasos[3]}</button></div>
+                                <div className={`pasos__paso ${paso === pasos[4] && 'pasos__paso__activo'}`}><button className='pasos__paso__boton' value={pasos[4]} onClick={(e) => {if (comprobarSiguientePaso(4)) {setPaso(e.target.value); setErrorPaso(false)} else {setErrorPaso(true)}}}>{pasos[4]}</button></div>
+                            </div>
+                        </div>
+                        <div className="registro__pasos">
+                            { paso === pasos[0] && <DatosCamping imagen={imagen} setImagen={setImagen} usuario={usuario} setUsuario={setUsuario} password={password} setPassword={setPassword} correo={correo} setCorreo={setCorreo} nombre={nombre} setNombre={setNombre} errorPaso={errorPaso} /> } 
+                            { paso === pasos[1] && <Parcelas pequenaAncho={pequenaAncho} setPequenaAncho={setPequenaAncho} mediaAncho={mediaAncho} setMediaAncho={setMediaAncho} grandeAncho={grandeAncho} setGrandeAncho={setGrandeAncho} pequenaLargo={pequenaLargo} setPequenaLargo={setPequenaLargo} mediaLargo={mediaLargo} setMediaLargo={setMediaLargo} grandeLargo={grandeLargo} setGrandeLargo={setGrandeLargo} tipos={tipos} setTipos={setTipos} conceptosGenerales={conceptosGenerales} setConceptosGenerales={setConceptosGenerales} caracteristicas={caracteristicas} setCaracteristicas={setCaracteristicas} errorPaso={errorPaso} /> }
+                            { paso === pasos[2] && <Zonas zonas={zonas} setZonas={setZonas} tipos={tipos} caracteristicas={caracteristicas} luzCamping={conceptosGenerales.includes('665a0165c5f8973c88844b8b')} errorPaso={errorPaso} /> }
+                            { paso === pasos[3] && <Acomodadores acomodadores={acomodadores} setAcomodadores={setAcomodadores} errorPaso={errorPaso} /> }
+                            { paso === pasos[4] && <Finalizar datosCamping={{ usuario, password, correo, nombre }} logoCamping={imagen} tamanos={[pequenaAncho, pequenaLargo, mediaAncho, mediaLargo, grandeAncho, grandeLargo]} tipos={[...tipos, ...conceptosGenerales]} caracteristicas={caracteristicas} zonas={zonas} acomodadores={acomodadores} procesoFinalizado={procesoFinalizado} setProcesoFinalizado={setProcesoFinalizado} /> }
+                        </div>
+                        <div className="registro__botones">
+                            { paso != pasos[0] && <button className='registro__botones__boton' onClick={() => setPaso(pasos[pasos.indexOf(paso) - 1])}>anterior</button> }
+                            { paso != pasos[4] && <button className='registro__botones__boton' onClick={() => { if (comprobarSiguientePaso(pasos.indexOf(paso) + 1)) { setPaso(pasos[pasos.indexOf(paso) + 1]); setErrorPaso(false) } else { setErrorPaso(true) }} }>siguiente</button> }
+                        </div>
+                    </>
+                ) : (
+                    <Outlet />
+                )
+            }
         </div>
     )
 }
