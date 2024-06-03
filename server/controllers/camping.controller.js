@@ -25,7 +25,7 @@ const registrarCamping = async (req, res, next) => {
                     logo: logoCamping,
                     tamanos: tamanos.split(','),
                     caracteristicas: caracteristicas.split(','),
-                    conceptos: tipos.split(',')
+                    conceptos: tipos.split(',').concat(['665a0165c5f8973c88844b8d', '665a0165c5f8973c88844b8c'])
                 })
 
                 await new_camping.save()

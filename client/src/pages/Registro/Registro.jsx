@@ -164,7 +164,7 @@ export default function Registro () {
                         </div>
                     </>
                 ) : (
-                    <Outlet />
+                    <Outlet context={[nombre]} />
                 )
             }
         </div>
