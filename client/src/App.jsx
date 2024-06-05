@@ -5,6 +5,7 @@ import Login from './pages/Login/Login'
 import Registro from './pages/Registro/Registro'
 import Error from './pages/Error/Error'
 import Completado from './components/Registro/PantallaCompletado/Completado'
+import Principal from './pages/Principal/Principal'
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,14 @@ const router = createBrowserRouter([
         element: <Completado />
       }
     ]
+  },
+  {
+    path: '/acomodador/:nombre_camping/:id_acomodador',
+    element: <Principal />
+  },
+  {
+    path: '/admin/:nombre_camping',
+    element: <Principal />
   }
 ])
 

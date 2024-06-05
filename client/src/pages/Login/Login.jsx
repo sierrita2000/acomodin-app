@@ -1,6 +1,9 @@
+import { useState } from 'react'
 import './Login.css'
 
 export default function Login() {
+
+    const [ tipoUsuario, setTiposUsuario ] = useState(0) // 0 --> acomodador, 1 --> camping
 
     /**
      * Evento del icono ojo para poder cambiar el input de la contraseña de password a text.
@@ -26,6 +29,11 @@ export default function Login() {
                 <h1>ACOMODIN</h1>
                 <div className="login__izq__formulario">
                     <img src="../../logo.png" alt="LOGO" />
+                    <p>¿Quién va a iniciar sesión?</p>
+                    <div>
+                        <button className={`button_login ${tipoUsuario === 0 && 'button_activado'}`} onClick={() => setTiposUsuario(0)}>ACOMODADOR</button>
+                        <button className={`button_login ${tipoUsuario === 1 && 'button_activado'}`} onClick={() => setTiposUsuario(1)}>CAMPING</button>
+                    </div>
                     <form>
                         <div className="login__form__usuario">
                             <input type="text" name="login_usuario" id="login_usuario" minLength={1} />

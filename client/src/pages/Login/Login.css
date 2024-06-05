@@ -24,7 +24,7 @@
     font-family: var(--Crimson);
     font-size: 35px;
     color: var(--azulOscuro);
-    margin: 0 0 2rem;
+    margin: 0 0 1rem;
 }
 
 .login__izq__formulario {
@@ -34,13 +34,41 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 2rem;
+    padding: 1.5rem 2rem;
     box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
 }
 
 .login__izq__formulario img {
-    height: 8rem;
+    height: 6rem;
     filter: invert(95%);
+}
+
+.login__izq__formulario > p {
+    color: whitesmoke;
+    font-family: var(--Crimson);
+    font-size: 18px;
+    margin: 1rem 0;
+}
+
+.login__izq__formulario > div {
+    display: flex;
+    justify-content: center;
+    margin: 0 0 1rem;
+}
+
+.login__izq__formulario > div .button_login {
+    color: whitesmoke;
+    font-family: var(--Crimson);
+    font-size: 22px;
+    padding: .3rem .8rem;
+    transition: background-color .3s ease-in-out, transform .1s ease-in-out;
+    margin: 0 .5rem;
+}
+
+.login__izq__formulario > div .button_activado {
+    background-color: whitesmoke;
+    color: var(--azulOscuro);
+    font-weight: bolder;
 }
 
 .login__izq__formulario form {
@@ -65,7 +93,7 @@
     top: -1.8rem;
     left: 0;
     font-weight: bold;
-    font-size: 25px;
+    font-size: 22px;
     transition: all .3s ease-in-out;
 }
 
@@ -79,7 +107,7 @@
     color: whitesmoke;
     font-family: var(--Crimson);
     font-style: italic;
-    font-size: 20px;
+    font-size: 22px;
 }
 
 .login__form__password button {
