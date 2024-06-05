@@ -1,0 +1,51 @@
+.plantilla {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.plantilla__logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.plantilla__logo img {
+    height: 8rem;
+}
+
+.plantilla__logo h1 {
+    color: rgb(58, 82, 135);
+    margin: 0 0 2rem;
+}
+
+.plantilla > p {
+    font-style: italic;
+    margin: 2rem 0;
+}
+
+.plantilla__credenciales {
+    display: flex;
+    flex-direction: column;
+}
+
+.plantilla__credenciales div {
+    display: flex;
+    margin: .2rem 0;
+}
+
+.plantilla__credenciales div p:nth-child(1) {
+    font-weight: bolder;
+    margin: 0 .5rem 0 0 ;
+}
+
+.plantilla a {
+    padding: .4rem 2rem;
+    background-color: rgb(58, 82, 135);
+    color: whitesmoke;
+    font-size: 25px;
+    font-weight: bolder;
+    text-decoration: none;
+}

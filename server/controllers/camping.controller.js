@@ -11,7 +11,7 @@ const bcrypt = require('bcrypt')
 const registrarCamping = async (req, res, next) => {
     try {
         const { tamanos, tipos, caracteristicas } = req.body
-        const logoCamping = req.file.filename
+        const logoCamping = req.file ? req.file.filename : null
 
         const datosCamping = JSON.parse(req.body.datosCamping)
 
@@ -23,14 +23,17 @@ const registrarCamping = async (req, res, next) => {
                     correo: datosCamping.correo,
                     nombre: datosCamping.nombre,
                     logo: logoCamping,
-                    tamanos: tamanos.split(','),
-                    caracteristicas: caracteristicas.split(','),
+                    tamanos: tamanos.split(',') || [],
+                    caracteristicas: caracteristicas.split(',') || [],
                     conceptos: tipos.split(',').concat(['665a0165c5f8973c88844b8d', '665a0165c5f8973c88844b8c'])
                 })
 
                 await new_camping.save()
                     .then(resultsCamping => res.status(200).send(new ResponseAPI('ok', 'Camping creado correctamente', resultsCamping)))
-                    .catch(error => { throw new Error(error) })
+                    .catch(error => { 
+                        console.log(error.name, error.message, "objeto error :\n", error)
+                        throw new Error(error.message) 
+                    })
             })
     } catch(error) {
         next(error)

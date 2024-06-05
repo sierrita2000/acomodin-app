@@ -20,8 +20,7 @@ const campingSchema = new mongoose.Schema({
         required: true
     },
     logo: {
-        type: String,
-        required: true
+        type: String
     },
     tamanos: {
         type: Array

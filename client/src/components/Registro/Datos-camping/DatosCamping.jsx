@@ -2,8 +2,6 @@ import './DatosCamping.css'
 
 export default function DatosCamping ( props ) {
 
-    console.log(props.errorPaso)
-
     /**
      * Evento del icono ojo para poder cambiar el input de la contraseña de password a text.
      * @param {Event} e 

@@ -106,7 +106,7 @@ export default function Finalizar ( props ) {
                         <i className="fa-solid fa-triangle-exclamation"></i>
                         <p>Error al registrar tu camping</p>
                         <p>{error}</p>
-                        <Link to={"/"} className='finalizar__error__link'>ACEPTAR</Link>
+                        <Link to={"/registro-camping"} className='finalizar__error__link'>ACEPTAR</Link>
                     </div>
                 </div>
             )}

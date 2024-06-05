@@ -21,6 +21,8 @@ connection()
 const router = Router()
 
 // RUTAS DE USUARIO CAMPING
+router.get("/camping/usuario/:usuario/password/:password")
+
 router.post("/camping/registrar-camping", upload.single('logoCamping'), registrarCamping)
 
 // RUTAS DE ZONA
@@ -29,6 +31,8 @@ router.post("/zonas/registrar-zonas", registrarZonas)
 // RUTAS DE PARCELA
 
 // RUTAS DE ACOMODADOR
+router.get("/acomodadores/usuario/:usuario/password/:password")
+
 router.post("/acomodadores/registrar-acomodadores", registrarAcomodadores)
 
 // RUTAS DE CONCEPTOS

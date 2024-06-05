@@ -6,6 +6,7 @@ import Registro from './pages/Registro/Registro'
 import Error from './pages/Error/Error'
 import Completado from './components/Registro/PantallaCompletado/Completado'
 import Principal from './pages/Principal/Principal'
+import Plantilla from './pages/PlantillaCorreo/PlantillaCorreo'
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
   {
     path: '/admin/:nombre_camping',
     element: <Principal />
+  },
+  {
+    path: '/plantilla',
+    element: <Plantilla />
   }
 ])
 
