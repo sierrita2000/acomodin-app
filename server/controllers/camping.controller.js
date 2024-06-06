@@ -1,6 +1,7 @@
 const { Camping } = require('../models/Camping')
 const { ResponseAPI } = require('../classes/ResponseAPI')
 const bcrypt = require('bcrypt')
+const { ValidationError, DuplicatedError } = require('../errors/errors')
 
 /**
  * 
@@ -31,8 +32,12 @@ const registrarCamping = async (req, res, next) => {
                 await new_camping.save()
                     .then(resultsCamping => res.status(200).send(new ResponseAPI('ok', 'Camping creado correctamente', resultsCamping)))
                     .catch(error => { 
-                        console.log(error.name, error.message, "objeto error :\n", error)
-                        throw new Error(error.message) 
+                        if (error.name === 'ValidationError') {
+                            next(new ValidationError('correo', `El campo "correo" en Datos del Camping no es correcto.`))
+                        }
+                        if (error.name === 'MongoServerError') {
+                            next(new DuplicatedError('usuario', `El nombre del usuario en Datos del Camping ya existe. Escoge otro.`))
+                        }
                     })
             })
     } catch(error) {

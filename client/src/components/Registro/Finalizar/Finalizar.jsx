@@ -44,7 +44,7 @@ export default function Finalizar ( props ) {
             const dataZonas = await responseZonas.json()
 
             if (dataZonas.status != 'ok') {
-                setError(dataZonas.results)
+                setError([dataZonas, "Zonas"])
                 setCargando(false)
             }
 
@@ -63,7 +63,7 @@ export default function Finalizar ( props ) {
             const dataAcomodadores = await responseAcomodadores.json()
 
             if (dataAcomodadores.status != 'ok') {
-                setError(dataAcomodadores.results)
+                setError([dataAcomodadores, "Acomodadores"])
                 setCargando(false)
             }
 
@@ -74,15 +74,20 @@ export default function Finalizar ( props ) {
             }
         } else {
             setCargando(false)
-            setError(dataCamping.results)
+            setError([dataCamping, "Datos del camping"])
         }
+    }
+
+    const handleError = (paso) => {
+        setError(null)
+        props.setPaso(paso)
     }
 
     return(
         <div className="finalizar">
             <img src="../../../figura-carro-cesped.png" alt="FIGURA-CARRO-TIENDA" />
             <p>Para terminar de registrar tu cuenta de camping pulsa el botón de "Finalizar"</p>
-            <button onClick={() => setTimeout(registrarCamping, 1000)}>
+            <button onClick={registrarCamping}>
                 {
                     cargando ? (
                         <div className="dot-spinner">
@@ -105,8 +110,8 @@ export default function Finalizar ( props ) {
                     <div className="finalizar__error__modal">
                         <i className="fa-solid fa-triangle-exclamation"></i>
                         <p>Error al registrar tu camping</p>
-                        <p>{error}</p>
-                        <Link to={"/registro-camping"} className='finalizar__error__link'>ACEPTAR</Link>
+                        <p>{error[0].message}</p>
+                        <button onClick={() => handleError(error[1])} className='finalizar__error__link'>ACEPTAR</button>
                     </div>
                 </div>
             )}

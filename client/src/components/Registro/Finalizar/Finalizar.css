@@ -82,7 +82,6 @@
     color: whitesmoke;
     background-color: var(--negro);
     padding: .5rem 2rem;
-    text-decoration: none;
     transition: all .1s ease-in-out;
 }
 
