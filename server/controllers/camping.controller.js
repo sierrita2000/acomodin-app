@@ -45,5 +45,39 @@ const registrarCamping = async (req, res, next) => {
     }
 }
 
-module.exports = { registrarCamping }
+/**
+ * Devuelve el _id del camping si el usuario y contraseña son correctos.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverCamping = async (req, res, next) => {
+    try {
+        const { usuario, password } = req.params
+
+        await Camping.findOne({ usuario }).exec()
+            .then(results => {
+                if (results) {
+                    const password_hasheada = results.password
+
+                    bcrypt.compare(password, password_hasheada)
+                        .then(result_password => {
+                            result_password ?
+                                res.status(200).send(new ResponseAPI('ok', 'Log in coorecto', results)) // usuario y contraseña correctos
+                            :
+                                res.status(400).send(new ResponseAPI('error', 'La contraseña no es correcta', null)) // contraseña incorrecta
+                        })
+                } else {
+                    res.status(400).send(new ResponseAPI('not-found', 'El nombre del usuario no existe', null)) // usuario incorrecto
+                }
+            })
+            .catch(error => {
+                throw new Error(error)
+            })
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { registrarCamping, devolverCamping }
 
