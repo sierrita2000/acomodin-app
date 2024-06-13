@@ -13,7 +13,7 @@ export default function Finalizar ( props ) {
         setCargando(true)
 
         const formDataCamping = new FormData()
-        formDataCamping.append('logoCamping', props.logoCamping)
+        formDataCamping.append('imagenCamping', props.imagenCamping)
         formDataCamping.append('datosCamping', JSON.stringify(props.datosCamping))
         formDataCamping.append('tamanos', props.tamanos)
         formDataCamping.append('tipos', props.tipos)

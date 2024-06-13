@@ -1,0 +1,255 @@
+.principal {
+    height: fit-content;
+    min-height: 100vh;
+    width: 100%;
+    background: url('../../../fondo.png') no-repeat;
+    background-size: cover;
+    overflow-x: hidden;
+}
+
+/* LOADER href=" https://uiverse.io/abrahamcalsin/serious-turkey-52 " */
+
+.dot-spinner {
+    --uib-size: 10rem;
+    --uib-speed: .9s;
+    --uib-color: var(--negro);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: var(--uib-size);
+    width: var(--uib-size);
+    margin: 40vh auto 0;
+  }
+  
+  .dot-spinner__dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .dot-spinner__dot::before {
+    content: '';
+    height: 20%;
+    width: 20%;
+    border-radius: 50%;
+    background-color: var(--uib-color);
+    transform: scale(0);
+    opacity: 0.5;
+    animation: pulse0112 calc(var(--uib-speed) * 1.111) ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(18, 31, 53, 0.3);
+  }
+  
+  .dot-spinner__dot:nth-child(2) {
+    transform: rotate(45deg);
+  }
+  
+  .dot-spinner__dot:nth-child(2)::before {
+    animation-delay: calc(var(--uib-speed) * -0.875);
+  }
+  
+  .dot-spinner__dot:nth-child(3) {
+    transform: rotate(90deg);
+  }
+  
+  .dot-spinner__dot:nth-child(3)::before {
+    animation-delay: calc(var(--uib-speed) * -0.75);
+  }
+  
+  .dot-spinner__dot:nth-child(4) {
+    transform: rotate(135deg);
+  }
+  
+  .dot-spinner__dot:nth-child(4)::before {
+    animation-delay: calc(var(--uib-speed) * -0.625);
+  }
+  
+  .dot-spinner__dot:nth-child(5) {
+    transform: rotate(180deg);
+  }
+  
+  .dot-spinner__dot:nth-child(5)::before {
+    animation-delay: calc(var(--uib-speed) * -0.5);
+  }
+  
+  .dot-spinner__dot:nth-child(6) {
+    transform: rotate(225deg);
+  }
+  
+  .dot-spinner__dot:nth-child(6)::before {
+    animation-delay: calc(var(--uib-speed) * -0.375);
+  }
+  
+  .dot-spinner__dot:nth-child(7) {
+    transform: rotate(270deg);
+  }
+  
+  .dot-spinner__dot:nth-child(7)::before {
+    animation-delay: calc(var(--uib-speed) * -0.25);
+  }
+  
+  .dot-spinner__dot:nth-child(8) {
+    transform: rotate(315deg);
+  }
+  
+  .dot-spinner__dot:nth-child(8)::before {
+    animation-delay: calc(var(--uib-speed) * -0.125);
+  }
+  
+  @keyframes pulse0112 {
+    0%,
+    100% {
+      transform: scale(0);
+      opacity: 0.5;
+    }
+  
+    50% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* FIN LOADER */
+
+/* CABECERA */
+
+/* Botón de menú responsive */
+
+.principal__cabecera__btn_menu-bars {
+    display: none;
+}
+
+/* FIN Botón de menú responsive */
+
+.principal__cabecera {
+    height: 6.5rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.principal__cabecera nav {
+    display: flex;
+}
+
+.principal__cabecera__nav_boton {
+    text-decoration: none;
+    font-family: var(--Montserrat);
+    font-size: 18px;
+    font-weight: bolder;
+    color: var(--negro);
+    margin: 0 1rem;
+    padding: .5rem;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+}
+
+.principal__cabecera__nav_boton:hover {
+    transform: scale(1.05);
+}
+
+.principal__cabecera nav .active {
+    background-color: var(--negro);
+    color: whitesmoke;
+}
+
+.principal__cabecera__perfil {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0 0;
+    margin: 0 2rem 0 0;
+    position: relative;
+}
+
+.principal__cabecera__perfil__circulo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 5rem;
+    width: 5rem;
+    border-radius: 50%;
+    border: 2px solid var(--negro);
+    background-color: var(--azulClaro);
+    overflow: hidden;
+    z-index: 1;
+    filter: drop-shadow(0 4px 3px rgb(0, 0, 0, 0.5));
+}
+
+.principal__cabecera__perfil__circulo i {
+    position: relative;
+    top: .6rem;
+    font-size: 60px;
+    color: var(--negro);
+}
+
+.principal__cabecera__perfil__circulo img {
+    height: 100%;
+    object-fit: cover;
+}
+
+.principal__cabecera__perfil__links {
+    position: absolute;
+    top: 1rem;
+    right: 0rem;
+    height: 5rem;
+    width: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: .5rem;
+    text-align: center;
+    border-radius: 50%;
+    border: 2px solid var(--negro);
+    background-color: var(--azulGastado);
+    filter: drop-shadow(0 4px 2px rgb(0, 0, 0, 0.5));
+    overflow: hidden;
+    transition: all .15s ease-in-out;
+}
+
+.principal__cabecera__perfil__links .principal__cabecera__nav_boton {
+    display: none;
+}
+
+.principal__cabecera__perfil__links .principal__cabecera__nav_boton__desplegado {
+    display: block;
+}
+
+.principal__cabecera__perfil__links > div {
+    height: 2px;
+    width: 80%;
+    background-color: var(--negro);
+}
+
+.principal__cabecera__perfil__links > button:hover {
+    transform: scale(1.05);
+}
+
+.principal__cabecera__perfil__circulo__accionador-hover:hover ~ .principal__cabecera__perfil__links {
+    height: 5.5rem;
+    width: 5.5rem;
+    top: 1.2rem;
+    right: .2rem;
+}
+
+.principal__cabecera__perfil__links__desplegado {
+    height: 10rem;
+    width: 10rem;
+    top: 3.5rem;
+    right: 1.5rem;
+}
+
+/* FIN CABECERA */
+
+.principal__outlet {
+    height: fit-content;
+    width: 100%;
+}

@@ -32,7 +32,37 @@ const router = createBrowserRouter([
   {
     path: '/principal',
     element: <Principal />,
-    errorElement: <Error primerNumero={4} segundoNumero={1} mensaje={"¡No puedes acceder a esta página sin autorización!"} ruta={"/login"} textoBoton={"INICIAR SESIÓN"} />
+    errorElement: <Error primerNumero={4} segundoNumero={1} mensaje={"¡No puedes acceder a esta página sin autorización!"} ruta={"/login"} textoBoton={"INICIAR SESIÓN"} />,
+    children: [
+      {
+        path: '/principal/calendario-reservas',
+        element: <h1>Calendario reservas</h1>
+      },
+      {
+        path: '/principal/parcelas',
+        element: <h1>Parcelas</h1>
+      },
+      {
+        path: '/principal/registro-actividad',
+        element: <h1>Registro actividad</h1>
+      },
+      {
+        path: '/principal/entradas',
+        element: <h1>Entradas</h1>
+      },
+      {
+        path: '/principal/salidas',
+        element: <h1>Salidas</h1>
+      },
+      {
+        path: '/principal/perfil',
+        element: <h1>Perfil</h1>
+      },
+      {
+        path: '/principal/mi-camping',
+        element: <h1>Mi camping</h1>
+      }
+    ]
   }
 ])
 

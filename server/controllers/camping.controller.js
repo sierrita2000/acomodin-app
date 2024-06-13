@@ -12,7 +12,7 @@ const { ValidationError, DuplicatedError } = require('../errors/errors')
 const registrarCamping = async (req, res, next) => {
     try {
         const { tamanos, tipos, caracteristicas } = req.body
-        const logoCamping = req.file ? req.file.filename : null
+        const imagenCamping = req.file ? req.file.filename : null
 
         const datosCamping = JSON.parse(req.body.datosCamping)
 
@@ -23,7 +23,7 @@ const registrarCamping = async (req, res, next) => {
                     password: passwordHash,
                     correo: datosCamping.correo,
                     nombre: datosCamping.nombre,
-                    logo: logoCamping,
+                    imagen: imagenCamping,
                     tamanos: tamanos.split(',') || [],
                     caracteristicas: caracteristicas.split(',') || [],
                     conceptos: tipos.split(',').concat(['665a0165c5f8973c88844b8d', '665a0165c5f8973c88844b8c'])

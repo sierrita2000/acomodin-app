@@ -24,7 +24,7 @@ const router = Router()
 router.get("/camping/usuario/:usuario/password/:password", devolverCamping)
 router.get("/camping/id/:id_camping", devolverCampingPorID)
 
-router.post("/camping/registrar-camping", upload.single('logoCamping'), registrarCamping)
+router.post("/camping/registrar-camping", upload.single('imagenCamping'), registrarCamping)
 
 // RUTAS DE ZONA
 router.post("/zonas/registrar-zonas", registrarZonas)
