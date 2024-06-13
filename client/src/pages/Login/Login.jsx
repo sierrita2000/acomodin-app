@@ -1,9 +1,15 @@
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import './Login.css'
+import { useNavigate } from 'react-router-dom'
+import { LoginContext } from '../../context/LoginContext'
 
 export default function Login() {
 
     const [ tipoUsuario, setTiposUsuario ] = useState(0) // 0 --> acomodador, 1 --> camping
+
+    const navigate = useNavigate()
+
+    const loginContext = useContext(LoginContext)
 
     /**
      * Evento del icono ojo para poder cambiar el input de la contraseña de password a text.
@@ -22,6 +28,26 @@ export default function Login() {
         input_password.setAttribute('type', tipo)
     }
 
+    /**
+     * Controla el inicio de sesión de un usuario.
+     */
+    const loginUsuario = async (e) => {
+        e.preventDefault()
+        
+        const usuario = document.getElementById('login_usuario')
+        const password = document.getElementById('login_password')
+    
+        const response = await fetch(`${import.meta.env.VITE_API_HOST}${tipoUsuario === 0 ? `acomodadores/usuario/${usuario.value}/password/${password.value}` : `camping/usuario/${usuario.value}/password/${password.value}`}`)
+        const data = await response.json()
+    
+        if (data.status === 'ok') {
+            loginContext[1]([data.results._id, tipoUsuario])
+            navigate('/principal')
+        } else {
+            alert(data.message)
+        }
+    }
+
     return(
         <section className="login">
             <section className="login__izq">
@@ -36,15 +62,15 @@ export default function Login() {
                     </div>
                     <form>
                         <div className="login__form__usuario">
-                            <input type="text" name="login_usuario" id="login_usuario" minLength={1} />
+                            <input type="text" name="login_usuario" id="login_usuario" />
                             <label htmlFor="login_usuario">usuario</label>
                         </div>
                         <div className="login__form__password">
-                            <input type="password" name="login_password" id="login_password" minLength={1} />
+                            <input type="password" name="login_password" id="login_password" />
                             <label htmlFor="login_password">contraseña</label>
                             <button onClick={e => verPassword(e)}><i className="fa-solid fa-eye-slash"></i></button>
                         </div>
-                        <button className='login__btn__iniciar' type="submit">INICIAR</button>
+                        <button onClick={e => loginUsuario(e)} className='login__btn__iniciar' type="submit">INICIAR</button>
                     </form>
                 </div>
             </section>

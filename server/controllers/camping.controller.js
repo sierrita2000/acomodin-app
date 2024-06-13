@@ -63,7 +63,7 @@ const devolverCamping = async (req, res, next) => {
                     bcrypt.compare(password, password_hasheada)
                         .then(result_password => {
                             result_password ?
-                                res.status(200).send(new ResponseAPI('ok', 'Log in coorecto', results)) // usuario y contraseña correctos
+                                res.status(200).send(new ResponseAPI('ok', 'Log in correcto', results)) // usuario y contraseña correctos
                             :
                                 res.status(400).send(new ResponseAPI('error', 'La contraseña no es correcta', null)) // contraseña incorrecta
                         })
@@ -79,5 +79,31 @@ const devolverCamping = async (req, res, next) => {
     }
 }
 
-module.exports = { registrarCamping, devolverCamping }
+/**
+ * Devuelve los datos del camping por su ID.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverCampingPorID = async (req, res, next) => {
+    try {
+        const { id_camping } = req.params
+
+        await Camping.findById(id_camping).exec()
+            .then(results => {
+                if(results) {
+                    res.status(200).send(new ResponseAPI('ok', `Camping con id "${id_camping}"`, results))
+                } else {
+                    res.status(404).send(new ResponseAPI('not-found', `No se encunetra el camping con id "${id_camping}"`, null))
+                }
+            })
+            .catch(error => {
+                throw new Error(error)
+            })
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { registrarCamping, devolverCamping, devolverCampingPorID }
 

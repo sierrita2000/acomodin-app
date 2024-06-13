@@ -47,7 +47,7 @@ export default function Acomodadores ( props ) {
                 <button onClick={guardarCambios}><p>GUARDAR CAMBIOS</p>{ guardar && <div><i className="fa-solid fa-thumbs-up"></i></div> }</button>
             </div>
             <div className="acomodadores__contenido">
-                {(props.errorPaso) && <p className='frase_error'>* Todos los campos deben estar completos</p>}
+                {(props.errorPaso) && <p className='frase_error'>* Todos los campos deben estar completos, o algún campo correo es incorrecto'</p>}
                 {
                     props.acomodadores?.map((acomodador, indice) => {
                         return <Acomodador key={`acomodador-${indice}`} indice={indice+1} { ...acomodador } acomodadores={props.acomodadores} setAcomodadores={props.setAcomodadores} guardar={guardar} handleGuardarCambios={guardarCambios} errorPaso={props.errorPaso} />
@@ -110,7 +110,7 @@ function Acomodador ({ indice, id, correo, nombre, acomodadores, setAcomodadores
                 <div className="acomodador__info__info">
                     {(errorPaso && correoAcomodador === "") && <p className='asterisco_error_acomodador'>*</p>}
                     <label htmlFor="acomodador_correo">correo:</label>
-                    <input className={`acomodador__info__info__input ${(errorPaso && correoAcomodador === "") && 'input__error'}`} type="text" name="acomodador_correo" id="acomodador_correo" value={correoAcomodador} onChange={e => setCorreoAcomodador(e.target.value)} />
+                    <input className={`acomodador__info__info__input ${(errorPaso && (correoAcomodador === "" || !(new RegExp('[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}').test(correoAcomodador)))) && 'input__error'}`} type="text" name="acomodador_correo" id="acomodador_correo" value={correoAcomodador} onChange={e => setCorreoAcomodador(e.target.value)} />
                 </div>
                 <div className="acomodador__info__info">
                     {(errorPaso && nombreAcomodador === "") && <p className='asterisco_error_acomodador'>*</p>}

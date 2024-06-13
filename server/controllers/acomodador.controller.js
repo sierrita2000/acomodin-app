@@ -19,6 +19,7 @@ const registrarAcomodadores = (req, res, next) => {
         acomodadores.forEach(async acomodador => {
             const usuario_acomodador = `${acomodador.nombre}_${nombre_camping.replaceAll(' ', '_')}`
             const password_acomodador = crearPasswordAleatorio()
+            console.log(password_acomodador)
 
             bcrypt.hash(password_acomodador, 10)
                 .then(async password_acomodador_encriptada => {
@@ -63,7 +64,7 @@ const devolverAcomodador = async (req, res, next) => {
                     bcrypt.compare(password, password_hasheada)
                         .then(result_password => {
                             result_password ?
-                                res.status(200).send(new ResponseAPI('ok', 'Log in coorecto', results)) // usuario y contraseña correctos
+                                res.status(200).send(new ResponseAPI('ok', 'Log in correcto', results)) // usuario y contraseña correctos
                             :
                                 res.status(400).send(new ResponseAPI('error', 'La contraseña no es correcta', null)) // contraseña incorrecta
                         })
@@ -79,7 +80,33 @@ const devolverAcomodador = async (req, res, next) => {
     }
 }
 
-module.exports = { registrarAcomodadores, devolverAcomodador }
+/**
+ * Devuelve los datos del acomodador por su ID.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverAcomodadorPorID = async (req, res, next) => {
+    try {
+        const { id_acomodador } = req.params
+
+        await Acomodador.findById(id_acomodador).exec()
+            .then(results => {
+                if(results) {
+                    res.status(200).send(new ResponseAPI('ok', `Acomodador con id "${id_acomodador}"`, results))
+                } else {
+                    res.status(404).send(new ResponseAPI('not-found', `No se encunetra el acomodador con id "${id_acomodador}"`, null))
+                }
+            })
+            .catch(error => {
+                throw new Error(error)
+            })
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID }
 
 /**
  * Genera una contraseña de 12 caracteres aleatoria.
@@ -87,15 +114,14 @@ module.exports = { registrarAcomodadores, devolverAcomodador }
  */
 const crearPasswordAleatorio = () => {
     const letras = [...'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ']
-    const puntuacion = [...'!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~']
     const numeros = new Array(10).fill(0).map((n, indice) => n = indice)
 
-    const caracteres = [...letras, ...puntuacion, ...numeros]
+    const caracteres = [...letras, ...numeros]
 
     let password = ''
 
     for(let i = 0; i < 12; i++) {
-        const caracter = caracteres[Math.floor(Math.random() * caracteres.length - 1)]
+        const caracter = caracteres[Math.floor(Math.random() * (caracteres.length - 1))]
         password += caracter
     }
 

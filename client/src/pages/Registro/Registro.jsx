@@ -91,10 +91,16 @@ export default function Registro () {
     }
 
     const pasoAcomodadoresCorrecto = () => {
+        const regexp = new RegExp('[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}')
         let resultado = true
         acomodadores.forEach(acomodador => {
             if(acomodador.correo === '' || acomodador.nombre === '') {
                 resultado = false
+            } else {
+                if(!regexp.test(acomodador.correo)) {
+                    console.log(regexp.test(acomodador.correo))
+                    resultado = false
+                }
             }
         })
         

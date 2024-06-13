@@ -1,10 +1,10 @@
 const { Router } = require('express')
 const { connection } = require('../connection/connection')
-const { registrarCamping, devolverCamping } = require('../controllers/camping.controller')
+const { registrarCamping, devolverCamping, devolverCampingPorID } = require('../controllers/camping.controller')
 const { crearConceptos, devolverTodosLosConceptos } = require('../controllers/conceptos.controller')
 const multer = require('multer')
 const { registrarZonas } = require('../controllers/zona.controller')
-const { registrarAcomodadores, devolverAcomodador } = require('../controllers/acomodador.controller')
+const { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID } = require('../controllers/acomodador.controller')
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -22,6 +22,7 @@ const router = Router()
 
 // RUTAS DE USUARIO CAMPING
 router.get("/camping/usuario/:usuario/password/:password", devolverCamping)
+router.get("/camping/id/:id_camping", devolverCampingPorID)
 
 router.post("/camping/registrar-camping", upload.single('logoCamping'), registrarCamping)
 
@@ -32,6 +33,7 @@ router.post("/zonas/registrar-zonas", registrarZonas)
 
 // RUTAS DE ACOMODADOR
 router.get("/acomodadores/usuario/:usuario/password/:password", devolverAcomodador)
+router.get("/acomodador/id/:id_acomodador", devolverAcomodadorPorID)
 
 router.post("/acomodadores/registrar-acomodadores", registrarAcomodadores)
 
