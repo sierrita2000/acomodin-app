@@ -31,6 +31,7 @@ button {
   padding: .5rem 1rem;
   cursor: pointer;
   transition: all .1s ease-in-out;
+  color: var(--negro);
 }
 
 button:hover {

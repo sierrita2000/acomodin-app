@@ -105,5 +105,31 @@ const devolverCampingPorID = async (req, res, next) => {
     }
 }
 
-module.exports = { registrarCamping, devolverCamping, devolverCampingPorID }
+/**
+ * Actualiza los datos de un camping.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const actualizarDatosCamping = async (req, res, next) => {
+    try {
+        const { id } = req.params
+        const imagen = req.file ? req.file.filename : null
+
+        const datosCamping = JSON.parse(req.body.datos)
+
+        await Camping.findByIdAndUpdate(id, { imagen, ...datosCamping }, { returnDocument: 'after' }).exec()
+            .then(results => {
+                res.status(200).send(new ResponseAPI('ok', `Camping con id ${id} actualizado correctamente`, results))
+            })
+            .catch(error => {
+                throw new Error(error)
+            })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { registrarCamping, devolverCamping, devolverCampingPorID, actualizarDatosCamping }
 

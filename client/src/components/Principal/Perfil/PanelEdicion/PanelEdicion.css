@@ -1,0 +1,123 @@
+.panel_edicion {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(0, 0, 0, 0.5);
+    z-index: 2;
+}
+
+/* MODAL */
+
+.panel_edicion__modal {
+    height: fit-content;
+    width: fit-content;
+    min-width: 28rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: url('../../../../../fondo.png');
+    background-size: 100%;
+    border: 2px solid var(--negro);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    animation: aparecer-panel .3s ease-in-out;
+}
+
+@keyframes aparecer-panel {
+    from {
+        filter: opacity(0%);
+        transform: translateY(-2rem);
+    }
+}
+
+.panel_edicion__modal__cerrar_btn {
+    align-self: flex-end;
+}
+
+.panel_edicion__modal__cerrar_btn i {
+    font-size: 24px;
+}
+
+#panel_imagen {
+    display: none;
+}
+
+.panel_edicion__modal__imagen {
+    height: 10rem;
+    width: 10rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    border: 2px solid var(--negro);
+    background-color: var(--azulClaro);
+    overflow: hidden;
+    filter: drop-shadow(0 4px 4px rgb(0, 0, 0, 0.4));
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+}
+
+.panel_edicion__modal__imagen:hover {
+    transform: scale(1.05);
+    filter: drop-shadow(0 4px 6px rgb(0, 0, 0, 0.3));
+}
+
+.panel_edicion__modal__imagen img {
+    height: 100%;
+    width: 100%;
+}
+
+.panel_edicion__modal__imagen i {
+    position: relative;
+    top: 1rem;
+    font-size: 140px;
+}
+
+.panel_edicion__modal__campos {
+    width: 95%;
+    margin: 1rem 0;
+}
+
+.panel_edicion__modal__campos__campo {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 1rem 0;
+}
+
+.panel_edicion__modal__campos__campo label {
+    font-family: var(--Crimson);
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.panel_edicion__modal__campos__campo input[type = "text"] {
+    width: inherit;
+    border: 2px solid var(--negro);
+    margin: 0 0 0 .5rem;
+    padding: .2rem .4rem;
+    font-family: var(--Crimson);
+    font-style: italic;
+    font-size: 22px;
+    background-color: var(--azulClaro);
+}
+
+.panel_edicion__modal__botones button {
+    font-family: var(--Montserrat);
+    font-size: 20px;
+    font-weight: bolder;
+    background-color: var(--negro);
+    color: var(--azulClaro);
+    margin: 0 1rem;
+}
+
+.panel_edicion__modal__botones button:hover {
+    transform: scale(1.05);
+}
+
+/* MODAL */

@@ -197,7 +197,7 @@
 
 .principal__cabecera__perfil__circulo img {
     height: 100%;
-    object-fit: cover;
+    width: 100%;
 }
 
 .principal__cabecera__perfil__links {

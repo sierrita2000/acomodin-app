@@ -106,7 +106,33 @@ const devolverAcomodadorPorID = async (req, res, next) => {
     }
 }
 
-module.exports = { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID }
+/**
+ * Actualiza los datos de un acomodador.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const actualizarDatosAcomodador = async (req, res, next) => {
+    try {
+        const { id } = req.params
+        const imagen = req.file ? req.file.filename : null
+
+        const datosAcomodador = JSON.parse(req.body.datos)
+
+        await Acomodador.findByIdAndUpdate(id, { imagen, ...datosAcomodador }, { returnDocument: 'after' }).exec()
+            .then(results => {
+                res.status(200).send(new ResponseAPI('ok', `Acomodador con id ${id} actualizado correctamente`, results))
+            })
+            .catch(error => {
+                throw new Error(error)
+            })
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador }
 
 /**
  * Genera una contraseña de 12 caracteres aleatoria.

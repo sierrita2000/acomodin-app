@@ -54,14 +54,14 @@ export default function Principal () {
                                 <div className="principal__cabecera__perfil__circulo principal__cabecera__perfil__circulo__accionador-hover" onClick={e => desplegarPanelPerfil(e)}>
                                     {
                                         data?.results.imagen ? (
-                                            <img src={`${import.meta.env.VITE_API_HOST}static/${data?.results.imagen}`} alt="LOGO-CAMPING" />
+                                            <img src={`${import.meta.env.VITE_API_HOST}static/${data?.results.imagen}`} alt="IMAGEN-PERFIL" />
                                         ) : (
                                             <i className="fa-solid fa-user"></i>
                                         )
                                     }
                                 </div>
                                 <div className='principal__cabecera__perfil__links'>
-                                    <Link to='/principal/perfil' className='principal__cabecera__nav_boton'>PERFIL</Link>
+                                    <Link to='/principal/perfil' className='principal__cabecera__nav_boton' onClick={desplegarPanelPerfil} >PERFIL</Link>
                                     <div></div>
                                     <button className='principal__cabecera__nav_boton'>CERRAR SESIÓN</button>
                                 </div>

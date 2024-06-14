@@ -8,6 +8,8 @@ import Completado from './components/Registro/PantallaCompletado/Completado'
 import Principal from './pages/Principal/Principal'
 import { LoginContext } from './context/LoginContext'
 import { useState } from 'react'
+import Perfil from './components/Principal/Perfil/Perfil'
+import PanelEdicion from './components/Principal/Perfil/PanelEdicion/PanelEdicion'
 
 const router = createBrowserRouter([
   {
@@ -56,7 +58,16 @@ const router = createBrowserRouter([
       },
       {
         path: '/principal/perfil',
-        element: <h1>Perfil</h1>
+        element: <Perfil />,
+        children: [
+          {
+            path: '/principal/perfil/editar/',
+            element: <PanelEdicion />
+          },
+          {
+            path: '/principal/perfil/cambiar-contraseña'
+          }
+        ]
       },
       {
         path: '/principal/mi-camping',
