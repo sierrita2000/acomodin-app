@@ -368,6 +368,7 @@
 .inicio__footer {
     height: 25rem;
     width: 100%;
+    max-width: 1600px;
     background-color: var(--azulOscuro);
     margin: 2rem 0 0;
     display: flex;

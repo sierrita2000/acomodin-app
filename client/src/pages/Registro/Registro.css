@@ -1,12 +1,12 @@
 .registro {
     min-height: 100vh;
     width: 100%;
-    background: url('../../fondo.png') no-repeat;
-    background-size: cover;
+    background: url('../../fondo.png');
     background-attachment: fixed;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
 }
 
 /* CABECERA */
@@ -14,6 +14,7 @@
 .registro__cabecera {
     height: fit-content;
     width: 100%;
+    max-width: 1600px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -67,6 +68,11 @@
     font-size: 20px;
 }
 /* FIN CABECERA */
+
+.registro__pasos {
+    width: 100%;
+    max-width: 1600px;
+}
 
 /* BOTONES */
 
