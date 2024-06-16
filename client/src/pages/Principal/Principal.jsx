@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import './Principal.css'
 import { LoginContext } from '../../context/LoginContext'
 import { useFetch } from '../../hooks/useFetch'
@@ -8,13 +8,16 @@ export default function Principal () {
 
     const loginContext = useContext(LoginContext)
 
-    const [ data, error, loading ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador': 'camping'}/id/${loginContext[0][0]}`)
+    const [ actualizacion, setActualizacion ] = useState(false)
 
+    const [ data, setData ] = useState(null)
+    const [ loading, setLoading ] = useState(false)
+    const [ error, setError ] = useState(null)
+    
     /**
      * Desplegar el panel del perfil y cerrar sesión al pulsar sobre la imagen del usuario.
      */
     const desplegarPanelPerfil = (e) => {
-        console.log('pulsado')
         const panel = document.querySelector('.principal__cabecera__perfil__links')
         const imagen = document.querySelector('.principal__cabecera__perfil__circulo')
         const links = document.querySelectorAll('.principal__cabecera__perfil__links .principal__cabecera__nav_boton')
@@ -23,6 +26,16 @@ export default function Principal () {
         panel.classList.toggle('principal__cabecera__perfil__links__desplegado')
         links.forEach(link => link.classList.toggle('principal__cabecera__nav_boton__desplegado'))
     }
+
+    useEffect(() => {
+        setLoading(true)
+
+        fetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador': 'camping'}/id/${loginContext[0][0]}`)
+            .then(response => response.json())
+            .then(data => setData(data))
+            .catch(error => setError(error))
+            .finally(() => setLoading(false))
+    }, [actualizacion])
 
     return(
         <div className="principal">
@@ -68,7 +81,7 @@ export default function Principal () {
                             </div>
                         </div>
                         <div className="principal__outlet">
-                            <Outlet />
+                            <Outlet context={[ actualizacion, setActualizacion ]} />
                         </div>
                     </>
                 )

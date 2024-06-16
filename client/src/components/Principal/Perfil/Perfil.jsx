@@ -1,14 +1,16 @@
 import { LoginContext } from '../../../context/LoginContext'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import './Perfil.css'
 import { useFetch } from '../../../hooks/useFetch'
-import { Link, Outlet } from 'react-router-dom'
+import { Link, Outlet, useOutletContext } from 'react-router-dom'
 
 export default function Perfil () {
 
     const loginContext = useContext(LoginContext)
 
-    const [ data, error, loading ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador': 'camping'}/id/${loginContext[0][0]}`)
+    const [ actualizacion, setActualizacion ] = useOutletContext()
+
+    let [ data, error, loading ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador': 'camping'}/id/${loginContext[0][0]}`)
 
     return(
         <div className="perfil">
@@ -68,7 +70,7 @@ export default function Perfil () {
                                 )
                             }
                         </div>
-                        <Outlet />
+                        <Outlet context={[ actualizacion, setActualizacion ]} />
                     </>
                 )
             }

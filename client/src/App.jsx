@@ -10,6 +10,7 @@ import { LoginContext } from './context/LoginContext'
 import { useState } from 'react'
 import Perfil from './components/Principal/Perfil/Perfil'
 import PanelEdicion from './components/Principal/Perfil/PanelEdicion/PanelEdicion'
+import PanelPassword from './components/Principal/Perfil/PanelPassword/PanelPassword'
 
 const router = createBrowserRouter([
   {
@@ -65,7 +66,8 @@ const router = createBrowserRouter([
             element: <PanelEdicion />
           },
           {
-            path: '/principal/perfil/cambiar-contraseña'
+            path: '/principal/perfil/cambiar-contraseña',
+            element: <PanelPassword />
           }
         ]
       },
