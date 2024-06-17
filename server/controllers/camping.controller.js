@@ -118,7 +118,10 @@ const actualizarDatosCamping = async (req, res, next) => {
 
         const datosCamping = JSON.parse(req.body.datos)
 
-        await Camping.findByIdAndUpdate(id, { imagen, ...datosCamping }, { returnDocument: 'after' }).exec()
+        const objUpdate = { ...datosCamping }
+        if (imagen) objUpdate.imagen = imagen
+
+        await Camping.findByIdAndUpdate(id, objUpdate, { returnDocument: 'after' }).exec()
             .then(results => {
                 res.status(200).send(new ResponseAPI('ok', `Camping con id ${id} actualizado correctamente`, results))
             })

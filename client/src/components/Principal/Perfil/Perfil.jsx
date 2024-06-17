@@ -39,7 +39,7 @@ export default function Perfil () {
                                     }
                             </div>
                             <Link to={`/principal/perfil/editar`} className='perfil__izq__boton_editar'>EDITAR</Link>
-                            <Link className='perfil__izq__boton_contrasena'>Cambiar contraseña</Link>
+                            <Link to={`/principal/perfil/cambiar-contraseña`} className='perfil__izq__boton_contrasena'>Cambiar contraseña</Link>
                         </div>
                         <div className="perfil__der">
                             <div className="perfil__der__campo">

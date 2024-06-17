@@ -11,7 +11,7 @@ export default function PanelEdicion () {
     
     const [ actualizacion, setActualizacion ] = useOutletContext()
 
-    const [ imagen, setImagen ] = useState(null)
+    const [ imagen, setImagen ] = useState('')
     const [ usuario, setUsuario ] = useState('')
     const [ correo, setCorreo ] = useState('')
     const [ nombre, setNombre ] = useState('')
@@ -53,13 +53,14 @@ export default function PanelEdicion () {
             objDatos.telefono = telefono
         }
 
+        console.log(objDatos)
         const formData = new FormData()
         formData.append('datos', JSON.stringify(objDatos))
-        if (imagen) {
+        if ((typeof imagen != 'string') && imagen) {
             formData.append('imagen', imagen)
         }
 
-        const response = await fetch(`${import.meta.env.VITE_API_HOST}acomodadores/actualizar-${loginContext[0][1] === 0 ? 'acomodador' : 'camping'}/id/${loginContext[0][0]}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodadores/actualizar-acomodador' : 'camping/actualizar-camping'}/id/${loginContext[0][0]}`, {
             method: 'PUT',
             body: formData
         })

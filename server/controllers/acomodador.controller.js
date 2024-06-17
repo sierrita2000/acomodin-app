@@ -119,7 +119,10 @@ const actualizarDatosAcomodador = async (req, res, next) => {
 
         const datosAcomodador = JSON.parse(req.body.datos)
 
-        await Acomodador.findByIdAndUpdate(id, { imagen, ...datosAcomodador }, { returnDocument: 'after' }).exec()
+        const objUpdate = { ...datosAcomodador }
+        if (imagen) objUpdate.imagen = imagen
+
+        await Acomodador.findByIdAndUpdate(id, objUpdate, { returnDocument: 'after' }).exec()
             .then(results => {
                 res.status(200).send(new ResponseAPI('ok', `Acomodador con id ${id} actualizado correctamente`, results))
             })
