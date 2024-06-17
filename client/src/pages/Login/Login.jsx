@@ -42,7 +42,7 @@ export default function Login() {
     
         if (data.status === 'ok') {
             loginContext[1]([data.results._id, tipoUsuario])
-            navigate('/principal')
+            navigate('/principal/calendario-reservas')
         } else {
             alert(data.message)
         }

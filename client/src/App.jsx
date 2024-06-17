@@ -11,6 +11,7 @@ import { useState } from 'react'
 import Perfil from './components/Principal/Perfil/Perfil'
 import PanelEdicion from './components/Principal/Perfil/PanelEdicion/PanelEdicion'
 import PanelPassword from './components/Principal/Perfil/PanelPassword/PanelPassword'
+import Parcelas from './components/Principal/Parcelas/Parcelas'
 
 const router = createBrowserRouter([
   {
@@ -43,7 +44,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/principal/parcelas',
-        element: <h1>Parcelas</h1>
+        element: <Parcelas />
       },
       {
         path: '/principal/registro-actividad',

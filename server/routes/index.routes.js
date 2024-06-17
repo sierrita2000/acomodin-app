@@ -3,8 +3,9 @@ const { connection } = require('../connection/connection')
 const { registrarCamping, devolverCamping, devolverCampingPorID, actualizarDatosCamping, actualizarPasswordCamping } = require('../controllers/camping.controller')
 const { crearConceptos, devolverTodosLosConceptos } = require('../controllers/conceptos.controller')
 const multer = require('multer')
-const { registrarZonas } = require('../controllers/zona.controller')
+const { registrarZonas, devolverZonas } = require('../controllers/zona.controller')
 const { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador } = require('../controllers/acomodador.controller')
+const { devolverParcelas, devolverParceaPorId } = require('../controllers/parcela.controller')
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -30,9 +31,13 @@ router.put("/camping/actualizar-camping/id/:id", upload.single('imagen'), actual
 router.put("/camping/actualizar-password/id/:id", actualizarPasswordCamping)
 
 // RUTAS DE ZONA
+router.get("/zonas/devolver-zonas/id_camping/:id_camping", devolverZonas)
+
 router.post("/zonas/registrar-zonas", registrarZonas)
 
 // RUTAS DE PARCELA
+router.get("/parcelas/devolver-parcelas/id_zona/:id_zona", devolverParcelas)
+router.get("/parcelas/id/:id", devolverParceaPorId)
 
 // RUTAS DE ACOMODADOR
 router.get("/acomodadores/usuario/:usuario/password/:password", devolverAcomodador)

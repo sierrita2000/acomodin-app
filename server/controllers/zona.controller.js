@@ -51,4 +51,30 @@ const registrarZonas = (req, res, next) => {
     }
 }
 
-module.exports = { registrarZonas }
+/**
+ * Devuelve las zonas de un camping.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverZonas = async (req, res, next) => {
+    try {
+        const { id_camping } = req.params
+
+        await Zona.find({ id_camping }).exec()
+            .then(results => {
+                if (results.length != 0) {
+                    res.status(200).send(new ResponseAPI('ok', `Zonas del camping con id "${id_camping}"`, results))
+                } else {
+                    res.status(404).send(new ResponseAPI('not-found', `No existen zonas que pertenezcan al camping con id "${id_camping}"`, null))
+                }
+            })
+            .catch(error => {
+                res.status(404).send(new ResponseAPI('not-found', `No existe ningún camping con id "${id_camping}"`, null))
+            })
+    } catch(error) {
+        next(error)
+    }
+}
+
+module.exports = { registrarZonas, devolverZonas }

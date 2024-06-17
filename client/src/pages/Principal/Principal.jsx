@@ -2,7 +2,8 @@ import { useContext, useEffect, useState } from 'react'
 import './Principal.css'
 import { LoginContext } from '../../context/LoginContext'
 import { useFetch } from '../../hooks/useFetch'
-import { Outlet, NavLink, Link } from 'react-router-dom'
+import { Outlet, NavLink, Link, useNavigate } from 'react-router-dom'
+import Mensaje from '../../components/Mensaje/Mensaje'
 
 export default function Principal () {
 
@@ -10,9 +11,12 @@ export default function Principal () {
 
     const [ actualizacion, setActualizacion ] = useState(false)
 
+    const [ mostrarMensaje, setMostrarMensaje ] = useState(false)
+
     const [ data, setData ] = useState(null)
     const [ loading, setLoading ] = useState(false)
-    const [ error, setError ] = useState(null)
+
+    const navigate = useNavigate()
     
     /**
      * Desplegar el panel del perfil y cerrar sesión al pulsar sobre la imagen del usuario.
@@ -27,13 +31,17 @@ export default function Principal () {
         links.forEach(link => link.classList.toggle('principal__cabecera__nav_boton__desplegado'))
     }
 
+    const cerrarSesion = () => {
+        loginContext[1](null)
+        navigate('/login')
+    }
+
     useEffect(() => {
         setLoading(true)
 
         fetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador': 'camping'}/id/${loginContext[0][0]}`)
             .then(response => response.json())
             .then(data => setData(data))
-            .catch(error => setError(error))
             .finally(() => setLoading(false))
     }, [actualizacion])
 
@@ -76,13 +84,18 @@ export default function Principal () {
                                 <div className='principal__cabecera__perfil__links'>
                                     <Link to='/principal/perfil' className='principal__cabecera__nav_boton' onClick={desplegarPanelPerfil} >PERFIL</Link>
                                     <div></div>
-                                    <button className='principal__cabecera__nav_boton'>CERRAR SESIÓN</button>
+                                    <button onClick={() => setMostrarMensaje(true)} className='principal__cabecera__nav_boton'>CERRAR SESIÓN</button>
                                 </div>
                             </div>
                         </div>
                         <div className="principal__outlet">
                             <Outlet context={[ actualizacion, setActualizacion ]} />
                         </div>
+                        {
+                            mostrarMensaje && (
+                                <Mensaje mensaje={"¿Seguro que quiere cerrar la sesión?"} accionCancelar={() => {setMostrarMensaje(false)}} accionAceptar={cerrarSesion} />
+                            )
+                        }
                     </>
                 )
             }

@@ -1,0 +1,164 @@
+/* LOADER href=" https://uiverse.io/abrahamcalsin/serious-turkey-52 " */
+
+.parcelas__der .dot-spinner {
+    --uib-size: 10rem;
+    --uib-speed: .9s;
+    --uib-color: var(--negro);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: var(--uib-size);
+    width: var(--uib-size);
+    margin: 0;
+  }
+  
+  .dot-spinner__dot {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    width: 100%;
+  }
+  
+  .dot-spinner__dot::before {
+    content: '';
+    height: 15%;
+    width: 15%;
+    border-radius: 50%;
+    background-color: var(--uib-color);
+    transform: scale(0);
+    opacity: 0.5;
+    animation: pulse0112 calc(var(--uib-speed) * 1.111) ease-in-out infinite;
+    box-shadow: 0 0 20px rgba(18, 31, 53, 0.3);
+  }
+  
+  .dot-spinner__dot:nth-child(2) {
+    transform: rotate(45deg);
+  }
+  
+  .dot-spinner__dot:nth-child(2)::before {
+    animation-delay: calc(var(--uib-speed) * -0.875);
+  }
+  
+  .dot-spinner__dot:nth-child(3) {
+    transform: rotate(90deg);
+  }
+  
+  .dot-spinner__dot:nth-child(3)::before {
+    animation-delay: calc(var(--uib-speed) * -0.75);
+  }
+  
+  .dot-spinner__dot:nth-child(4) {
+    transform: rotate(135deg);
+  }
+  
+  .dot-spinner__dot:nth-child(4)::before {
+    animation-delay: calc(var(--uib-speed) * -0.625);
+  }
+  
+  .dot-spinner__dot:nth-child(5) {
+    transform: rotate(180deg);
+  }
+  
+  .dot-spinner__dot:nth-child(5)::before {
+    animation-delay: calc(var(--uib-speed) * -0.5);
+  }
+  
+  .dot-spinner__dot:nth-child(6) {
+    transform: rotate(225deg);
+  }
+  
+  .dot-spinner__dot:nth-child(6)::before {
+    animation-delay: calc(var(--uib-speed) * -0.375);
+  }
+  
+  .dot-spinner__dot:nth-child(7) {
+    transform: rotate(270deg);
+  }
+  
+  .dot-spinner__dot:nth-child(7)::before {
+    animation-delay: calc(var(--uib-speed) * -0.25);
+  }
+  
+  .dot-spinner__dot:nth-child(8) {
+    transform: rotate(315deg);
+  }
+  
+  .dot-spinner__dot:nth-child(8)::before {
+    animation-delay: calc(var(--uib-speed) * -0.125);
+  }
+  
+  @keyframes pulse0112 {
+    0%,
+    100% {
+      transform: scale(0);
+      opacity: 0.5;
+    }
+  
+    50% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
+  /* FIN LOADER */
+
+.parcelas__der__parcela {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem 6rem;
+}  
+
+.parcelas__der__parcela__nombre {
+    padding: 1rem 2rem;
+    border: 2px solid var(--negro);
+    background-color: var(--marron1);
+    font-family: var(--Crimson);
+    font-size: 38px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: whitesmoke;
+    z-index: 1;
+}
+
+.parcelas__der__parcela__informacion {
+    height: inherit;
+    width: 100%;
+    border: 2px solid var(--negro);
+    background-color: var(--marron3);
+    margin: -1rem 0 0 .5rem;
+    padding: 3rem 1.5rem 1.5rem;
+}
+
+.parcela__informacion__arriba {
+    height: 40%;
+    width: 100%;
+}
+
+.parcela__informacion__arriba section {
+    height: 60%;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+}
+
+.parcela__informacion__arriba section:nth-child(1) div {
+    display: flex;
+}
+
+.parcela__informacion__electricidad img {
+    height: 6rem;
+}
+
+.parcela__informacion__abajo {
+    height: 50%;
+    width: 100%;
+}
