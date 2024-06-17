@@ -135,7 +135,36 @@ const actualizarDatosAcomodador = async (req, res, next) => {
     }
 }
 
-module.exports = { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador }
+/**
+ * Actualiza la contraseña de un acomodador.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const actualizarPasswordAcomodador = async (req, res, next) => {
+    try {
+        const { id } = req.params
+        const { new_password } = req.body
+
+        await bcrypt.hash(new_password, 10)
+            .then(async new_password_hasheada => {
+                await Acomodador.findByIdAndUpdate(id, { password: new_password_hasheada }, { returnDocument: 'after' }).exec()
+                    .then(results => {
+                        res.status(200).send(new ResponseAPI('ok', 'Contraseña actualizada', results))
+                    })
+                    .catch(error => {
+                        throw new Error(error)
+                    })
+            })
+            .catch(error => {
+                throw new Error(error)
+            })
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador }
 
 /**
  * Genera una contraseña de 12 caracteres aleatoria.

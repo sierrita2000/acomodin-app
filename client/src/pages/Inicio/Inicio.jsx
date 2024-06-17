@@ -124,7 +124,7 @@ export default function Inicio () {
             </section>
             <section className='inicio__footer' id='contacto'>
                 <div className="inicio__footer__contacto">
-                    <h2>Cuéntanos lo que quieras...</h2>
+                    <h2>Preguntanos lo que quieras...</h2>
                     <form>
                         <div className="contacto__izq">
                             <label htmlFor="contacto_correo">correo</label>
