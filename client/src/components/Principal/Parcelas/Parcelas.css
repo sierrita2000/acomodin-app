@@ -1,4 +1,4 @@
-.parcelas {
+.principal__parcelas {
     height: calc(100vh - 6.5rem);
     width: 100%;
     display: flex;
@@ -8,7 +8,7 @@
 
 /* LOADER href=" https://uiverse.io/abrahamcalsin/serious-turkey-52 " */
 
-.parcelas .dot-spinner {
+.principal__parcelas .dot-spinner {
     --uib-size: 10rem;
     --uib-speed: .9s;
     --uib-color: var(--negro);
@@ -120,7 +120,7 @@
     width: fit-content;
     display: flex;
     flex-direction: column;
-    padding: 2rem 2rem 0;
+    padding: 2rem 2rem;
     overflow-y: scroll;
     scrollbar-width: none;
 }
@@ -177,7 +177,7 @@
     font-family: var(--Crimson);
     font-size: 25px;
     text-decoration: none;
-    margin: .3rem 12rem;
+    margin: .3rem 8rem;
 }
 
 .parcela__activa {

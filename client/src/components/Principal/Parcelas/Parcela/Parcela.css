@@ -131,34 +131,131 @@
 .parcelas__der__parcela__informacion {
     height: inherit;
     width: 100%;
+    display: flex;
     border: 2px solid var(--negro);
     background-color: var(--marron3);
     margin: -1rem 0 0 .5rem;
-    padding: 3rem 1.5rem 1.5rem;
+    padding: 2rem 1.5rem 1.5rem;
 }
 
 .parcela__informacion__arriba {
-    height: 40%;
-    width: 100%;
-}
-
-.parcela__informacion__arriba section {
-    height: 60%;
-    width: 100%;
+    height: 100%;
+    width: 30%;
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
-    justify-content: space-around;
+    justify-content: flex-start;
 }
 
-.parcela__informacion__arriba section:nth-child(1) div {
-    display: flex;
+.parcela__informacion__arriba > div {
+  margin: 0 0 1rem;
+}
+
+.parcela__informacion__arriba h4 {
+  font-family: var(--Crimson);
+  font-size: 18px;
+  color: var(--negro);
+}
+
+.parcela__informacion__tamano p {
+  font-family: var(--Crimson);
+  font-size: 18px;
+  font-style: italic;
+  color: var(--negro);
+  margin: 0 0 0 1rem;
+}
+
+.parcela__informacion__electricidad > div {
+  width: fit-content;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  margin: 0 0 0 1rem;
 }
 
 .parcela__informacion__electricidad img {
-    height: 6rem;
+  height: 2rem;
+}
+
+.parcela__informacion__electricidad .sin_incluir {
+  filter: grayscale(95%);
+}
+
+.parcela__informacion__electricidad > div .raya_cruzada {
+  height: 100%;
+  width: 4px;
+  position: absolute;
+  bottom: 0;
+  background-color: brown;
+  transform: rotate(45deg);
+  border-radius: 999px;
+}
+
+.parcela__informacion__estado__circulo {
+  height: 2rem;
+  width: 2rem;
+  border-radius: 50%;
+  border: 2px solid var(--negro);
+  background-color: var(--verdeClaro);
+  margin: 0 0 0 1rem;
+}
+
+.parcela__informacion__tipos {
+  width: 100%;
+}
+
+.parcela__informacion__tipos__lista {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 0 .5rem;
+}
+
+.parcela__informacion__tipos__lista img {
+  height: 2rem;
+  margin: .5rem;
+  filter: drop-shadow(0 2px 2px rgb(0, 0, 0, 0.5));
+}
+
+.parcela__informacion__caracteristicas__lista {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.parcela__informacion__caracteristicas__lista span {
+  margin: .2rem .5rem;
+  border: 1px solid var(--negro);
+  background-color: whitesmoke;
+  font-family: var(--Crimson);
+  color: var(--negro);
+  padding: .2rem;
 }
 
 .parcela__informacion__abajo {
-    height: 50%;
-    width: 100%;
+    height: 100%;
+    width: inherit;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.parcela__informacion__abajo h2 {
+  font-family: var(--Crimson);
+  font-size: 26px;
+  color: var(--negro);
+}
+
+.parcela__informacion__abajo__caja {
+  height: inherit;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0 1rem;
+  border: 2px solid var(--negro);
+  background-color: var(--marron2);
+  overflow-y: scroll;
+  scrollbar-width: thin;
 }

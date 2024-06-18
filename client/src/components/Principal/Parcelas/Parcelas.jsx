@@ -11,9 +11,11 @@ export default function Parcelas () {
     const [ zonas, setZonas ] = useState([])
     const [ parcela, setParcela ] = useState(null)
 
+    console.log(zonas)
+
     const [ loading, setLoading ] = useState(true)
 
-    const [ dataUsuario ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador': 'camping'}/id/${loginContext[0][0]}`)
+    //const [ dataUsuario ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador': 'camping'}/id/${loginContext[0][0]}`)
 
     const abrirCerrarZona = (id_zona) => {
         const icono_flecha = document.getElementById(id_zona).querySelector('.parcelas__izq__zona__titulo i')
@@ -24,9 +26,11 @@ export default function Parcelas () {
     }
     
     useEffect(() => {
-        setZonas([])
-        if (dataUsuario?.status === 'ok') {
-            fetch(`${import.meta.env.VITE_API_HOST}zonas/devolver-zonas/id_camping/${loginContext[0][1] === 0 ? dataUsuario.results.id_camping : dataUsuario.results._id}`)
+        let zonas_camping = []
+        fetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador': 'camping'}/id/${loginContext[0][0]}`)
+            .then(response => response.json())
+            .then(dataUsuario => {
+                fetch(`${import.meta.env.VITE_API_HOST}zonas/devolver-zonas/id_camping/${loginContext[0][1] === 0 ? dataUsuario.results.id_camping : dataUsuario.results._id}`)
                 .then(response => response.json())
                 .then(dataZonas => {
                     if(dataZonas.status === 'ok') {
@@ -34,17 +38,18 @@ export default function Parcelas () {
                             fetch(`${import.meta.env.VITE_API_HOST}parcelas/devolver-parcelas/id_zona/${zona._id}`)
                                 .then(response => response.json())
                                 .then(dataParcelas => {
-                                    setZonas(zonas.concat([[zona, dataParcelas.results]]))
+                                    zonas_camping.push([zona, dataParcelas.results])
                                 })
+                                .finally(() => setZonas(zonas.concat(zonas_camping)))
                         })
                     }
                 })
-                .finally(() => setLoading(false))
-        }
-    }, [dataUsuario])
+            })
+            .finally(() => { setLoading(false) })
+    }, [])
 
     return(
-        <div className="parcelas">
+        <div className="principal__parcelas">
             {
                 loading ? (
                     <div className="dot-spinner">
@@ -62,6 +67,7 @@ export default function Parcelas () {
                         <div className='parcelas__izq'>
                             {
                                 zonas.map(zona => {
+                                    console.log(zona)
                                     return (
                                         <div id={zona[0]._id} className='parcelas__izq__zona'>
                                             <div onClick={() => abrirCerrarZona(zona[0]._id)} className="parcelas__izq__zona__titulo">

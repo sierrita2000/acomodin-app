@@ -36,7 +36,6 @@ export default function PanelPassword () {
      */
     const guardarPassword = async (e) => {
         e.preventDefault()
-        setLoading(true)
 
         const input_password = document.getElementById('perfil_password')
         const input_password_repeat = document.getElementById('perfil_password_repeat')
@@ -44,6 +43,7 @@ export default function PanelPassword () {
         if (input_password.value != input_password_repeat.value) {
             setError('Las contraseñas no coinciden')
         } else {
+            setLoading(true)
             const response = await fetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodadores/' : 'camping/'}actualizar-password/id/${loginContext[0][0]}`, {
                 method: 'PUT',
                 headers: {
