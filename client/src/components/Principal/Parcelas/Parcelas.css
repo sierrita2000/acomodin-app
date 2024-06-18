@@ -209,12 +209,12 @@
 
 .parcelas__der__vacia p {
     font-family: var(--Indie);
-    font-size: 38px;
+    font-size: 50px;
     font-weight: bold;
     margin: 0 0 1rem;
 }
 
 .parcelas__der__vacia img {
-    height: 20rem;
+    height: 26rem;
     filter: drop-shadow(0 10px 6px rgb(0, 0, 0, 0.5));
 }

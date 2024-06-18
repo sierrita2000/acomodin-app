@@ -38,7 +38,18 @@ export default function Parcelas () {
                             fetch(`${import.meta.env.VITE_API_HOST}parcelas/devolver-parcelas/id_zona/${zona._id}`)
                                 .then(response => response.json())
                                 .then(dataParcelas => {
-                                    zonas_camping.push([zona, dataParcelas.results])
+                                    zonas_camping.push([zona, dataParcelas.results.sort((a, b) => {
+                                        const nombreA = a.nombre.toLowerCase()
+                                        const nombreB = b.nombre.toLowerCase()
+
+                                        if (nombreA > nombreB) {
+                                            return 1
+                                        } else if (nombreA < nombreB) {
+                                            return -1
+                                        } else {
+                                            return 0
+                                        }
+                                    })])
                                 })
                                 .finally(() => setZonas(zonas.concat(zonas_camping)))
                         })

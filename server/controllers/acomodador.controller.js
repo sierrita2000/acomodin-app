@@ -107,6 +107,32 @@ const devolverAcomodadorPorID = async (req, res, next) => {
 }
 
 /**
+ * Devuelve los acomodadores de un camping.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverAcomodadoresCamping = async (req, res, next) => {
+    try {
+        const { id_camping } = req.params
+
+        await Acomodador.find({ id_camping }).exec()
+            .then(results => {
+                if(results) {
+                    res.status(200).send(new ResponseAPI('ok', `Acomodadores del camping con id "${id_camping}"`, results))
+                } else {
+                    res.status(404).send(new ResponseAPI('not-found', `No se encunetran acomodadores en el camping con id "${id_acomodador}"`, null))
+                }
+            })
+            .catch(error => {
+                throw new Error(error)
+            })
+    } catch (error) {
+        next(error)
+    }
+}
+
+/**
  * Actualiza los datos de un acomodador.
  * @param {Request} req 
  * @param {Response} res 
@@ -164,7 +190,7 @@ const actualizarPasswordAcomodador = async (req, res, next) => {
     }
 }
 
-module.exports = { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador }
+module.exports = { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping }
 
 /**
  * Genera una contraseña de 12 caracteres aleatoria.

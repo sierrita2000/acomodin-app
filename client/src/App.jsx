@@ -12,6 +12,7 @@ import Perfil from './components/Principal/Perfil/Perfil'
 import PanelEdicion from './components/Principal/Perfil/PanelEdicion/PanelEdicion'
 import PanelPassword from './components/Principal/Perfil/PanelPassword/PanelPassword'
 import Parcelas from './components/Principal/Parcelas/Parcelas'
+import MiCamping from './components/Principal/MiCamping/MiCamping'
 
 const router = createBrowserRouter([
   {
@@ -74,7 +75,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/principal/mi-camping',
-        element: <h1>Mi camping</h1>
+        element: <MiCamping />
       }
     ]
   }

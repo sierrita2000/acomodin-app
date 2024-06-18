@@ -4,7 +4,7 @@ const { registrarCamping, devolverCamping, devolverCampingPorID, actualizarDatos
 const { crearConceptos, devolverTodosLosConceptos } = require('../controllers/conceptos.controller')
 const multer = require('multer')
 const { registrarZonas, devolverZonas } = require('../controllers/zona.controller')
-const { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador } = require('../controllers/acomodador.controller')
+const { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping } = require('../controllers/acomodador.controller')
 const { devolverParcelas, devolverParceaPorId } = require('../controllers/parcela.controller')
 
 const storage = multer.diskStorage({
@@ -42,6 +42,7 @@ router.get("/parcelas/id/:id", devolverParceaPorId)
 // RUTAS DE ACOMODADOR
 router.get("/acomodadores/usuario/:usuario/password/:password", devolverAcomodador)
 router.get("/acomodador/id/:id_acomodador", devolverAcomodadorPorID)
+router.get("/acomodadores/id_camping/:id_camping", devolverAcomodadoresCamping)
 
 router.post("/acomodadores/registrar-acomodadores", registrarAcomodadores)
 

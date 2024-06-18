@@ -18,7 +18,7 @@
 }
 
 .zona__zona > button {
-  margin: 0 1rem 0 0;
+  margin: 0 .2rem 0 0;
 }
 
 .zona__zona > button i {
@@ -33,7 +33,7 @@
 
 .zona__zona .zona__info {
   height: 7.2rem;
-  width: 90%;
+  width: 94%;
   display: flex;
   align-items: center;
   justify-content: space-between;

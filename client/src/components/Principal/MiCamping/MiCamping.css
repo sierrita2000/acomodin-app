@@ -1,0 +1,28 @@
+.mi_camping {
+    height: fit-content;
+    width: 100%;
+    padding: 1rem 1.5rem;
+}
+
+.mi_camping > h2 {
+    font-family: var(--Montserrat);
+    background-color: var(--azulOscuro);
+    padding: .5rem 1rem;
+    color: whitesmoke;
+}
+
+#titulo_zonas {
+    margin: 0 0 2rem;
+}
+
+.mi_camping .parcelas .parcelas__imagen,
+.mi_camping .zonas .zonas__imagen,
+.mi_camping .acomodadores .acomodadores__imagen,
+.mi_camping .zonas .zonas__zonas .zonas__zonas__raya,
+.mi_camping .zonas .zonas__zonas > p {
+    display: none;
+}
+
+.mi_camping .zonas .zonas__zonas {
+    padding: 0;
+}

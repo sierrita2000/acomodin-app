@@ -69,6 +69,8 @@ function Acomodador ({ indice, id, correo, nombre, acomodadores, setAcomodadores
     const [ correoAcomodador, setCorreoAcomodador ] = useState(correo)
     const [ nombreAcomodador, setNombreAcomodador ] = useState(nombre)
 
+    console.log(correoAcomodador, nombreAcomodador, correo, nombre)
+
     const [ borrar, setBorrar ] = useState(false)
 
     const refAcomodador = useRef(null)
