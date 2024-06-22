@@ -129,13 +129,14 @@
 }
 
 .parcelas__der__parcela__informacion {
-    height: inherit;
+    height: 100%;
     width: 100%;
     display: flex;
     border: 2px solid var(--negro);
     background-color: var(--marron3);
     margin: -1rem 0 0 .5rem;
-    padding: 2rem 1.5rem 1.5rem;
+    padding: 3rem 1.5rem 1.5rem;
+    position: relative;
 }
 
 .parcela__informacion__arriba {
@@ -145,16 +146,24 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+    padding: 0 1.5rem 0 0;
 }
 
 .parcela__informacion__arriba > div {
+  width: 100%;
   margin: 0 0 1rem;
 }
 
 .parcela__informacion__arriba h4 {
+  width: 100%;
   font-family: var(--Crimson);
   font-size: 18px;
-  color: var(--negro);
+  color: rgb(230, 230, 230);
+  letter-spacing: 2px;
+  padding: .2rem .4rem;
+  background-color: var(--marron2);
+  margin: 0 0 .5rem;
+  border: 1px solid var(--negro);
 }
 
 .parcela__informacion__tamano p {
@@ -195,7 +204,7 @@
   height: 2rem;
   width: 2rem;
   border-radius: 50%;
-  border: 2px solid var(--negro);
+  border: 1px solid var(--negro);
   background-color: var(--verdeClaro);
   margin: 0 0 0 1rem;
 }
@@ -213,7 +222,7 @@
 
 .parcela__informacion__tipos__lista img {
   height: 2rem;
-  margin: .5rem;
+  margin: .5rem .5rem;
   filter: drop-shadow(0 2px 2px rgb(0, 0, 0, 0.5));
 }
 
@@ -228,8 +237,9 @@
   border: 1px solid var(--negro);
   background-color: whitesmoke;
   font-family: var(--Crimson);
+  font-style: italic;
   color: var(--negro);
-  padding: .2rem;
+  padding: .2rem .4rem;
 }
 
 .parcela__informacion__abajo {
@@ -241,6 +251,8 @@
 }
 
 .parcela__informacion__abajo h2 {
+  position: absolute;
+  top: .5rem;
   font-family: var(--Crimson);
   font-size: 26px;
   color: var(--negro);
@@ -248,14 +260,50 @@
 
 .parcela__informacion__abajo__caja {
   height: inherit;
+  min-height: 24rem;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 1rem;
+  border: 1px solid var(--negro);
+  background-color: var(--marron2);
+  overflow-y: scroll;
+  scrollbar-width: thin;
+}
+
+.parcela__informacion__abajo__caja .dot-spinner {
+  --uib-color: whitesmoke;
+}
+
+.parcelas__reservas__vacia {
+  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding: 0 1rem;
-  border: 2px solid var(--negro);
-  background-color: var(--marron2);
-  overflow-y: scroll;
-  scrollbar-width: thin;
+  justify-content: center;
+}
+
+.parcelas__reservas__vacia p {
+  font-family: var(--Indie);
+  font-weight: bold;
+  color: var(--negro);
+  font-size: 30px;
+}
+
+.parcelas__reservas__vacia img {
+  height: 12rem;
+  filter: drop-shadow(0 4px 4px rgb(0, 0, 0, 0.5));
+  margin: 1rem 0;
+}
+
+.parcelas__reservas__vacia button {
+  font-family: var(--Montserrat);
+  font-size: 24px;
+  font-weight: bolder;
+  letter-spacing: 2px;
+  padding: .4rem 3rem;
+  background-color: var(--negro);
+  color: rgb(218, 218, 218);
 }

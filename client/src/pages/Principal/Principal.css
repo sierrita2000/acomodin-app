@@ -184,7 +184,7 @@
     border: 2px solid var(--negro);
     background-color: var(--azulClaro);
     overflow: hidden;
-    z-index: 1;
+    z-index: 2;
     filter: drop-shadow(0 4px 3px rgb(0, 0, 0, 0.5));
 }
 
@@ -218,6 +218,7 @@
     filter: drop-shadow(0 4px 2px rgb(0, 0, 0, 0.5));
     overflow: hidden;
     transition: all .15s ease-in-out;
+    z-index: 1;
 }
 
 .principal__cabecera__perfil__links .principal__cabecera__nav_boton {

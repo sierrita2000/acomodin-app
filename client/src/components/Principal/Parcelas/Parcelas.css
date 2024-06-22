@@ -1,9 +1,9 @@
 .principal__parcelas {
-    height: calc(100vh - 6.5rem);
+    height: fit-content;
+    min-height: calc(100vh - 6.5rem);
     width: 100%;
     display: flex;
     justify-content: center;
-    overflow: hidden;
 }
 
 /* LOADER href=" https://uiverse.io/abrahamcalsin/serious-turkey-52 " */

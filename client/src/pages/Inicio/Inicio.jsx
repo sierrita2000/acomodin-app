@@ -92,15 +92,15 @@ export default function Inicio () {
                     <h2>Paso 4</h2>
                     <div className="procesos__botones">
                         <div className="procesos__botones__boton boton1">
-                            <div title='importante' className={ `boton ${proceso === 'importante' && 'boton_activado'}` } ><i className={`fa-solid fa-circle-exclamation ${proceso === 'importante' && 'icono_activado'}`} title='importante'></i></div>
-                            <h6 className={`titulo ${proceso === 'importante' && 'titulo_activado'}`}>IMPORTANTE</h6>
+                            <div title='calendario' className={ `boton ${proceso === 'calendario' && 'boton_activado'}` } ><i className={`fa-solid fa-calendar-days ${proceso === 'calendario' && 'icono_activado'}`} title='calendario'></i></div>
+                            <h6 className={`titulo ${proceso === 'calendario' && 'titulo_activado'}`}>CALENDARIO</h6>
                         </div>
                         <div className="procesos__botones__boton boton2">
                             <div title='parcelas' className={ `boton ${proceso === 'parcelas' && 'boton_activado'}` } ><i className={`fa-solid fa-campground ${proceso === 'parcelas' && 'icono_activado'}`} title='parcelas'></i></div>
                             <h6 className={`titulo ${proceso === 'parcelas' && 'titulo_activado'}`}>PARCELAS</h6>
                         </div>
                         <div className="procesos__botones__boton boton3">
-                            <div title='actividad' className={ `boton ${proceso === 'actividad' && 'boton_activado'}` } ><i className={`fa-solid fa-calendar-days ${proceso === 'actividad' && 'icono_activado'}`} title='actividad'></i></div>
+                            <div title='actividad' className={ `boton ${proceso === 'actividad' && 'boton_activado'}` } ><i className={`fa-solid fa-bookmark ${proceso === 'actividad' && 'icono_activado'}`} title='actividad'></i></div>
                             <h6 className={`titulo ${proceso === 'actividad' && 'titulo_activado'}`}>REGISTRO DE ACTIVIDAD</h6>
                         </div>
                         <div className="procesos__botones__boton boton4">
