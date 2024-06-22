@@ -19,7 +19,6 @@ const registrarAcomodadores = (req, res, next) => {
         acomodadores.forEach(async acomodador => {
             const usuario_acomodador = `${acomodador.nombre}_${nombre_camping.replaceAll(' ', '_')}`
             const password_acomodador = crearPasswordAleatorio()
-            console.log(password_acomodador)
 
             bcrypt.hash(password_acomodador, 10)
                 .then(async password_acomodador_encriptada => {
@@ -190,7 +189,80 @@ const actualizarPasswordAcomodador = async (req, res, next) => {
     }
 }
 
-module.exports = { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping }
+/**
+ * Actualiza los acomodadores de un camping
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const actualizarAcomodadoresCamping = async (req, res, next) => {
+    try {
+        const { id_camping } = req.params
+        const { acomodadores } = req.body
+
+        const lista_id_acomodadores = acomodadores.map(acomodador => acomodador.id)
+
+        let resultado = true
+
+        await Acomodador.find({ id_camping }).exec()
+            .then(results_acomodadores => {
+                const lista_id_acomodadores_bbdd = results_acomodadores.map(acomodador => acomodador._id.toString())
+
+                const acomodadores_eliminados = lista_id_acomodadores_bbdd.filter(id_acomodador => !lista_id_acomodadores.includes(id_acomodador))
+                const acomodadores_nuevos = acomodadores.filter(acomodador => !lista_id_acomodadores_bbdd.includes(acomodador.id))
+                const acomodadores_modificados = acomodadores.filter(acomodador => lista_id_acomodadores_bbdd.includes(acomodador.id))
+
+                // Eliminado acomodadores
+                if (acomodadores_eliminados.length > 0) {
+                    acomodadores_eliminados.forEach(async acomodador => {
+                        await Acomodador.findByIdAndDelete(acomodador.id)
+                            .catch(e => { throw new Error(e);  resultado = false })
+                    })
+                }
+                
+                // Creando nuevos acomodadores
+                if (acomodadores_nuevos.length > 0) {
+                    acomodadores_nuevos.forEach(async acomodador => {
+                        const usuario_acomodador = `${acomodador.nombre}_${nombre_camping.replaceAll(' ', '_')}`
+                        const password_acomodador = crearPasswordAleatorio()
+
+                        bcrypt.hash(password_acomodador, 10)
+                            .then(async password_acomodador_encriptada => {
+                                const new_acomodador = new Acomodador({
+                                    usuario: usuario_acomodador,
+                                    password: password_acomodador_encriptada,
+                                    nombre: acomodador.nombre,
+                                    correo: acomodador.correo,
+                                    id_camping: id_camping
+                                })
+
+                                await new_acomodador.save()
+                                    .then(() => {
+                                        enviarEmail(acomodador.correo, acomodador.nombre, usuario_acomodador, password_acomodador, nombre_camping)
+                                    })
+                                    .catch(error => { throw new Error(error);  resultado = false })
+                            })
+                    })
+                }
+
+                // Modificando los datos de los acomodadores ya existentes
+                if (acomodadores_modificados.length > 0) {
+                    acomodadores_modificados.forEach(async acomodador => {
+                        await Acomodador.findByIdAndUpdate(acomodador.id, { nombre: acomodador.nombre, correo: acomodador.correo }, {returnDocument: 'after'}).exec()
+                            .catch(e => { throw new Error(e);  resultado = false })
+                    })
+                }
+            })
+            .catch(error => {
+                throw new Error(error)
+            })
+            .finally(() => resultado ? res.status(200).send(new ResponseAPI('ok', 'Acomodadores actualizados', true)) : res.status(500).send(new ResponseAPI('error', 'No se han podido actualizar los acomodadores', false)))
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping, actualizarAcomodadoresCamping }
 
 /**
  * Genera una contraseña de 12 caracteres aleatoria.

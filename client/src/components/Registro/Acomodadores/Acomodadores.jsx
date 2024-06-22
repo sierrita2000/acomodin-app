@@ -7,8 +7,29 @@ export default function Acomodadores ( props ) {
     const [ guardar, setGuardar ] = useState(false)
 
     const guardarCambios = () => {
-        setGuardar(true)
-        setTimeout(() => setGuardar(false), 1000)
+        const correos = document.querySelectorAll('.acomodador__info__info .correo')
+        const nombres = document.querySelectorAll('.acomodador__info__info .nombre')
+
+        let e = false
+
+        correos.forEach(correo => {
+            if ((correo.value === '') || !(new RegExp('[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}').test(correo.value))) {
+                e = true
+            }
+        })
+
+        nombres.forEach(nombre => {
+            if (nombre.value === '') {
+                e = true
+            }
+        })
+
+        props.setError && props.setError(e)
+
+        if (!e) {
+            setGuardar(true)
+            setTimeout(() => setGuardar(false), 1000)
+        }
     }
 
     const crearAcomodadores = () => {
@@ -47,10 +68,10 @@ export default function Acomodadores ( props ) {
                 <button onClick={guardarCambios}><p>GUARDAR CAMBIOS</p>{ guardar && <div><i className="fa-solid fa-thumbs-up"></i></div> }</button>
             </div>
             <div className="acomodadores__contenido">
-                {(props.errorPaso) && <p className='frase_error'>* Todos los campos deben estar completos, o algún campo correo es incorrecto'</p>}
+                {(props.errorPaso || props.error) && <p className='frase_error'>* Todos los campos deben estar completos, o algún campo correo es incorrecto'</p>}
                 {
                     props.acomodadores?.map((acomodador, indice) => {
-                        return <Acomodador key={`acomodador-${indice}`} indice={indice+1} { ...acomodador } acomodadores={props.acomodadores} setAcomodadores={props.setAcomodadores} guardar={guardar} handleGuardarCambios={guardarCambios} errorPaso={props.errorPaso} />
+                        return <Acomodador key={`acomodador-${indice}`} indice={indice+1} { ...acomodador } acomodadores={props.acomodadores} setAcomodadores={props.setAcomodadores} guardar={guardar} handleGuardarCambios={guardarCambios} errorPaso={props.errorPaso} error={props.error} />
                     })
                 }
                 <div className="acomodadores__contenido__anadir">
@@ -64,12 +85,10 @@ export default function Acomodadores ( props ) {
     )
 }
 
-function Acomodador ({ indice, id, correo, nombre, acomodadores, setAcomodadores, guardar, handleGuardarCambios,  errorPaso }) {
+function Acomodador ({ indice, id, correo, nombre, acomodadores, setAcomodadores, guardar, handleGuardarCambios,  errorPaso, error }) {
 
     const [ correoAcomodador, setCorreoAcomodador ] = useState(correo)
     const [ nombreAcomodador, setNombreAcomodador ] = useState(nombre)
-
-    console.log(correoAcomodador, nombreAcomodador, correo, nombre)
 
     const [ borrar, setBorrar ] = useState(false)
 
@@ -87,13 +106,12 @@ function Acomodador ({ indice, id, correo, nombre, acomodadores, setAcomodadores
 
     const borrarAcomodador = () => {
         const posicion = acomodadores.findIndex(a => a.id === id)
-        const acomodadores_copia = acomodadores
+        const acomodadores_copia = [...acomodadores]
 
         acomodadores_copia.splice(posicion, 1)
 
         setAcomodadores(acomodadores_copia)
         setBorrar(false)
-        handleGuardarCambios()
     }
 
     useEffect(() => {
@@ -112,12 +130,12 @@ function Acomodador ({ indice, id, correo, nombre, acomodadores, setAcomodadores
                 <div className="acomodador__info__info">
                     {(errorPaso && correoAcomodador === "") && <p className='asterisco_error_acomodador'>*</p>}
                     <label htmlFor="acomodador_correo">correo:</label>
-                    <input className={`acomodador__info__info__input ${(errorPaso && (correoAcomodador === "" || !(new RegExp('[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}').test(correoAcomodador)))) && 'input__error'}`} type="text" name="acomodador_correo" id="acomodador_correo" value={correoAcomodador} onChange={e => setCorreoAcomodador(e.target.value)} />
+                    <input className={`correo acomodador__info__info__input ${((errorPaso || error) && (correoAcomodador === "" || !(new RegExp('[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*@[a-zA-Z0-9_]+([.][a-zA-Z0-9_]+)*[.][a-zA-Z]{2,5}').test(correoAcomodador)))) && 'input__error'}`} type="text" name="acomodador_correo" id="acomodador_correo" value={correoAcomodador} onChange={e => setCorreoAcomodador(e.target.value)} />
                 </div>
                 <div className="acomodador__info__info">
                     {(errorPaso && nombreAcomodador === "") && <p className='asterisco_error_acomodador'>*</p>}
                     <label htmlFor="acomodador_nombre">nombre:</label>
-                    <input className={`acomodador__info__info__input ${(errorPaso && nombreAcomodador === "") && 'input__error'}`} type="text" name="acomodador_nombre" id="acomodador_nombre" value={nombreAcomodador} onChange={e => setNombreAcomodador(e.target.value)} />
+                    <input className={`nombre acomodador__info__info__input ${((errorPaso || error) && nombreAcomodador === "") && 'input__error'}`} type="text" name="acomodador_nombre" id="acomodador_nombre" value={nombreAcomodador} onChange={e => setNombreAcomodador(e.target.value)} />
                 </div>
                 <button onClick={() => setBorrar(true)}><i className="fa-solid fa-trash"></i></button>
                 { borrar && <Mensaje mensaje={`¿Seguro que quieres eliminar el ACOMODADOR ${indice} ?`} accionCancelar={() => setBorrar(false)} accionAceptar={borrarAcomodador} /> }

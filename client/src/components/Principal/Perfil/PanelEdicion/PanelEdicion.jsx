@@ -60,7 +60,7 @@ export default function PanelEdicion () {
             formData.append('imagen', imagen)
         }
 
-        const response = await fetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodadores/actualizar-acomodador' : 'camping/actualizar-camping'}/id/${loginContext[0][0]}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodadores/actualizar-acomodador' : 'camping/actualizar-datos-camping'}/id/${loginContext[0][0]}`, {
             method: 'PUT',
             body: formData
         })

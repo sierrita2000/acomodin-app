@@ -4,11 +4,12 @@ import './Parcela.css'
 
 export default function Parcela ({ id_parcela }) {
 
-    let [ dataParcela, error, loading ] = useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${id_parcela}`)
+    let [ dataParcela, errorParcela, loadingParcela ] = useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${id_parcela}`)
+    // let [ dataReservas, errorReservas, loadingReservas ] = useFetch(`${import.meta.env.VITE_API_HOST}`)
     let [ dataConceptos ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
 
     return(
-        loading ? (
+        loadingParcela ? (
             <div className="dot-spinner">
                 <div className="dot-spinner__dot"></div>
                 <div className="dot-spinner__dot"></div>

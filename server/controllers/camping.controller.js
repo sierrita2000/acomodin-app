@@ -46,6 +46,35 @@ const registrarCamping = async (req, res, next) => {
 }
 
 /**
+ * Actualiza un camping
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const actualizarCamping = async (req, res, next) => {
+    try {
+        const { tamanos, tipos, caracteristicas } = req.body
+        const { id } = req.params
+
+        const updates = { 
+            tamanos: tamanos || [],
+            caracteristicas: caracteristicas || [],
+            conceptos: tipos.concat(['665a0165c5f8973c88844b8d', '665a0165c5f8973c88844b8c'])
+        }
+        
+        await Camping.findByIdAndUpdate(id, updates, { returnDocument: 'after' }).exec()
+            .then(results => {
+                res.status(200).send(new ResponseAPI('ok', `Camping con id "${id}" actualizado correctamente`, results))
+            })
+            .catch(error => {
+                throw new Error(error)
+            })
+    } catch(error) {
+        next(error)
+    }
+}
+
+/**
  * Devuelve el _id del camping si el usuario y contraseña son correctos.
  * @param {Request} req 
  * @param {Response} res 
@@ -163,5 +192,5 @@ const actualizarPasswordCamping = async (req, res, next) => {
     }
 }
 
-module.exports = { registrarCamping, devolverCamping, devolverCampingPorID, actualizarDatosCamping, actualizarPasswordCamping }
+module.exports = { registrarCamping, devolverCamping, devolverCampingPorID, actualizarDatosCamping, actualizarPasswordCamping, actualizarCamping }
 

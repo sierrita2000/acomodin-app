@@ -8,7 +8,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, electrici
 
     const [ nombreParcela, setNombreParcela ] = useState(nombre)
     const [ tamanoParcela, setTamanoParcela ] = useState(tamano)
-    const [ tiposParcela, setTiposParcela ] = useState(tipos.filter(t => tiposZona.includes(t)))
+    const [ tiposParcela, setTiposParcela ] = useState(tipos)
     const [ electricidadParcela, setElectricidadParcela ] = useState(electricidad)
     const [ caracteristicasParcela, setCaracteristicasParcela ] = useState(caracteristicas)
 
@@ -57,7 +57,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, electrici
     useEffect(() => {
         setNombreParcela(nombre)
         setTamanoParcela(tamano)
-        setTiposParcela(tipos.filter(t => tiposZona.includes(t)))
+        setTiposParcela(tipos)
         setCaracteristicasParcela(caracteristicas)
         luzCamping ? setElectricidadParcela(electricidad) : setElectricidadParcela(false)
 
@@ -67,7 +67,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, electrici
         })
 
         refParcela.current.querySelector(`select option[value="${tamano}"]`).selected = true
-    }, [id])
+    }, [id, tipos, tiposZona, luzCamping, caracteristicasCamping])
 
     return(
         <div id={`parcela-${id}`} ref={refParcela} className="parcela">
@@ -106,7 +106,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, electrici
             </div>
             <div className="parcela__boton__eliminar">
                 <button onClick={() => setBorrar(true)}><i className="fa-solid fa-trash"></i></button>
-                { borrar && <Mensaje mensaje={`¿Seguro que quieres eliminar la zona "${nombreParcela}" ?`} accionCancelar={() => setBorrar(false)} accionAceptar={borrarParcela} /> }
+                { borrar && <Mensaje mensaje={`¿Seguro que quieres eliminar la parcela "${nombreParcela}" ?`} accionCancelar={() => setBorrar(false)} accionAceptar={borrarParcela} /> }
             </div>
         </div>
     )

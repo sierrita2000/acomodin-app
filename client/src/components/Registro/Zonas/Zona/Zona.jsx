@@ -8,8 +8,19 @@ import { useFetch } from '../../../../hooks/useFetch'
 export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCamping, setZonas, zonas, handleGuardarCambios, caracteristicasCamping, luzCamping }) {
 
     const [ nombreZona, setNombreZona ] = useState(nombre)
-    const [ tiposZona, setTiposZona ] = useState(tipos.filter(t => tiposCamping.includes(t)))
-    const [ parcelasZona, setParcelasZona ] = useState(parcelas)
+    const [ tiposZona, setTiposZona ] = useState(tipos)
+    const [ parcelasZona, setParcelasZona ] = useState(parcelas.sort((a, b) => {
+        const nombreA = a.nombre.toLowerCase()
+        const nombreB = b.nombre.toLowerCase()
+
+        if (nombreA > nombreB) {
+            return 1
+        } else if (nombreA < nombreB) {
+            return -1
+        } else {
+            return 0
+        }
+    }))
 
     const [ borrar, setBorrar ] = useState(false)
 
@@ -102,6 +113,12 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
     useEffect(() => {
         guardar && guardarCambios()
     }, [guardar])
+
+    useEffect(() => {
+        setNombreZona(nombre)
+        setTiposZona(tipos)
+        setParcelasZona(parcelas)
+    }, [nombre, tipos, parcelas, tiposCamping])
 
     return(
         <div id={`zona-${id}`} className="zona">

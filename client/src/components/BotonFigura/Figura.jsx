@@ -6,14 +6,14 @@ export default function Figura ({ id, imagen, titulo, tipos, setTipos }) {
     const imagenRef = useRef(null)
 
     const clickTipo = () => {
-        let copia_tipos = tipos
+        let copia_tipos = [...tipos]
         // const figura = document.getElementById(`img_figura_${titulo}`)
 
         imagenRef.current.classList.toggle('figura__imagen__activada')
 
         if (tipos.includes(id)) {
-            copia_tipos.splice(tipos.indexOf(id), 1)
-            setTipos(copia_tipos)
+            //copia_tipos.splice(tipos.indexOf(id), 1)
+            setTipos(copia_tipos.filter(tipo => tipo != id))
         } else {
             copia_tipos.push(id)
             setTipos(copia_tipos)

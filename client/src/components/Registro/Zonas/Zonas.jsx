@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './Zonas.css'
 import Zona from './Zona/Zona'
 
@@ -22,6 +22,10 @@ export default function Zonas ( props ) {
 
         props.setZonas(props.zonas.concat(objZona))
     }
+
+    useEffect(() => {
+        guardarCambios()
+    }, [props.zonas])
 
     return(
         <div className="zonas">
