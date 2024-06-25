@@ -205,8 +205,6 @@ export default function MiCamping () {
         fetchAcomodadores()
     }, [])
 
-    console.log(zonas)
-
     return(
         <div className="mi_camping">
             <h2>CARACTERÍSTICAS DEL CAMPING</h2>

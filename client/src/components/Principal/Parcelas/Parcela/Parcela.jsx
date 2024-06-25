@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useFetch } from '../../../../hooks/useFetch'
+import { Link } from 'react-router-dom'
 import './Parcela.css'
+import { LoginContext } from '../../../../context/LoginContext'
 
 export default function Parcela ({ id_parcela }) {
-
+    
     let [ dataParcela, errorParcela, loadingParcela ] = useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${id_parcela}`)
     let [ dataReservas, errorReservas, loadingReservas ] = useFetch(`${import.meta.env.VITE_API_HOST}estancias/reservas/id_parcela/${id_parcela}`)
     let [ dataConceptos ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
@@ -89,7 +91,7 @@ export default function Parcela ({ id_parcela }) {
                                         <div className="parcelas__reservas__vacia">
                                             <p>¡No hay reservas aún!</p>
                                             <img src="../../../../../figura-tienda-cesped.png" alt="FIGURA-TIENDA" />
-                                            <button>AÑADIR RESERVA</button>
+                                            <Link to={`/principal/parcelas/${id_parcela}/formulario-reserva`}>AÑADIR RESERVA</Link>
                                         </div>
                                     )
                                 )

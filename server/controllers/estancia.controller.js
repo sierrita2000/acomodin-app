@@ -7,7 +7,7 @@ const devolverEstanciasDeParcela = async (req, res, next) => {
         const fecha_actual = new Date()
 
         // Estancias que incluyan la parcela con id "id_parcela" y que sean de hoy o más adelante. 
-        await Estancia.find({ parcelas: { $in: [id_parcela] }, fecha_fin: { $gt: fecha_actual } }).exec()
+        await Estancia.find({ parcela: id_parcela, fecha_fin: { $gt: fecha_actual } }).exec()
             .then(results => {
                 if(results.length > 0) {
                     res.status(200).send(new ResponseAPI('ok', `Reservas de la parcela con id ${id_parcela}`, results))
@@ -21,4 +21,16 @@ const devolverEstanciasDeParcela = async (req, res, next) => {
     }
 }
 
-module.exports = { devolverEstanciasDeParcela }
+const crearEstancia = async (req, res, next) => {
+    try {
+        const { estancia, estancia_accion } = req.body
+    } catch(error) {
+        next(error)
+    }
+}
+
+module.exports = { devolverEstanciasDeParcela, crearEstancia }
+
+const validarTiempoEstancia = () => {
+
+}

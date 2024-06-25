@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
 import './Parcelas.css'
 import { LoginContext } from '../../../context/LoginContext'
-import { useFetch } from '../../../hooks/useFetch'
 import Parcela from './Parcela/Parcela'
+import { Outlet } from 'react-router-dom'
 
 export default function Parcelas () {
 
@@ -11,15 +11,23 @@ export default function Parcelas () {
     const [ zonas, setZonas ] = useState([])
     const [ parcela, setParcela ] = useState(null)
 
-    console.log(zonas)
-
     const [ loading, setLoading ] = useState(true)
 
-    //const [ dataUsuario ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador': 'camping'}/id/${loginContext[0][0]}`)
-
+    /**
+     * Abre o cierra las parcelas de una zona.
+     * @param {String} id_zona 
+     */
     const abrirCerrarZona = (id_zona) => {
+        const zonas = document.querySelectorAll('.parcelas__izq__zona')
         const icono_flecha = document.getElementById(id_zona).querySelector('.parcelas__izq__zona__titulo i')
         const listado_parcelas = document.getElementById(id_zona).querySelector('.parcelas__izq__zona__parcelas')
+
+        zonas.forEach(zona => {
+            if (id_zona != zona.getAttribute('id')) {
+                zona.querySelector('.parcelas__izq__zona__titulo i').classList.remove('icono_girado')
+                zona.querySelector('.parcelas__izq__zona__parcelas').classList.remove('listado_parcelas_desplegado')
+            }
+        })
 
         icono_flecha.classList.toggle('icono_girado')
         listado_parcelas.classList.toggle('listado_parcelas_desplegado')
@@ -114,7 +122,7 @@ export default function Parcelas () {
                     </>
                 )
             }
-            
+            <Outlet />
         </div>
     )
 }

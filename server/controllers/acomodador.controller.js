@@ -2,6 +2,7 @@ const { ResponseAPI } = require('../classes/ResponseAPI')
 const { Acomodador } = require('../models/Acomodador')
 const bcrypt = require('bcrypt')
 const { transporter } = require('../email/transporter')
+const { Camping } = require('../models/Camping')
 require('dotenv/config')
 
 /**
@@ -132,6 +133,28 @@ const devolverAcomodadoresCamping = async (req, res, next) => {
 }
 
 /**
+ * Devuelve la informacion de un camping de un acomodador.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverCampingDeAcomodador = async (req, res, next) => {
+    try {
+        const { id } = req.params
+
+        await Acomodador.findById(id).exec()
+            .then(async resultsAcomodador => {
+                await Camping.findById(resultsAcomodador.id_camping).exec()
+                    .then(results => res.status(200).send(new ResponseAPI('ok', `Camping con id ${resultsAcomodador.id_camping}`, results)))
+                    .catch(error => { throw new Error(error) })
+            })
+            .catch(error => { throw new Error(error) })
+    } catch (error) {
+        next(error)
+    }
+}
+
+/**
  * Actualiza los datos de un acomodador.
  * @param {Request} req 
  * @param {Response} res 
@@ -212,19 +235,21 @@ const actualizarAcomodadoresCamping = async (req, res, next) => {
                 const acomodadores_nuevos = acomodadores.filter(acomodador => !lista_id_acomodadores_bbdd.includes(acomodador.id))
                 const acomodadores_modificados = acomodadores.filter(acomodador => lista_id_acomodadores_bbdd.includes(acomodador.id))
 
+                console.log(acomodadores_eliminados, acomodadores_nuevos, acomodadores_modificados)
                 // Eliminado acomodadores
                 if (acomodadores_eliminados.length > 0) {
-                    acomodadores_eliminados.forEach(async acomodador => {
-                        await Acomodador.findByIdAndDelete(acomodador.id)
-                            .catch(e => { throw new Error(e);  resultado = false })
+                    acomodadores_eliminados.forEach(async id_acomodador => {
+                        await Acomodador.findByIdAndDelete(id_acomodador)
+                            .catch(e => { resultado = false; throw new Error(e) })
                     })
                 }
                 
                 // Creando nuevos acomodadores
                 if (acomodadores_nuevos.length > 0) {
                     acomodadores_nuevos.forEach(async acomodador => {
-                        const usuario_acomodador = `${acomodador.nombre}_${nombre_camping.replaceAll(' ', '_')}`
+                        const usuario_acomodador = `${acomodador.nombre}_${Math.floor(Math.random() * 100)}`
                         const password_acomodador = crearPasswordAleatorio()
+                        console.log(usuario_acomodador, password_acomodador)
 
                         bcrypt.hash(password_acomodador, 10)
                             .then(async password_acomodador_encriptada => {
@@ -238,9 +263,9 @@ const actualizarAcomodadoresCamping = async (req, res, next) => {
 
                                 await new_acomodador.save()
                                     .then(() => {
-                                        enviarEmail(acomodador.correo, acomodador.nombre, usuario_acomodador, password_acomodador, nombre_camping)
+                                        enviarEmail(acomodador.correo, acomodador.nombre, usuario_acomodador, password_acomodador, '')
                                     })
-                                    .catch(error => { throw new Error(error);  resultado = false })
+                                    .catch(error => { resultado = false; throw new Error(error) })
                             })
                     })
                 }
@@ -249,7 +274,7 @@ const actualizarAcomodadoresCamping = async (req, res, next) => {
                 if (acomodadores_modificados.length > 0) {
                     acomodadores_modificados.forEach(async acomodador => {
                         await Acomodador.findByIdAndUpdate(acomodador.id, { nombre: acomodador.nombre, correo: acomodador.correo }, {returnDocument: 'after'}).exec()
-                            .catch(e => { throw new Error(e);  resultado = false })
+                            .catch(e => { resultado = false; throw new Error(e) })
                     })
                 }
             })
@@ -262,7 +287,7 @@ const actualizarAcomodadoresCamping = async (req, res, next) => {
     }
 }
 
-module.exports = { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping, actualizarAcomodadoresCamping }
+module.exports = { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping, actualizarAcomodadoresCamping, devolverCampingDeAcomodador }
 
 /**
  * Genera una contraseña de 12 caracteres aleatoria.

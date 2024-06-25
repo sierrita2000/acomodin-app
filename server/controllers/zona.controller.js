@@ -133,7 +133,6 @@ const actualizarZonas = async (req, res, next) => {
                                     const parcelas_eliminadas = lista_id_parcelas_bbdd.filter(id_parcela => !lista_parcelas.includes(id_parcela))
                                     const parcelas_modificadas = zona.parcelas.filter(parcela => lista_id_parcelas_bbdd.includes(parcela.id))
 
-                                    console.log(lista_parcelas, lista_id_parcelas_bbdd, parcelas_nuevas, parcelas_eliminadas, parcelas_modificadas)
                                     // Eliminando parcelas
                                     if (parcelas_eliminadas.length > 0) {
                                         parcelas_eliminadas.forEach(async id_parcela => {

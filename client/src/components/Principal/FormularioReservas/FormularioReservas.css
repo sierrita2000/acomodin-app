@@ -1,0 +1,238 @@
+.formulario_reservas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(0, 0, 0, 0.5);
+    z-index: 4;
+    overflow-y: scroll;
+    padding: 4rem 0;
+}
+
+.formulario_reservas__modal {
+    height: fit-content;
+    width: fit-content;
+    background: url('../../../../fondo.png');
+    background-size: 100%;
+    border: 1px solid var(--negro);
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+    animation: aparecer-modal .4s ease-in-out;
+}
+
+@keyframes aparecer-modal {
+    from {
+        transform: translateY(-2rem);
+        filter: opacity(0%);
+    }
+}
+
+.formulario_reservas__modal__btn_cerrar {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: .5rem;
+    background-color: rgba(155, 155, 155, 0.3);
+}
+
+.formulario_reservas__modal__btn_cerrar button i {
+    font-size: 22px;
+}
+
+.formulario_reservas__modal__formulario {
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.formulario_reservas__modal__formulario section {
+    width: 36rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin: .5rem 0 1rem;
+}
+
+.formulario_reservas__modal__formulario section label {
+    width: 100%;
+    font-family: var(--Crimson);
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: whitesmoke;
+    margin: 0 0 .6rem;
+    padding: .4rem .8rem;
+    background-color: rgb(59, 59, 59);
+    border-radius: 4px;
+}
+
+.formulario_reservas__modal__formulario section:nth-child(-n+2) > div {
+    width: 48%;
+    display: flex;
+    flex-direction: column;
+}
+
+.formulario_reservas__modal__formulario section:nth-child(1) div input {
+    border-bottom: 2px solid var(--negro);
+    padding: .4rem 0;
+    font-family: var(--Crimson);
+    font-size: 18px;
+    color: var(--negro);
+}
+
+.formulario_reservas__modal__formulario section:nth-child(2) div input {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    padding: .4rem 0;
+    border-bottom: 2px solid var(--negro);
+    font-family: var(--Crimson);
+    font-size: 18px;
+    color: var(--negro);
+}
+
+.formulario_reservas__modal__formulario section:nth-child(n+3) {
+    flex-direction: column;
+}
+
+#formReservaConceptos {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+/* CONCEPTO */
+
+.formulario_reserva__concepto {
+    height: fit-content;
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    margin: 1.5rem 0;
+}
+
+.formulario_reserva__concepto img {
+    height: 3.5rem;
+    max-width: 50%;
+    filter: drop-shadow(0 4px 4px rgb(0, 0, 0, 0.4));
+}
+
+.formulario_reserva__concepto > div {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 45%;
+}
+
+.formulario_reserva__concepto > div input:disabled {
+    height: 100%;
+    width: 100%;
+    border: 1px solid var(--negro);
+    padding: 0 0 0 .8rem;
+    font-family: var(--Crimson);
+    font-size: 30px;
+    color: var(--negro);
+}
+
+.formulario_reserva__concepto > div .botones {
+    height: 100%;
+    width: fit-content;
+    position: absolute;
+    top: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.formulario_reserva__concepto > div .botones button {
+    padding: .1rem .4rem;
+    font-size: 16px;
+    color: var(--negro);
+}
+
+/* FIN CONCEPTO */
+
+#formReservaPreferencias {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+#formReservaPreferencias > div {
+    height: 12rem;
+    width: 48%;
+    border: 1px solid var(--negro);
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: var(--negro);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: .5rem 0;
+}
+
+.formulario_reserva__preferencia {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    margin: .4rem 0;
+}
+
+.formulario_reserva__preferencia p {
+    width: inherit;
+    font-family: var(--Crimson);
+    font-size: 18px;
+    color: var(--negro);
+}
+
+.formulario_reserva__preferencia button i {
+    font-size: 20px;
+    color: var(--negro);
+}
+
+#formReservaParcelas {
+    width: 100%;
+    font-family: var(--Crimson);
+    font-size: 18px;
+    color: var(--negro);
+    padding: .6rem .8rem;
+    border: 1px solid var(--negro);
+}
+
+#forReservaComentarios {
+    height: 8rem;
+    width: 100%;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    scrollbar-color: var(--negro);
+    background-color: transparent;
+    font-family: var(--Crimson);
+    font-size: 16px;
+    color: var(--negro);
+    padding: .4rem;
+    border: 1px solid var(--negro);
+    resize: none;
+    outline: none;
+}
+
+.form_reservas_boton {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.form_reservas_boton button {
+    font-family: var(--Montserrat);
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: whitesmoke;
+    background-color: rgb(59, 59, 59);
+    padding: .4rem 2rem;
+    margin: 1rem 0;
+}

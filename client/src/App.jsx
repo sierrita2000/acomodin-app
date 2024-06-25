@@ -13,6 +13,7 @@ import PanelEdicion from './components/Principal/Perfil/PanelEdicion/PanelEdicio
 import PanelPassword from './components/Principal/Perfil/PanelPassword/PanelPassword'
 import Parcelas from './components/Principal/Parcelas/Parcelas'
 import MiCamping from './components/Principal/MiCamping/MiCamping'
+import FormularioReservas from './components/Principal/FormularioReservas/FormularioReservas'
 
 const router = createBrowserRouter([
   {
@@ -45,7 +46,13 @@ const router = createBrowserRouter([
       },
       {
         path: '/principal/parcelas',
-        element: <Parcelas />
+        element: <Parcelas />,
+        children: [
+          {
+            path: '/principal/parcelas/:id_parcela/formulario-reserva',
+            element: <FormularioReservas reserva={true} />
+          }
+        ]
       },
       {
         path: '/principal/registro-actividad',

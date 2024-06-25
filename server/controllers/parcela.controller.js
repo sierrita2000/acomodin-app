@@ -1,5 +1,6 @@
 const { ResponseAPI } = require('../classes/ResponseAPI')
 const { Parcela } = require('../models/Parcela')
+const { Zona } = require('../models/Zona')
 
 /**
  * Devuelve todas las parcelas de una zona
@@ -7,7 +8,7 @@ const { Parcela } = require('../models/Parcela')
  * @param {Response} res 
  * @param {Function} next 
  */
-const devolverParcelas = async (req, res, next) => {
+const devolverParcelasPorZona = async (req, res, next) => {
     try {
         const { id_zona } = req.params
         
@@ -45,4 +46,35 @@ const devolverParceaPorId = async (req, res, next) => {
     }
 }
 
-module.exports = { devolverParcelas, devolverParceaPorId }
+/**
+ * Devuelve todas las parcelas de un camping
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverParcelasPorCamping = async (req, res, next) => {
+    try {
+        const { id_camping } = req.params
+
+        await Zona.find({ id_camping }).exec()
+            .then(async resultsZonas => {
+                if (resultsZonas.length > 0) {
+                    await Parcela.find({ id_zona: { $in: resultsZonas.map(zona => zona._id) } }).exec()
+                        .then(resultsParcelas => {
+                            if (resultsParcelas.length > 0) {
+                                res.status(200).send(new ResponseAPI('ok', `Parcelas del camping con id ${id_camping}`, resultsParcelas))
+                            } else {
+                                res.status(404).send(new ResponseAPI('not-found', `No existen parcelas para el camping con id ${id_camping}`))
+                            }
+                        })
+                } else {
+                    res.status(404).send(new ResponseAPI('not-found', `No existen zonas para el camping con id ${id_camping}`))
+                }
+            })
+            .catch(error => { throw new Error(error) })
+    } catch(error) {
+        next(error)
+    }
+}
+
+module.exports = { devolverParcelasPorZona, devolverParceaPorId, devolverParcelasPorCamping }

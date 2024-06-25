@@ -23,9 +23,9 @@ const estanciaSchema = new mongoose.Schema({
         type: Array,
         default: []
     },
-    parcelas: {
-        type: Array,
-        default: []
+    parcela: {
+        type: mongoose.ObjectId,
+        default: null
     },
     caracteristicas: {
         type: Array,

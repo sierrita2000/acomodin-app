@@ -4,9 +4,9 @@ const { registrarCamping, devolverCamping, devolverCampingPorID, actualizarDatos
 const { crearConceptos, devolverTodosLosConceptos } = require('../controllers/conceptos.controller')
 const multer = require('multer')
 const { registrarZonas, devolverZonas, actualizarZonas } = require('../controllers/zona.controller')
-const { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping, actualizarAcomodadoresCamping } = require('../controllers/acomodador.controller')
-const { devolverParcelas, devolverParceaPorId } = require('../controllers/parcela.controller')
-const { devolverEstanciasDeParcela } = require('../controllers/estancia.controller')
+const { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping, actualizarAcomodadoresCamping, devolverCampingDeAcomodador } = require('../controllers/acomodador.controller')
+const { devolverParceaPorId, devolverParcelasPorZona, devolverParcelasPorCamping } = require('../controllers/parcela.controller')
+const { devolverEstanciasDeParcela, crearEstancia } = require('../controllers/estancia.controller')
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -40,13 +40,15 @@ router.post("/zonas/registrar-zonas", registrarZonas)
 router.put("/zonas/actualizar-zonas/id_camping/:id_camping", actualizarZonas)
 
 // RUTAS DE PARCELA
-router.get("/parcelas/devolver-parcelas/id_zona/:id_zona", devolverParcelas)
+router.get("/parcelas/devolver-parcelas/id_zona/:id_zona", devolverParcelasPorZona)
 router.get("/parcelas/id/:id", devolverParceaPorId)
+router.get("/parcelas/devolver-parcelas/id_camping/:id_camping", devolverParcelasPorCamping)
 
 // RUTAS DE ACOMODADOR
 router.get("/acomodadores/usuario/:usuario/password/:password", devolverAcomodador)
 router.get("/acomodador/id/:id_acomodador", devolverAcomodadorPorID)
 router.get("/acomodadores/id_camping/:id_camping", devolverAcomodadoresCamping)
+router.get("/acomodador/:id/devolver-camping", devolverCampingDeAcomodador)
 
 router.post("/acomodadores/registrar-acomodadores", registrarAcomodadores)
 
@@ -61,6 +63,8 @@ router.post("/conceptos/crear-conceptos", crearConceptos)
 
 // RUTAS DE ESTANCIA    
 router.get("/estancias/reservas/id_parcela/:id_parcela", devolverEstanciasDeParcela)
+
+router.post("/estancias/crear-estancia", crearEstancia)
 
 // RUTAS DE ESTANCIAS_ACCION
 

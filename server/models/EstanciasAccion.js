@@ -5,9 +5,13 @@ const estanciasAccionSchema = new mongoose.Schema({
         type: mongoose.ObjectId,
         required: true
     },
-    id_acomodador: {
+    id_usuario: {
         type: mongoose.ObjectId,
         required: true
+    },
+    tipo_usuario: {
+        type: String,
+        enum: ['acomodador', 'camping']
     },
     fecha: {
         type: Date,
