@@ -12,11 +12,11 @@ const estanciaSchema = new mongoose.Schema({
         match: /^[0-9]+$/
     },
     fecha_inicio: {
-        type: Date,
+        type: String,
         required: true
     },
     fecha_fin: {
-        type: Date,
+        type: String,
         required: true
     },
     conceptos: {
@@ -30,6 +30,10 @@ const estanciaSchema = new mongoose.Schema({
     caracteristicas: {
         type: Array,
         default: []
+    },
+    id_camping: {
+        type: mongoose.ObjectId,
+        required: true
     }
 })
 

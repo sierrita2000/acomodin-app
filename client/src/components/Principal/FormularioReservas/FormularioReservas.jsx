@@ -20,7 +20,6 @@ export default function FormularioReservas ({ reserva }) {
     const [ comentarios, setComentarios ] = useState('')
 
     const [ loadingReserva, setLoadingReserva ] = useState(false)
-    const [ errorReserva, setErrorReserva ] = useState(null)
 
     let [ dataConceptos ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
     let [ dataParcela ] = id_parcela ? useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${id_parcela}`) : null
@@ -77,19 +76,29 @@ export default function FormularioReservas ({ reserva }) {
         return `${hoy.getFullYear()}/${(hoy.getMonth() + 1 < 10) ? '0' : ''}${hoy.getMonth() + 1}/${(hoy.getDate() + 1 < 10) ? '0' : ''}${hoy.getDate()}`
     }
 
+    /**
+     * Crea una estancia en la BBDD
+     */
     const crearEstancia = async () => {
         setLoadingReserva(true)
 
-        const obj_estancia = { nombre, telefono, fecha_inicio: fechaInicio, fecha_fin: fechaFin, conceptos, parcela: id_parcela }
+        const obj_estancia = { nombre, telefono, fecha_inicio: fechaInicio, fecha_fin: fechaFin, conceptos, parcela: id_parcela, id_camping: dataCamping?.results._id }
         const obj_estancia_accion = { id_usuario: loginContext[0][0], tipo_usuario: (loginContext[0][1] === 0 ? 'acomodador' : 'camping'), fecha: formatearFechaHoy(), estado: 'reserva', comentarios }
-        console.log(obj_estancia, obj_estancia_accion)
-        /*const response = await fetch(`${import.meta.env.VITE_API_HOST}estancias/crear-estancia`, {
+        
+        const response = await fetch(`${import.meta.env.VITE_API_HOST}estancias/crear-estancia`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({ estancia: obj_estancia, estancia_accion: obj_estancia_accion })
-        })*/
+        })
+        const data = await response.json()
+
+        if(data) {
+            setLoadingReserva(false)
+            alert(data.message)
+            navigate(-1, {replace: true, state: { actualizacion: true }})
+        }
     }
 
     useEffect(() => {
@@ -109,7 +118,7 @@ export default function FormularioReservas ({ reserva }) {
         <div className="formulario_reservas">
             <div className="formulario_reservas__modal">
                 <section className="formulario_reservas__modal__btn_cerrar">
-                    <button onClick={() => navigate('..')}><i className="fa-solid fa-xmark"></i></button>
+                    <button onClick={() => navigate(-1, {replace: true})}><i className="fa-solid fa-xmark"></i></button>
                 </section>
                 <form className='formulario_reservas__modal__formulario'>
                     <section>

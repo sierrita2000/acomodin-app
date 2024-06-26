@@ -1,14 +1,27 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useFetch } from '../../../../hooks/useFetch'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import './Parcela.css'
-import { LoginContext } from '../../../../context/LoginContext'
+import Estancia from '../../Estancia/Estancia'
 
 export default function Parcela ({ id_parcela }) {
-    
+
+    let location = useLocation()
+
+    const [ reservas, setReservas ] = useState(null)
+    const [ loadingReservas, setLoadingReservas ] = useState(false)
+    console.log(reservas)
+
     let [ dataParcela, errorParcela, loadingParcela ] = useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${id_parcela}`)
-    let [ dataReservas, errorReservas, loadingReservas ] = useFetch(`${import.meta.env.VITE_API_HOST}estancias/reservas/id_parcela/${id_parcela}`)
     let [ dataConceptos ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
+
+    useEffect(() => {
+        setLoadingReservas(true)
+        fetch(`${import.meta.env.VITE_API_HOST}estancias/reservas/id_parcela/${id_parcela}`)
+            .then(response => response.json())
+            .then(data => setReservas(data.results))
+            .finally(() => setLoadingReservas(false))
+    }, [location, id_parcela])
 
     return(
         loadingParcela ? (
@@ -85,21 +98,50 @@ export default function Parcela ({ id_parcela }) {
                                         <div className="dot-spinner__dot"></div>
                                     </div>
                                 ) : (
-                                    dataReservas?.results.length > 0 ? (
-                                        <div className="parcelas__reservas"></div>
+                                    reservas ? (
+                                        <div className="parcelas__reservas">
+                                                {
+                                                    reservas.map(reserva => {
+                                                        return <EstanciaReservas { ...reserva } />
+                                                    })
+                                                }
+                                        </div>
                                     ) : (
                                         <div className="parcelas__reservas__vacia">
                                             <p>¡No hay reservas aún!</p>
                                             <img src="../../../../../figura-tienda-cesped.png" alt="FIGURA-TIENDA" />
-                                            <Link to={`/principal/parcelas/${id_parcela}/formulario-reserva`}>AÑADIR RESERVA</Link>
+                                            <Link className='btn_anadir_estancia' to={`/principal/parcelas/${id_parcela}/formulario-reserva`}>AÑADIR RESERVA</Link>
                                         </div>
                                     )
                                 )
                             }
                         </div>
+                        {
+                            reservas && <Link className='btn_anadir_estancia' to={`/principal/parcelas/${id_parcela}/formulario-reserva`}>AÑADIR RESERVA</Link>
+                        }
                     </section>
                 </div>
             </div>
         )
+    )
+}
+
+function EstanciaReservas({ estancia, estancia_accion }) {
+
+    let [ dataUsuario ] = useFetch(`${import.meta.env.VITE_API_HOST}${estancia_accion.tipo_usuario === 'acomodador' ? 'acomodador/' : 'camping/'}id/${estancia_accion.id_usuario}`)
+
+    return(
+        <div className="parcelas__reservas__estancia">
+            <div className="parcelas__reservas__estancia__imagen">
+                <img src={`${import.meta.env.VITE_API_HOST}static/${dataUsuario?.results.imagen}`} alt="IMAGEN-USUARIO" />
+            </div>
+            <div className="parcelas__reservas__estancia__info">
+                <p>{estancia.nombre}</p>
+                <span></span>
+                <p>{estancia.telefono || '-'}</p>
+                <span></span>
+                <p>{estancia.fecha_inicio.replaceAll('-', '/')} - {estancia.fecha_fin.replaceAll('-', '/')}</p>
+            </div>
+        </div>
     )
 }

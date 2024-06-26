@@ -85,15 +85,14 @@ export default function Parcelas () {
                     <>
                         <div className='parcelas__izq'>
                             {
-                                zonas.map(zona => {
-                                    console.log(zona)
+                                zonas.map((zona, indice) => {
                                     return (
                                         <div id={zona[0]._id} className='parcelas__izq__zona'>
                                             <div onClick={() => abrirCerrarZona(zona[0]._id)} className="parcelas__izq__zona__titulo">
-                                                <i className="fa-solid fa-caret-right"></i>
+                                                <i className={`fa-solid fa-caret-right ${indice === 0 && 'icono_girado'}`}></i>
                                                 <span>{zona[0].nombre}</span>
                                             </div>
-                                            <div className="parcelas__izq__zona__parcelas">
+                                            <div className={`parcelas__izq__zona__parcelas ${indice === 0 && 'listado_parcelas_desplegado'}`}>
                                                 {
                                                     zona[1].map(p => {
                                                         return (

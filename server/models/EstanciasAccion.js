@@ -14,8 +14,7 @@ const estanciasAccionSchema = new mongoose.Schema({
         enum: ['acomodador', 'camping']
     },
     fecha: {
-        type: Date,
-        default: Date.now()
+        type: String
     },
     estado: {
         type: String,
@@ -23,7 +22,8 @@ const estanciasAccionSchema = new mongoose.Schema({
         required: true
     },
     comentarios: {
-        type: Array
+        type: String,
+        default: ''
     }
 })
 

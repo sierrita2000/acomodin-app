@@ -33,7 +33,7 @@ export default function Principal () {
 
     const cerrarSesion = () => {
         loginContext[1](null)
-        navigate('/login')
+        navigate('/login', { replace: true })
     }
 
     useEffect(() => {
