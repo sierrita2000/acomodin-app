@@ -10,7 +10,7 @@
     justify-content: flex-start;
     height: var(--uib-size);
     width: var(--uib-size);
-    margin: 0;
+    margin: 10rem 0 0;
   }
   
   .dot-spinner__dot {
@@ -201,12 +201,25 @@
 }
 
 .parcela__informacion__estado__circulo {
-  height: 2rem;
-  width: 2rem;
-  border-radius: 50%;
+  width: fit-content;
   border: 1px solid var(--negro);
+  padding: .2rem .4rem;
+  margin: 0 0 0 .5rem;
+  font-family: var(--Crimson);
+  font-style: italic;
+  letter-spacing: 1px;
+}
+
+.reservada {
+  background-color: rgb(202, 131, 0);
+}
+
+.ocupada {
+  background-color: red;
+}
+
+.libre {
   background-color: var(--verdeClaro);
-  margin: 0 0 0 1rem;
 }
 
 .parcela__informacion__tipos {
@@ -274,7 +287,8 @@
 }
 
 .parcela__informacion__abajo__caja .dot-spinner {
-  --uib-color: whitesmoke;
+  --uib-size: 6rem;
+  margin: 0;
 }
 
 .parcelas__reservas__vacia {

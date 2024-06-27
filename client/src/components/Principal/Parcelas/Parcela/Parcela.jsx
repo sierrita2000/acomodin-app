@@ -6,15 +6,42 @@ import Estancia from '../../Estancia/Estancia'
 
 export default function Parcela ({ id_parcela }) {
 
+    /**
+     * Formatea la fecha de hoy
+     * @returns String
+     */
+    const formatearFecha = (fecha) => {
+        return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() + 1 < 10) ? '0' : ''}${fecha.getDate()}`
+    }
+
     let location = useLocation()
 
     const [ reservas, setReservas ] = useState(null)
     const [ loadingReservas, setLoadingReservas ] = useState(false)
-    console.log(reservas)
 
     let [ dataParcela, errorParcela, loadingParcela ] = useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${id_parcela}`)
+    let [ dataEstadoParcela ] = useFetch(`${import.meta.env.VITE_API_HOST}estancia/id_parcela/${id_parcela}/fecha/${formatearFecha(new Date())}`)
     let [ dataConceptos ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
 
+    /**
+     * Devuelve las reservas ordenadas por la fecha de inicio.
+     * @returns Array
+     */
+    const reservasOrdenadas = () => {
+        const reservas_ordenadas = reservas.sort((a, b) => {
+            const fechaA = new Date(a.estancia.fecha_inicio)
+            const fechaB = new Date(b.estancia.fecha_inicio)
+            if (fechaA < fechaB) {
+              return -1
+            }
+            if (fechaA > fechaB) {
+              return 1
+            }
+            return 0
+        })
+        return reservas_ordenadas
+    }
+   
     useEffect(() => {
         setLoadingReservas(true)
         fetch(`${import.meta.env.VITE_API_HOST}estancias/reservas/id_parcela/${id_parcela}`)
@@ -54,8 +81,10 @@ export default function Parcela ({ id_parcela }) {
                                 </div>
                             </div>
                             <div className="parcela__informacion__estado">
-                                <h4>estado</h4>
-                                <div className="parcela__informacion__estado__circulo"></div>
+                                <h4>estado actual</h4>
+                                <div className={`parcela__informacion__estado__circulo ${dataEstadoParcela?.results}`}>
+                                    <p>{dataEstadoParcela?.results}</p>
+                                </div>
                             </div>
                             <div className="parcela__informacion__tipos">
                                 <h4>tipos</h4>
@@ -101,7 +130,7 @@ export default function Parcela ({ id_parcela }) {
                                     reservas ? (
                                         <div className="parcelas__reservas">
                                                 {
-                                                    reservas.map(reserva => {
+                                                    reservasOrdenadas().map(reserva => {
                                                         return <EstanciaReservas { ...reserva } />
                                                     })
                                                 }

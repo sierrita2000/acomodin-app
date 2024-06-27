@@ -3,6 +3,7 @@ import './FormularioReservas.css'
 import { useContext, useEffect, useState } from 'react'
 import { useFetch } from '../../../hooks/useFetch'
 import { LoginContext } from '../../../context/LoginContext'
+import Mensaje from '../../Mensaje/Mensaje'
 
 export default function FormularioReservas ({ reserva }) {
 
@@ -20,6 +21,9 @@ export default function FormularioReservas ({ reserva }) {
     const [ comentarios, setComentarios ] = useState('')
 
     const [ loadingReserva, setLoadingReserva ] = useState(false)
+    const [ errorReserva, setErrorReserva ] = useState(0) // 0: no hay error; 1: error de campos vacíos; 2: error de conceptos
+
+    const [ mensaje, setMensaje ] = useState(null)
 
     let [ dataConceptos ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
     let [ dataParcela ] = id_parcela ? useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${id_parcela}`) : null
@@ -71,19 +75,78 @@ export default function FormularioReservas ({ reserva }) {
      * Formatea la fecha de hoy
      * @returns String
      */
-    const formatearFechaHoy = () => {
-        const hoy = new Date()
-        return `${hoy.getFullYear()}/${(hoy.getMonth() + 1 < 10) ? '0' : ''}${hoy.getMonth() + 1}/${(hoy.getDate() + 1 < 10) ? '0' : ''}${hoy.getDate()}`
+    const formatearFecha = (fecha) => {
+        return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() + 1 < 10) ? '0' : ''}${fecha.getDate()}`
+    }
+
+    /**
+     * Devuelve la fecha del día siguiente de la fecha mínima.
+     * @returns String
+     */
+    const fechaMinimaSalida = () => {
+        if (fechaInicio) {
+            let fecha_minima = new Date(fechaInicio)
+
+            fecha_minima.setDate(fecha_minima.getDate() + 1)
+            return formatearFecha(fecha_minima)
+        } else {
+            return formatearFecha(new Date())
+        }
+    }
+
+    /**
+     * Controla el cambio de la fecha de inicio
+     * @param {Event} e 
+     */
+    const cambiarFechaInicio = (e) => {
+        setFechaInicio(e.target.value)
+
+        // Si después de introducir la fecha de inicio de nuevo, supera a la de salida, esta última se borra
+        if(new Date(fechaInicio) < new Date(fechaFin)) {
+            setFechaFin('')
+        }
+    }
+
+    /**
+     * Comprueba que al menos en la reserva hay seleccionado un adulto y un tipo de acomodación
+     * @returns Boolean
+     */
+    const comprobarConceptosValidos = () => {
+        let comprobacion = true
+
+        const tipos_acomodacion = dataConceptos?.results.filter(concepto => ['bungalows', 'tipis', 'autocaravanas', 'caravanas', 'tiendas', 'campers', 'carros tienda'].includes(concepto.nombre)).map(tipo => tipo._id)
+        const concepto_adulto = dataConceptos?.results.filter(concepto => concepto.nombre === 'adultos')[0]._id
+
+        const tipos_acomodacion_reserva = conceptos.filter(c => tipos_acomodacion.includes(c[0]) && (c[1] > 0))
+        const concepto_adulto_reserva = conceptos.filter(c => (c[0] === concepto_adulto) && (c[1] > 0))
+        
+        if((tipos_acomodacion_reserva.length === 0) && concepto_adulto_reserva.length === 0) {
+            comprobacion = false
+        }
+
+        return comprobacion
     }
 
     /**
      * Crea una estancia en la BBDD
      */
     const crearEstancia = async () => {
+        if (nombre === '' || fechaInicio === '' || fechaFin === '') {
+            setErrorReserva(1)
+            document.getElementById('formularioReservas').scrollIntoView({ behavior: 'smooth' })
+            return
+        }
+
+        if(!comprobarConceptosValidos()) {
+            setErrorReserva(2)
+            document.getElementById('formularioReservas').scrollIntoView({ behavior: 'smooth' })
+            return
+        }
+
         setLoadingReserva(true)
 
         const obj_estancia = { nombre, telefono, fecha_inicio: fechaInicio, fecha_fin: fechaFin, conceptos, parcela: id_parcela, id_camping: dataCamping?.results._id }
-        const obj_estancia_accion = { id_usuario: loginContext[0][0], tipo_usuario: (loginContext[0][1] === 0 ? 'acomodador' : 'camping'), fecha: formatearFechaHoy(), estado: 'reserva', comentarios }
+        const obj_estancia_accion = { id_usuario: loginContext[0][0], tipo_usuario: (loginContext[0][1] === 0 ? 'acomodador' : 'camping'), fecha: formatearFecha(new Date()), estado: 'reserva', comentarios }
         
         const response = await fetch(`${import.meta.env.VITE_API_HOST}estancias/crear-estancia`, {
             method: 'POST',
@@ -94,10 +157,9 @@ export default function FormularioReservas ({ reserva }) {
         })
         const data = await response.json()
 
-        if(data) {
+        if(data) { 
             setLoadingReserva(false)
-            alert(data.message)
-            navigate(-1, {replace: true, state: { actualizacion: true }})
+            setMensaje({ mensaje: data.message, accionAceptar: () => { navigate(-1, {replace: true, state: { actualizacion: true }}) } }) 
         }
     }
 
@@ -120,29 +182,31 @@ export default function FormularioReservas ({ reserva }) {
                 <section className="formulario_reservas__modal__btn_cerrar">
                     <button onClick={() => navigate(-1, {replace: true})}><i className="fa-solid fa-xmark"></i></button>
                 </section>
-                <form className='formulario_reservas__modal__formulario'>
-                    <section>
+                <form id='formularioReservas' className='formulario_reservas__modal__formulario'>
+                    { errorReserva === 1 && <p className='texto_error'>Debes rellenar los campos obligatorios</p> }
+                    <section className='formulario_reservas__section_datos'>
                         <div>
-                            <label htmlFor="formReservaNombre">nombre</label>
-                            <input type="text" name="formReservaNombre" id="formReservaNombre" value={nombre} onChange={e => setNombre(e.target.value)} />
+                            <label htmlFor="formReservaNombre">nombre<p>*</p></label>
+                            <input className={`formulario_reservas__input ${(errorReserva === 1 && nombre === '') && 'error_campo_vacio'}`} type="text" name="formReservaNombre" id="formReservaNombre" value={nombre} onChange={e => setNombre(e.target.value)} />
                         </div>
                         <div>
                             <label htmlFor="formReservaTelefono">telefono</label>
-                            <input type="text" name="formReservaTelefono" id="formReservaTelefono" maxLength={9} value={telefono} onChange={e => (new RegExp('^[0-9]+$').test(e.target.value) || e.target.value === '') && setTelefono(e.target.value)} />
+                            <input className='formulario_reservas__input' type="text" name="formReservaTelefono" id="formReservaTelefono" maxLength={9} value={telefono} onChange={e => (new RegExp('^[0-9]+$').test(e.target.value) || e.target.value === '') && setTelefono(e.target.value)} />
                         </div>
                     </section>
-                    <section>
+                    <section className='formulario_reservas__section_datos'>
                         <div>
-                            <label htmlFor="formReservaFechaInicio">fecha inicio</label>
-                            <input type="date" name="formReservaFechaInicio" id="formReservaFechaInicio" value={fechaInicio} onChange={e => setFechaInicio(e.target.value)} />
+                            <label htmlFor="formReservaFechaInicio">fecha inicio<p>*</p></label>
+                            <input className={`formulario_reservas__input__fechas ${(errorReserva === 1 && fechaInicio === '') && 'error_campo_vacio'}`} type="date" name="formReservaFechaInicio" id="formReservaFechaInicio" min={formatearFecha(new Date())} value={fechaInicio} onChange={e => cambiarFechaInicio(e)} />
                         </div>
                         <div>
-                            <label htmlFor="formReservaFechaFin">fecha fin</label>
-                            <input type="date" name="formReservaFechaFin" id="formReservaFechaFin" value={fechaFin} onChange={e => setFechaFin(e.target.value)} />
+                            <label htmlFor="formReservaFechaFin">fecha fin<p>*</p></label>
+                            <input className={`formulario_reservas__input__fechas ${(errorReserva === 1 && fechaFin === '') && 'error_campo_vacio'}`} type="date" name="formReservaFechaFin" id="formReservaFechaFin" min={fechaMinimaSalida()} value={fechaFin} onChange={e => setFechaFin(e.target.value)} />
                         </div>
                     </section>
-                    <section>
-                        <label htmlFor="formReservaConceptos">conceptos</label>
+                    { errorReserva === 2 && <p className='texto_error'>Debes seleccionar al menos un adulto, y un tipo de acampada</p> }
+                    <section className='formulario_reserva__section__column'>
+                        <label htmlFor="formReservaConceptos">conceptos<p>*</p></label>
                         <div id="formReservaConceptos" name="formReservaConceptos">
                             {
                                 dataConceptos?.results.filter(c => conceptos?.map(con => con[0]).includes(c._id)).map((concepto, indice) => {
@@ -164,7 +228,7 @@ export default function FormularioReservas ({ reserva }) {
                     </section>
                     {
                         !id_parcela && (
-                            <section>
+                            <section className='formulario_reserva__section__column'>
                                 <label htmlFor="formReservaPreferencias">preferencias</label>
                                 <div id="formReservaPreferencias" name="formReservaPreferencias" >
                                     <div>
@@ -195,21 +259,39 @@ export default function FormularioReservas ({ reserva }) {
                             </section>
                         )
                     }
-                    <section>
+                    <section className='formulario_reserva__section__column'>
                         <label htmlFor="formReservaParcelas">parcelas</label>
                         <div id="formReservaParcelas" name="formReservaParcelas">
                             {dataParcela?.results.nombre}
                         </div>
                     </section>
-                    <section>
+                    <section className='formulario_reserva__section__column'>
                         <label htmlFor='forReservaComentarios'>comentarios del acomodador</label>
                         <textarea name="forReservaComentarios" id="forReservaComentarios" placeholder='Escribe aquí los comentarios que quieras...' value={comentarios} onChange={e => setComentarios(e.target.value)}></textarea>
                     </section>
                     <div className='form_reservas_boton'>
-                        <button type='submit' onClick={e => {e.preventDefault(); crearEstancia()}} >{ reserva ? 'AÑADIR RESERVA' : 'AÑADIR ENTRADA'}</button>
+                        <button type='submit' onClick={e => {e.preventDefault(); crearEstancia()}} >
+                            { loadingReserva ? 
+                                    <div className="dot-spinner">
+                                        <div className="dot-spinner__dot"></div>
+                                        <div className="dot-spinner__dot"></div>
+                                        <div className="dot-spinner__dot"></div>
+                                        <div className="dot-spinner__dot"></div>
+                                        <div className="dot-spinner__dot"></div>
+                                        <div className="dot-spinner__dot"></div> 
+                                        <div className="dot-spinner__dot"></div>
+                                        <div className="dot-spinner__dot"></div>
+                                    </div>
+                                : 
+                                    reserva ? 'AÑADIR RESERVA' : 'AÑADIR ENTRADA'
+                            }
+                        </button>
                     </div>
                 </form>
             </div>
+            {
+                mensaje && <Mensaje mensaje={mensaje.mensaje} accionAceptar={mensaje.accionAceptar} />
+            }
         </div>
     )
 }

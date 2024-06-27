@@ -21,7 +21,8 @@ const devolverEstanciaActualYReservasFuturasDeParcela = async (req, res, next) =
                             let obj_estancia_accion = results_estancia_accion[0]
 
                             if(results_estancia_accion.length > 1) {
-                                results_estancia_accion.shift().forEach(ea => {
+                                results_estancia_accion.shift()
+                                results_estancia_accion.forEach(ea => {
                                     if(new Date(ea.fecha) > new Date(obj_estancia_accion.fecha)) {
                                         obj_estancia_accion = ea
                                     }
@@ -32,7 +33,6 @@ const devolverEstanciaActualYReservasFuturasDeParcela = async (req, res, next) =
                         })
 
                         await Promise.all(promises).then(estancias => {
-                            console.log(estancias)
                             res.status(200).send(new ResponseAPI('ok', `Estancias futuras para la parcela con id ${id_parcela}`, estancias))
                         })
                     } else {
@@ -65,7 +65,8 @@ const devolverEstanciaPorId = async (req, res, next) => {
                         let obj_estancia_accion = results_estancia_accion[0]
 
                         if(results_estancia_accion.length > 1) {
-                            results_estancia_accion.shift().forEach(ea => {
+                            results_estancia_accion.shift()
+                            results_estancia_accion.forEach(ea => {
                                 if(new Date(ea.fecha) > new Date(obj_estancia_accion.fecha)) {
                                     obj_estancia_accion = ea
                                 }
@@ -101,14 +102,14 @@ const crearEstancia = async (req, res, next) => {
                                 if (resultsValidarParcelaFecha) { // Crea la estancia.
                                     grabarEstancia(estancia, estancia_accion, res)
                                 } else { // Devuelve el número de huecos libres que quedan en el camping
-                                    res.status(200).send(new ResponseAPI('not-allowed', `Esta parcela está ocupada esos días`, { huecosLibresCamping: resultHuecosLibresCamping }))
+                                    res.status(200).send(new ResponseAPI('not-allowed', `Esta parcela está ocupada para las fechas ${estancia.fecha_inicio.replace('-', '/')} - ${estancia.fecha_fin.replace('-', '/')}.`, { huecosLibresCamping: resultHuecosLibresCamping }))
                                 }
                             })
                     } else { // Reserva sin parcela especificada.
                         grabarEstancia(estancia, estancia_accion, res)
                     }
                 } else {
-                    res.status(200).send(new ResponseAPI('not-allowed', `No hay hueco en el camping entre las fechas dadas.`, null))
+                    res.status(200).send(new ResponseAPI('not-allowed', `No hay hueco en el camping entre las fechas ${estancia.fecha_inicio.replace('-', '/')} - ${estancia.fecha_fin.replace('-', '/')}.`, null))
                 }
             })
     } catch(error) {
@@ -137,11 +138,88 @@ const grabarEstancia = async (estancia, estancia_accion, res) => {
         .catch(error => { throw new Error(error) })
 }
 
-module.exports = { devolverEstanciaActualYReservasFuturasDeParcela, crearEstancia, devolverEstanciaPorId }
+const devolverEstadoParcelaDia = async (req, res, next) => {
+    try {
+        const { id_parcela, fecha } = req.params
+
+        estanciaParcelaEnFecha(id_parcela, fecha)
+            .then(async estancia => {
+                if (estancia) {
+                    if (new Date(estancia.fecha_inicio) < new Date(fecha) && new Date(estancia.fecha_fin) > new Date(fecha)) {
+                        res.status(200).send(new ResponseAPI('ok', 'estado parcela', 'ocupada'))
+                    } else {
+                        await EstanciasAccion.find({ id_estancia: estancia._id }).exec()
+                            .then(results_estancia_accion => {
+                                const estancia_accion_mas_reciente = estanciaAccionMasReciente(results_estancia_accion)
+                                let estado = ''
+                                if (estancia_accion_mas_reciente.estado === 'reserva') {
+                                    if (fecha === estancia.fecha_inicio) {
+                                        estado = 'reservada para hoy'
+                                    } else {
+                                        estado = 'salida prevista para hoy'
+                                    }
+                                } else if (estancia_accion_mas_reciente.estado === 'entrada') {
+                                    estado = 'ocupada'
+                                } else if (estancia_accion_mas_reciente.estado === 'salida') {
+                                    estado = 'libre'
+                                }
+
+                                res.status(200).send(new ResponseAPI('ok', `estado parcela ${fecha}`, estado))
+                            })
+                            .catch(error => {  throw new Error(error)})
+                    }
+                } else {
+                    res.status(200).send(new ResponseAPI('ok', `estado parcela ${fecha}`, 'libre'))
+                }
+            })
+            .catch(error => { throw new Error(error) })
+    } catch(error) {
+        next(error)
+    }
+}
+
+module.exports = { devolverEstanciaActualYReservasFuturasDeParcela, crearEstancia, devolverEstanciaPorId, devolverEstadoParcelaDia }
 
 /**************************************************************************************************************/
 /**************************************************************************************************************/
 /**************************************************************************************************************/
+
+/**
+ * Devuelve la instancia de estancia_accion más reciente
+ * @param {Array} lista_estancias_accion 
+ * @returns Object
+ */
+const estanciaAccionMasReciente = (lista_estancias_accion) => {
+    let estancia_accion_mas_reciente = lista_estancias_accion[0]
+    lista_estancias_accion?.shift()
+
+    lista_estancias_accion?.forEach(estancia_accion => {
+        if (new Date(estancia_accion.fecha) > new Date(estancia_accion_mas_reciente.fecha)) {
+            estancia_accion_mas_reciente = estancia_accion
+        }
+    })
+
+    return estancia_accion_mas_reciente
+}
+
+/**
+ * Devuelve la estancia, si existe, de una parcela en la fecha indicada.
+ * @param {String} parcela 
+ * @param {Date} fecha
+ * @returns Object
+ */
+const estanciaParcelaEnFecha = async (parcela, fecha) => {
+    let estancia = null
+    const fecha_ = new Date(fecha)
+
+    const resultsEstancias = await Estancia.find({ parcela }).exec()
+
+    if (resultsEstancias.length > 0) {
+        estancia = resultsEstancias.find(estancia => (new Date(estancia.fecha_inicio) <= fecha_) && (new Date(estancia.fecha_fin) >= fecha_))
+    }
+
+    return estancia
+}
 
 /**
  * Comprueba si una parcela esta libre sin estancias durante unas fechas.

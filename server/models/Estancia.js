@@ -7,8 +7,6 @@ const estanciaSchema = new mongoose.Schema({
     },
     telefono: {
         type: String,
-        minLength: 9,
-        maxLength: 9,
         match: /^[0-9]+$/
     },
     fecha_inicio: {

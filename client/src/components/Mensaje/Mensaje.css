@@ -18,9 +18,13 @@
     align-items: center;
     background-color: whitesmoke;
     border-radius: 5px;
+    text-align: center;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 
 .mensaje__modal div:nth-child(1) {
+    height: fit-content;
+    min-height: 2rem;
     width: 100%;
     display: flex;
     justify-content: flex-end;

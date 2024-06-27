@@ -47,6 +47,14 @@
     flex-direction: column;
 }
 
+.formulario_reservas__modal__formulario .texto_error {
+    align-self: center;
+    font-family: var(--Crimson);
+    font-size: 18px;
+    color: red;
+    margin: 0 0 .6rem;
+}
+
 .formulario_reservas__modal__formulario section {
     width: 36rem;
     display: flex;
@@ -66,34 +74,39 @@
     padding: .4rem .8rem;
     background-color: rgb(59, 59, 59);
     border-radius: 4px;
+    display: flex;
 }
 
-.formulario_reservas__modal__formulario section:nth-child(-n+2) > div {
+.formulario_reservas__modal__formulario section label > p {
+    font-weight: lighter;
+}
+
+.formulario_reservas__modal__formulario .formulario_reservas__section_datos > div {
     width: 48%;
     display: flex;
     flex-direction: column;
 }
 
-.formulario_reservas__modal__formulario section:nth-child(1) div input {
+.formulario_reservas__modal__formulario .formulario_reservas__section_datos div .formulario_reservas__input {
     border-bottom: 2px solid var(--negro);
-    padding: .4rem 0;
+    padding: .4rem .2rem;
     font-family: var(--Crimson);
     font-size: 18px;
     color: var(--negro);
 }
 
-.formulario_reservas__modal__formulario section:nth-child(2) div input {
+.formulario_reservas__modal__formulario .formulario_reservas__section_datos div .formulario_reservas__input__fechas {
     border: none;
     background-color: transparent;
     outline: none;
-    padding: .4rem 0;
+    padding: .4rem .2rem;
     border-bottom: 2px solid var(--negro);
     font-family: var(--Crimson);
     font-size: 18px;
     color: var(--negro);
 }
 
-.formulario_reservas__modal__formulario section:nth-child(n+3) {
+.formulario_reservas__modal__formulario .formulario_reserva__section__column {
     flex-direction: column;
 }
 
@@ -102,6 +115,11 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+}
+
+.formulario_reservas__modal__formulario .formulario_reservas__section_datos div .error_campo_vacio,
+.formulario_reservas__modal__formulario .formulario_reservas__section_datos div .error_campo_vacio {
+    border: 2px solid red;
 }
 
 /* CONCEPTO */
@@ -227,12 +245,29 @@
 }
 
 .form_reservas_boton button {
+    width: 20rem;
+    display: flex;
+    justify-content: center;
     font-family: var(--Montserrat);
     font-size: 20px;
     font-weight: bold;
     letter-spacing: 2px;
     color: whitesmoke;
     background-color: rgb(59, 59, 59);
-    padding: .4rem 2rem;
+    padding: .4rem;
     margin: 1rem 0;
+}
+
+.form_reservas_boton .dot-spinner {
+    --uib-size: 2rem;
+    --uib-color: whitesmoke;
+    margin: 0;
+}
+
+.formulario_reservas .mensaje .mensaje__modal {
+    width: 26rem;
+}
+
+.formulario_reservas .mensaje .mensaje__modal .boton_cancelar {
+    display: none;
 }
