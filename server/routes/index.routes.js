@@ -64,6 +64,7 @@ router.post("/conceptos/crear-conceptos", crearConceptos)
 router.get("/estancias/reservas/id_parcela/:id_parcela", devolverEstanciaActualYReservasFuturasDeParcela)
 router.get("/estancia/id/:id", devolverEstanciaPorId)
 router.get("/estancia/id_parcela/:id_parcela/fecha/:fecha", devolverEstadoParcelaDia)
+router.get("/estancias/filtros/fecha/:fecha/estado/:estado")
 
 router.post("/estancias/crear-estancia", crearEstancia)
 

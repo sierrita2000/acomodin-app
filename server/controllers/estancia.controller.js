@@ -138,6 +138,12 @@ const grabarEstancia = async (estancia, estancia_accion, res) => {
         .catch(error => { throw new Error(error) })
 }
 
+/**
+ * Devuelve una estancia de una parcela en un día específico
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
 const devolverEstadoParcelaDia = async (req, res, next) => {
     try {
         const { id_parcela, fecha } = req.params
@@ -154,7 +160,7 @@ const devolverEstadoParcelaDia = async (req, res, next) => {
                                 let estado = ''
                                 if (estancia_accion_mas_reciente.estado === 'reserva') {
                                     if (fecha === estancia.fecha_inicio) {
-                                        estado = 'reservada para hoy'
+                                        estado = 'reservada'
                                     } else {
                                         estado = 'salida prevista para hoy'
                                     }
@@ -173,6 +179,22 @@ const devolverEstadoParcelaDia = async (req, res, next) => {
                 }
             })
             .catch(error => { throw new Error(error) })
+    } catch(error) {
+        next(error)
+    }
+}
+
+/**
+ * Devuelve todas las estancias de un camping en una fecha y de un tipo de estado.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverEstanciasPorFiltros = async (req, res, next) => {
+    try {
+        const { fecha, estado } = req.params
+
+
     } catch(error) {
         next(error)
     }

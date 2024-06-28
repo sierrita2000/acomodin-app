@@ -84,14 +84,9 @@ export default function FormularioReservas ({ reserva }) {
      * @returns String
      */
     const fechaMinimaSalida = () => {
-        if (fechaInicio) {
-            let fecha_minima = new Date(fechaInicio)
-
-            fecha_minima.setDate(fecha_minima.getDate() + 1)
-            return formatearFecha(fecha_minima)
-        } else {
-            return formatearFecha(new Date())
-        }
+        let fecha_minima = fechaInicio ? new Date(fechaInicio) : new Date()
+        fecha_minima.setDate(fecha_minima.getDate() + 1)
+        return formatearFecha(fecha_minima)
     }
 
     /**

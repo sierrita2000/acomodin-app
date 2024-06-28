@@ -137,6 +137,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background-color: rgba(139, 139, 139, 0.3);
 }
 
 .principal__cabecera nav {
@@ -165,11 +166,12 @@
 }
 
 .principal__cabecera__perfil {
+  height: 100%;
     align-self: flex-start;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1rem 0 0;
+    justify-content: center;
     margin: 0 2rem 0 0;
     position: relative;
 }
@@ -202,8 +204,6 @@
 
 .principal__cabecera__perfil__links {
     position: absolute;
-    top: 1rem;
-    right: 0rem;
     height: 5rem;
     width: 5rem;
     display: flex;

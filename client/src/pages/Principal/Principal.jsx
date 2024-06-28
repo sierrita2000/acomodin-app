@@ -31,6 +31,9 @@ export default function Principal () {
         links.forEach(link => link.classList.toggle('principal__cabecera__nav_boton__desplegado'))
     }
 
+    /**
+     * Cierra la sesión de un usuario.
+     */
     const cerrarSesion = () => {
         loginContext[1](null)
         navigate('/login', { replace: true })

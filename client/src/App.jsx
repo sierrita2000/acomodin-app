@@ -14,6 +14,7 @@ import PanelPassword from './components/Principal/Perfil/PanelPassword/PanelPass
 import Parcelas from './components/Principal/Parcelas/Parcelas'
 import MiCamping from './components/Principal/MiCamping/MiCamping'
 import FormularioReservas from './components/Principal/FormularioReservas/FormularioReservas'
+import RegistroActividad from './components/Principal/RegistroActividad/RegistroActividad'
 
 const router = createBrowserRouter([
   {
@@ -56,7 +57,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/principal/registro-actividad',
-        element: <h1>Registro actividad</h1>
+        element: <RegistroActividad />
       },
       {
         path: '/principal/entradas',

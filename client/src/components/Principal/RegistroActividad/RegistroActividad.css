@@ -1,0 +1,58 @@
+.registro_actividad {
+    height: fit-content;
+    min-height: calc(100vh - 6.5rem);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1.5rem;
+}
+
+/* FILTROS */
+
+.registro_actividad__filtros {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--azulOscuro);
+}
+
+.registro_actividad__filtros > section {
+    display: flex;
+}
+
+.registro_actividad__filtros label {
+    font-family: var(--Crimson);
+    font-size: 20px;
+    font-weight: bold;
+    color: whitesmoke;
+    margin: 0 .8rem 0 0;
+}
+
+.registro_actividad__filtros > section > div {
+    margin: 0 2rem 0 0;
+}
+
+.filtros__fecha #filtrosFecha,
+.filtros__estado #filtrosEstado {
+    font-family: var(--Crimson);
+    font-size: 16px;
+    color: var(--negro);
+    padding: .5rem;
+    outline: none;
+    border: none;
+    background-color: whitesmoke;
+}
+
+.filtros__boton {
+    font-family: var(--Montserrat);
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--negro);
+    background-color: whitesmoke;
+}
+
+/* FIN FILTROS */
