@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'react'
 import { useFetch } from '../../../hooks/useFetch'
 import { LoginContext } from '../../../context/LoginContext'
 import Mensaje from '../../Mensaje/Mensaje'
+import Concepto from './Concepto/Concepto'
 
 export default function FormularioReservas ({ reserva }) {
 
@@ -28,27 +29,6 @@ export default function FormularioReservas ({ reserva }) {
     let [ dataConceptos ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
     let [ dataParcela ] = id_parcela ? useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${id_parcela}`) : null
     let [ dataCamping ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? `acomodador/${loginContext[0][0]}/devolver-camping` : `camping/id/${loginContext[0][0]}`}`)
-    
-    /**
-     * Handler para controlar la cantidad de cada concepto
-     * @param {Number} accion 
-     * @param {Number} indice 
-     * @returns 
-     */
-    const sumarRestarConcepto = (accion, indice) => {
-        const copia_conceptos = conceptos.slice()
-        if (accion === 0){
-            copia_conceptos[indice][1] = copia_conceptos[indice][1] + 1
-        } else {
-            if (copia_conceptos[indice][1] === 0) {
-                return
-            } else {
-                copia_conceptos[indice][1] = copia_conceptos[indice][1] - 1
-            }
-        } 
-
-        setConceptos(copia_conceptos)
-    }
 
     /**
      * Handler del botón de añadir preferencia
@@ -205,18 +185,7 @@ export default function FormularioReservas ({ reserva }) {
                         <div id="formReservaConceptos" name="formReservaConceptos">
                             {
                                 dataConceptos?.results.filter(c => conceptos?.map(con => con[0]).includes(c._id)).map((concepto, indice) => {
-                                    return (
-                                        <div className="formulario_reserva__concepto">
-                                            <img title={concepto.nombre} src={`${import.meta.env.VITE_API_HOST}static/${concepto.imagen}`} alt={`FIGURA-${concepto.nombre}`} />
-                                            <div>
-                                                <input type="text" name={`formReservaConcepto${nombre}`} id={`formReservaConcepto${nombre}`} disabled value={conceptos[indice][1]} />
-                                                <div className="botones">
-                                                    <button onClick={e => {e.preventDefault(); sumarRestarConcepto(0, indice)}}><i className="fa-solid fa-caret-up"></i></button>
-                                                    <button onClick={e => {e.preventDefault(); sumarRestarConcepto(1, indice)}}><i className="fa-solid fa-caret-down"></i></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
+                                    return <Concepto key={concepto._id} nombre={concepto.nombre} imagen={concepto.imagen} conceptos={conceptos} setConceptos={setConceptos} indice={indice} disabled={false} />
                                 })
                             }
                         </div>

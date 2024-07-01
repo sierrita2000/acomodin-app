@@ -67,11 +67,17 @@ export default function Principal () {
                         <div className="principal__cabecera">
                             <button className='principal__cabecera__btn_menu-bars'><i className="fa-solid fa-bars"></i></button>
                             <nav>
-                                <NavLink to='/principal/calendario-reservas' className='principal__cabecera__nav_boton'>CALENDARIO RESERVAS</NavLink>
+                                <NavLink to='/principal/calendario-reservas' className='principal__cabecera__nav_boton'>CALENDARIO</NavLink>
                                 <NavLink to='/principal/parcelas' className='principal__cabecera__nav_boton'>PARCELAS</NavLink>
                                 <NavLink to='/principal/registro-actividad' className='principal__cabecera__nav_boton'>REGISTRO ACTIVIDAD</NavLink>
-                                <NavLink to='/principal/entradas' className='principal__cabecera__nav_boton'>ENTRADAS</NavLink>
-                                <NavLink to='/principal/salidas' className='principal__cabecera__nav_boton'>SALIDAS</NavLink>
+                                <NavLink to='/principal/reservas' className='principal__cabecera__nav_boton'>RESERVAS</NavLink>
+                                <div className='principal__cabecera__nav__boton_hoy'>
+                                    <p>HOY</p>
+                                    <div className='principal__cabecera__nav__boton_hoy__links'>
+                                        <NavLink to='/principal/entradas' className='principal__cabecera__nav_boton'>ENTRADAS</NavLink>
+                                        <NavLink to='/principal/salidas' className='principal__cabecera__nav_boton'>SALIDAS</NavLink>
+                                    </div>
+                                </div>
                                 { loginContext[0][1] === 1 && <NavLink to='/principal/mi-camping' className='principal__cabecera__nav_boton'>MI CAMPING</NavLink> }
                             </nav>
                             <div className="principal__cabecera__perfil">

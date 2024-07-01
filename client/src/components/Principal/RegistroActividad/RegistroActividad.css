@@ -18,6 +18,7 @@
     align-items: center;
     padding: 1rem;
     background-color: var(--azulOscuro);
+    margin: 0 0 1.5rem;
 }
 
 .registro_actividad__filtros > section {
@@ -56,3 +57,151 @@
 }
 
 /* FIN FILTROS */
+
+.registro_actividad__estancias {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.registro_actividad__leyenda {
+    display: flex;
+    align-items: center;
+    margin: 0 0 1.5rem;
+}
+
+.registro_actividad__leyenda div {
+    height: 2rem;
+    width: 2rem;
+    border: 1px solid var(--negro);
+    border-radius: 50%;
+}
+
+.registro_actividad__leyenda p {
+    font-family: var(--Montserrat);
+    font-size: 18px;
+    color: var(--negro);
+    margin: 0 1.5rem 0 .4rem;
+}
+
+/* REGISTROS NULOS */
+
+.registro_actividad__estancias__vacias {
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.registro_actividad__estancias__vacias p {
+    font-family: var(--Montserrat);
+    font-size: 30px;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    color: var(--negro);
+    margin: 0 0 1.5rem;
+}
+
+.registro_actividad__estancias__vacias img {
+    height: 22rem;
+    filter: drop-shadow(0 4px 4px rgb(0, 0, 0, 0.5));
+}
+
+/* REGISTROS NULOS */
+
+/* ESTANCIAS */
+
+.estancia_registro {
+    height: 8rem;
+    width: 80%;
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid var(--negro);
+    border-radius: 9999px 0 0 9999px;
+    margin: 0 0 1.5rem;
+    background-color: var(--azulClaro);
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+}
+
+.estancia_registro:hover {
+    transform: scale(1.03);
+}
+
+.estancia_registro__imagen {
+    height: 8rem;
+    width: 8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.6) 3px 0 2.6px;
+}
+
+.estancia_registro__imagen img {
+    height: 100%;
+    width: 100%;
+}
+
+.estancia_registro__informacion {
+    height: 100%;
+    width: calc(100% - 16rem);
+    display: flex;
+    align-items: center;
+}
+
+.estancia_registro__informacion > div:nth-child(odd) {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 2rem;
+}
+
+.estancia_registro__informacion > div:nth-child(odd) i {
+    font-size: 1.5rem;
+    color: var(--negro);
+    margin: 0 0 1rem;
+}
+
+.estancia_registro__informacion > div:nth-child(odd) p {
+    font-family: var(--Crimson);
+    font-size: 22px;
+    color: var(--negro);
+}
+
+.estancia_registro__informacion__raya {
+    height: 70%;
+    width: 2px;
+    background-color: var(--negro);
+}
+
+.estancia_registro__estado {
+    height: 100%;
+    width: 8rem;
+    border-left: 1px solid var(--negro);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+}
+
+.estancia_registro__estado__reserva {
+    background-color: rgb(209, 170, 111);
+}
+
+.estancia_registro__estado__entrada {
+    background-color: var(--verdeGastado);
+}
+
+.estancia_registro__estado__salida {
+    background-color: rgb(212, 107, 107);
+}
+
+/* FIN ESTANCIAS */

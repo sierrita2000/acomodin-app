@@ -122,58 +122,6 @@
     border: 2px solid red;
 }
 
-/* CONCEPTO */
-
-.formulario_reserva__concepto {
-    height: fit-content;
-    width: 30%;
-    display: flex;
-    justify-content: space-between;
-    margin: 1.5rem 0;
-}
-
-.formulario_reserva__concepto img {
-    height: 3.5rem;
-    max-width: 50%;
-    filter: drop-shadow(0 4px 4px rgb(0, 0, 0, 0.4));
-}
-
-.formulario_reserva__concepto > div {
-    position: relative;
-    display: flex;
-    align-items: center;
-    width: 45%;
-}
-
-.formulario_reserva__concepto > div input:disabled {
-    height: 100%;
-    width: 100%;
-    border: 1px solid var(--negro);
-    padding: 0 0 0 .8rem;
-    font-family: var(--Crimson);
-    font-size: 30px;
-    color: var(--negro);
-}
-
-.formulario_reserva__concepto > div .botones {
-    height: 100%;
-    width: fit-content;
-    position: absolute;
-    top: 0;
-    right: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.formulario_reserva__concepto > div .botones button {
-    padding: .1rem .4rem;
-    font-size: 16px;
-    color: var(--negro);
-}
-
-/* FIN CONCEPTO */
-
 #formReservaPreferencias {
     width: 100%;
     display: flex;

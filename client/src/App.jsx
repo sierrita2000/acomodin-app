@@ -15,6 +15,7 @@ import Parcelas from './components/Principal/Parcelas/Parcelas'
 import MiCamping from './components/Principal/MiCamping/MiCamping'
 import FormularioReservas from './components/Principal/FormularioReservas/FormularioReservas'
 import RegistroActividad from './components/Principal/RegistroActividad/RegistroActividad'
+import Estancia, { loader as estanciaLoader } from './components/Principal/Estancia/Estancia'
 
 const router = createBrowserRouter([
   {
@@ -57,7 +58,18 @@ const router = createBrowserRouter([
       },
       {
         path: '/principal/registro-actividad',
-        element: <RegistroActividad />
+        element: <RegistroActividad />,
+        children: [
+          {
+            path:'/principal/registro-actividad/:id_estancia_accion',
+            element: <Estancia />,
+            loader: estanciaLoader
+          }
+        ]
+      },
+      {
+        path: '/principal/reservas',
+        element: <h1>Reservas</h1>
       },
       {
         path: '/principal/entradas',

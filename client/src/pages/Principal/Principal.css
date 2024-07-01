@@ -141,7 +141,9 @@
 }
 
 .principal__cabecera nav {
+  height: 100%;
     display: flex;
+    align-items: center;
 }
 
 .principal__cabecera__nav_boton {
@@ -150,10 +152,49 @@
     font-size: 18px;
     font-weight: bolder;
     color: var(--negro);
-    margin: 0 1rem;
+    margin: 0 1.2rem;
     padding: .5rem;
     cursor: pointer;
     transition: all .1s ease-in-out;
+}
+
+.principal__cabecera__nav__boton_hoy {
+  position: relative;
+  top: 2rem;
+  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.principal__cabecera__nav__boton_hoy p {
+  font-family: var(--Montserrat);
+    font-size: 18px;
+    font-weight: bolder;
+    color: var(--negro);
+    margin: 0 0.5rem;
+    padding: .5rem;
+    cursor: default;
+}
+
+.principal__cabecera__nav__boton_hoy__links {
+  height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: whitesmoke;
+  transition: all .3s ease-in-out;
+  overflow: hidden;
+}
+
+.principal__cabecera__nav__boton_hoy__links a {
+  margin: .4rem 1rem;
+}
+
+.principal__cabecera__nav__boton_hoy:hover > .principal__cabecera__nav__boton_hoy__links {
+  height: 7.5rem;
+  border: 1px solid var(--negro);
 }
 
 .principal__cabecera__nav_boton:hover {

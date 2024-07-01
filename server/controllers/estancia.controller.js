@@ -192,15 +192,45 @@ const devolverEstadoParcelaDia = async (req, res, next) => {
  */
 const devolverEstanciasPorFiltros = async (req, res, next) => {
     try {
-        const { fecha, estado } = req.params
+        const { id_camping, fecha, estado } = req.params
 
+        await Estancia.find({ id_camping }).exec()
+            .then(results_estancias => {
+                if (results_estancias.length > 0) {
+                    const results_estancias_accion = results_estancias.map(async estancia => {
+                        const filtros = { id_estancia:estancia._id, fecha }
+                        if(estado != 'todos') filtros.estado = estado
 
+                        const estancia_acciones = await EstanciasAccion.find(filtros).exec()
+                        let array_estancias = new Array()
+                        if(estancia_acciones.length > 0) {
+                            estancia_acciones.forEach(estancia_accion => {
+                                array_estancias.push({ estancia, estancia_accion })
+                            })
+                        }
+
+                        return array_estancias
+                    })
+
+                    Promise.all(results_estancias_accion)
+                        .then(results => {
+                            const new_results = results.flat()
+                            new_results.length > 0 
+                                ? res.status(200).send(new ResponseAPI('ok', `Estancias filtradas`, new_results))
+                                : res.status(404).send(new ResponseAPI('not-found', `No existen estancias para los filtros`, null))
+                        })
+                        .catch(err => { throw new Error(err) })
+                } else {
+                    res.status(404).send(new ResponseAPI('not-found', `No existen estancias para el camping con id ${id_camping}`, null))
+                }
+            })
+            .catch(error => { throw new Error(error) })
     } catch(error) {
         next(error)
     }
 }
 
-module.exports = { devolverEstanciaActualYReservasFuturasDeParcela, crearEstancia, devolverEstanciaPorId, devolverEstadoParcelaDia }
+module.exports = { devolverEstanciaActualYReservasFuturasDeParcela, crearEstancia, devolverEstanciaPorId, devolverEstadoParcelaDia, devolverEstanciasPorFiltros }
 
 /**************************************************************************************************************/
 /**************************************************************************************************************/

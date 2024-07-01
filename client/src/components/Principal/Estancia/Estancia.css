@@ -1,0 +1,257 @@
+.estancia {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+    background-color: rgb(0, 0, 0, 0.6);
+    z-index: 2;
+    overflow-y: scroll;
+}
+
+.estancia > .boton_cierre {
+    align-self: flex-end;
+    font-size: 35px;
+    margin: 0 8rem 0 0;
+    color: whitesmoke;
+    filter: drop-shadow(0 0 2px black);
+}
+
+/* ESTANCIA COMPONENTE */
+
+.estancia__estancia {
+    height: fit-content;
+    width: 48rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ESTANCIA COMPONENTE ACOMODADOR */
+
+.estancia__estancia__acomodador {
+    position: relative;
+    height: 10rem;
+    width: 13rem;
+    display: flex;
+    align-items: flex-start;
+    border-top: 2px solid var(--negro);
+    border-right: 2px solid var(--negro);
+    border-left: 2px solid var(--negro);
+    border-radius: 9999px 9999px 0 0;
+    overflow: hidden;
+}
+
+.estancia__estancia__acomodador img {
+    width: 100%;
+    object-fit: cover;
+}
+
+.estancia__estancia__acomodador > div {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(0, 0, 0, 0.3);
+    padding: .5rem 0;
+    z-index: 1;
+}
+
+.estancia__estancia__acomodador > div p {
+    font-family: var(--Crimson);
+    font-size: 20px;
+    font-weight: bolder;
+    letter-spacing: 1px;
+    color: whitesmoke;
+}
+
+/* ESTANCIA COMPONENTE ACOMODADOR */
+
+/* ESTANCIA COMPONENTE INFORMACIÓN */
+
+.estancia__estancia__informacion {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid var(--negro);
+    padding: 1.5rem;
+    background: url('../../../../fondo.png');
+    background-size: 100%;
+}
+
+.estancia__estancia__informacion h2 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-family: var(--Crimson);
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    color: whitesmoke;
+    background-color: var(--azulOscuro);
+    padding: .2rem .5rem;
+    margin: 0 0 .5rem;
+}
+
+.estancia__estancia__informacion__datos {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem 0;
+}
+
+.estancia__estancia__informacion__datos > div {
+    display: flex;
+    align-items: center;
+    margin: 0 .8rem;
+}
+
+.estancia__estancia__informacion__datos i {
+    font-size: 20px;
+    margin: 0 .6rem 0 0;
+}
+
+.estancia__estancia__informacion__datos input[type="text"]:disabled {
+    color: var(--negro);
+}
+
+.estancia__estancia__informacion__datos input[type="text"] {
+    width: 10rem;
+    font-family: var(--Crimson);
+    font-size: 18px;
+}
+
+.estancia__estancia__informacion__datos input[type="date"]:disabled {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: var(--negro);
+}
+
+.estancia__estancia__informacion__datos input[type="date"] {
+    font-family: var(--Crimson);
+    font-size: 18px;
+    padding: .2rem;
+    background-color: whitesmoke;
+}
+
+.raya_fechas {
+    margin: 0 .2rem;
+}
+
+.estancia__estancia__informacion__conceptos {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.estancia__estancia__informacion__conceptos .concepto {
+    width: 28%;
+}
+
+.estancia__estancia__informacion > section {
+    height: 12rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.estancia__estancia__informacion__caracteristicas,
+.estancia__estancia__informacion__parcela_tipo {
+    height: 100%;
+    width: 48%;
+}
+
+.estancia__estancia__informacion__parcela,
+.estancia__estancia__informacion__tipo {
+    height: 50%;
+    width: 100%;
+}
+
+.estancia__estancia__informacion__parcela__parcela,
+.estancia__estancia__informacion__tipo__tipo {
+    padding: .5rem;
+}
+
+.estancia__estancia__informacion__caracteristicas__caracteristicas {
+    height: 70%;
+    width: 100%;
+    border: 1px solid var(--negro);
+    padding: .5rem;
+}
+
+.estancia__estancia__informacion__caracteristicas__caracteristicas p {
+    font-family: var(--Crimson);
+    font-size: 18px;
+    color: var(--negro);
+}
+
+.estancia__estancia__informacion__parcela__parcela {
+    font-family: var(--Crimson);
+    font-size: 22px;
+    color: var(--negro);
+}
+
+.estancia__estancia__informacion__tipo__tipo {
+    display: flex;
+    align-items: center;
+}
+
+.estancia__estancia__informacion__tipo__tipo > div {
+    height: 2rem;
+    width: 2rem;
+    border: 1px solid var(--negro);
+    border-radius: 50%;
+    margin: 0 .8rem 0 0;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 10px 30px -6px inset, rgba(0, 0, 0, 0.3) 0px 10px 10px -6px inset;
+}
+
+.estancia__estancia__informacion__tipo__tipo > p {
+    font-family: var(--Crimson);
+    font-size: 18px;
+    color: var(--negro);
+}
+
+.estado__reserva {
+    background-color: rgb(209, 170, 111);
+}
+
+.estado__entrada {
+    background-color: var(--verdeGastado);
+}
+
+.estado__salida {
+    background-color: rgb(212, 107, 107);
+}
+
+.estancia__estancia__informacion__comentarios {
+    height: 20rem;
+}
+
+#estanciaComentarios {
+    height: 8rem;
+    width: 100%;
+    resize: none;
+    outline: none;
+    background-color: transparent;
+    border: 1px solid var(--negro);
+    font-family: var(--Crimson);
+    font-size: 18px;
+    color: var(--negro);
+    padding: .5rem;
+}
+
+/* FIN ESTANCIA COMPONENTE INFORMACIÓN */
+
+/* ESTANCIA COMPONENTE */

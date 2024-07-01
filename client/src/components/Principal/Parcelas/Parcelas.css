@@ -211,11 +211,10 @@
     font-family: var(--Indie);
     font-size: 50px;
     font-weight: bold;
-    margin: 0 0 1rem;
+    margin: 1rem 0;
 }
 
 .parcelas__der__vacia img {
-  height: 100%;
-  min-height: 26rem;
+  height: 28rem;
   filter: drop-shadow(0 10px 6px rgb(0, 0, 0, 0.5));
 }
