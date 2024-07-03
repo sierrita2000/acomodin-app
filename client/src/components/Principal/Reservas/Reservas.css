@@ -1,0 +1,133 @@
+.reservas {
+    height: fit-content;
+    min-height: calc(100vh - 6.5rem);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1.5rem;
+}
+
+/* FILTROS */
+
+.reservas__filtros {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background-color: var(--azulOscuro);
+    margin: 0 0 1.5rem;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+.reservas__filtros > section {
+    width: fit-content;
+    display: flex;
+    align-items: center;
+}
+
+.reservas__filtros__filtro {
+    display: flex;
+    align-items: center;
+    margin: 0 2rem 0 0;
+}
+
+.reservas__filtros__filtro label {
+    font-family: var(--Crimson);
+    font-size: 20px;
+    font-weight: bold;
+    color: whitesmoke;
+    margin: 0 .8rem 0 0;
+}
+
+.reservas__filtros__filtro input,
+.reservas__filtros__filtro select {
+    font-family: var(--Crimson);
+    font-size: 16px;
+    color: var(--negro);
+    padding: .5rem;
+    outline: none;
+    border: none;
+    background-color: whitesmoke;
+}
+
+.reservas__filtros__filtro input[type="text"]:placeholder-shown {
+    font-style: italic;
+}
+
+.reservas__filtros__boton {
+    font-family: var(--Montserrat);
+    font-weight: bold;
+    font-size: 16px;
+    color: var(--negro);
+    background-color: whitesmoke;
+}
+
+/* FIN FILTROS */
+
+/* BOTON CREAR RESERVA */
+
+.reservas__boton_add_reserva {
+    display: flex;
+    align-items: flex-start;
+}
+
+.reservas__boton_add_reserva button {
+    font-family: var(--Montserrat);
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: whitesmoke;
+    background-color: var(--verdeOscuro);
+    padding: .4rem 3rem;
+    margin: 1rem 1.5rem 2rem;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+.reservas__boton_add_reserva img {
+    height: 4rem;
+    filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.5));
+}
+
+.reservas__boton_add_reserva img:nth-child(1) {
+    transform: rotateY(180deg);
+}
+
+/* BOTON CREAR RESERVA */
+
+.reservas__reservas {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* RESERVAS VACIAS */
+
+.reservas__reservas__vacias {
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.reservas__reservas__vacias p {
+    font-family: var(--Montserrat);
+    font-size: 30px;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    color: var(--negro);
+    margin: 0 0 1.5rem;
+}
+
+.reservas__reservas__vacias img {
+    height: 22rem;
+    filter: drop-shadow(0 4px 4px rgb(0, 0, 0, 0.5));
+}
+
+/* FIN RESERVAS VACIAS */

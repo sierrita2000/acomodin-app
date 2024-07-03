@@ -74,8 +74,8 @@ export default function Principal () {
                                 <div className='principal__cabecera__nav__boton_hoy'>
                                     <p>HOY</p>
                                     <div className='principal__cabecera__nav__boton_hoy__links'>
-                                        <NavLink to='/principal/entradas' className='principal__cabecera__nav_boton'>ENTRADAS</NavLink>
-                                        <NavLink to='/principal/salidas' className='principal__cabecera__nav_boton'>SALIDAS</NavLink>
+                                        <NavLink to='/principal/entradas/reservas-sin-llegar' className='principal__cabecera__nav_boton'>ENTRADAS</NavLink>
+                                        <NavLink to='/principal/salidas/salidas-sin-realizar' className='principal__cabecera__nav_boton'>SALIDAS</NavLink>
                                     </div>
                                 </div>
                                 { loginContext[0][1] === 1 && <NavLink to='/principal/mi-camping' className='principal__cabecera__nav_boton'>MI CAMPING</NavLink> }

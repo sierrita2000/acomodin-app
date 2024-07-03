@@ -1,0 +1,28 @@
+.listado_estancias {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.listado_estancias__vacias {
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1rem 0 0;
+}
+
+.listado_estancias__vacias p {
+    font-family: var(--Montserrat);
+    font-size: 30px;
+    font-weight: bolder;
+    letter-spacing: 2px;
+    color: var(--negro);
+    margin: 0 0 1.5rem;
+}
+
+.listado_estancias__vacias img {
+    height: 22rem;
+    filter: drop-shadow(0 4px 4px rgb(0, 0, 0, 0.5));
+}

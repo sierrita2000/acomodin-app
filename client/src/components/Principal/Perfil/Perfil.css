@@ -132,7 +132,7 @@
     width: 18rem;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     border-radius: 50%;
     border: 4px solid var(--negro);
     background-color: var(--azulClaro);
@@ -148,8 +148,9 @@
 }
 
 .perfil__izq__imagen img {
-    height: 100%;
-    width: 100%;
+  min-height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 .perfil__izq .perfil__izq__boton_editar {

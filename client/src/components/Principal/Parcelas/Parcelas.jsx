@@ -112,7 +112,7 @@ export default function Parcelas () {
                                     <Parcela id_parcela={parcela} />
                                 ) : (
                                     <div className="parcelas__der__vacia">
-                                        <p>Selecciona una parcela</p>
+                                        <p>SELECCIONA UNA PARCELA</p>
                                         <img src="../../../../figura-hoguera.png" alt="FIGURA-HOGUERA" />
                                     </div>
                                 )

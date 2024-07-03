@@ -28,7 +28,7 @@ export default function Concepto ({ nombre, imagen, conceptos, setConceptos, ind
             <img title={nombre} src={`${import.meta.env.VITE_API_HOST}static/${imagen}`} alt={`FIGURA-${nombre}`} />
             <div>
                 <input type="text" name={`concepto${nombre}`} id={`concepto${nombre}`} disabled value={conceptos[indice][1]} />
-                <div style={disabled && { display: 'none' }} className="botones">
+                <div style={disabled ? { display: 'none' } : {}} className="botones">
                     <button onClick={e => {e.preventDefault(); sumarRestarConcepto(0, indice)}}><i className="fa-solid fa-caret-up"></i></button>
                     <button onClick={e => {e.preventDefault(); sumarRestarConcepto(1, indice)}}><i className="fa-solid fa-caret-down"></i></button>
                 </div>

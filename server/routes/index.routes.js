@@ -5,8 +5,8 @@ const { crearConceptos, devolverTodosLosConceptos } = require('../controllers/co
 const multer = require('multer')
 const { registrarZonas, devolverZonas, actualizarZonas } = require('../controllers/zona.controller')
 const { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping, actualizarAcomodadoresCamping, devolverCampingDeAcomodador } = require('../controllers/acomodador.controller')
-const { devolverParceaPorId, devolverParcelasPorZona } = require('../controllers/parcela.controller')
-const { crearEstancia, devolverEstanciaPorId, devolverEstanciaActualYReservasFuturasDeParcela, devolverEstadoParcelaDia, devolverEstanciasPorFiltros } = require('../controllers/estancia.controller')
+const { devolverParceaPorId, devolverParcelasPorZona, devolverParcelasPorCamping } = require('../controllers/parcela.controller')
+const { crearEstancia, devolverEstanciaPorId, devolverEstanciaActualYReservasFuturasDeParcela, devolverEstadoParcelaDia, devolverEstanciasPorEstadoYFecha, devolverEstanciasPorFiltros, devolverEntradasHoySinSalir, devolverReservasHoySinLlegar } = require('../controllers/estancia.controller')
 const { devolverEstanciaPorIdAccion } = require('../controllers/estancia-accion.controller')
 
 const storage = multer.diskStorage({
@@ -43,6 +43,7 @@ router.put("/zonas/actualizar-zonas/id_camping/:id_camping", actualizarZonas)
 // RUTAS DE PARCELA
 router.get("/parcelas/devolver-parcelas/id_zona/:id_zona", devolverParcelasPorZona)
 router.get("/parcelas/id/:id", devolverParceaPorId)
+router.get("/parcelas/devolver-parcelas/id_camping/:id_camping", devolverParcelasPorCamping)
 
 // RUTAS DE ACOMODADOR
 router.get("/acomodadores/usuario/:usuario/password/:password", devolverAcomodador)
@@ -65,9 +66,12 @@ router.post("/conceptos/crear-conceptos", crearConceptos)
 router.get("/estancias/reservas/id_parcela/:id_parcela", devolverEstanciaActualYReservasFuturasDeParcela)
 router.get("/estancia/id/:id", devolverEstanciaPorId)
 router.get("/estancia/id_parcela/:id_parcela/fecha/:fecha", devolverEstadoParcelaDia)
-router.get("/estancias/id_camping/:id_camping/filtros/fecha/:fecha/estado/:estado", devolverEstanciasPorFiltros)
+router.get("/estancias/id_camping/:id_camping/filtros/fecha/:fecha/estado/:estado", devolverEstanciasPorEstadoYFecha)
+router.get("/estancias/devolver-reservas-hoy-sin-llegar/id_camping/:id_camping", devolverReservasHoySinLlegar)
+router.get("/estancias/devolver-entradas-hoy-sin-salir/id_camping/:id_camping", devolverEntradasHoySinSalir)
 
 router.post("/estancias/crear-estancia", crearEstancia)
+router.post("/estancias/devolver-estancias-filtros/id_camping/:id_camping", devolverEstanciasPorFiltros)
 
 // RUTAS DE ESTANCIAS_ACCION
 

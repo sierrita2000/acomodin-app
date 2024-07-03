@@ -28,6 +28,24 @@ export default function Estancia () {
     let [ dataParcela ] = estancia.estancia.parcela ? useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${estancia.estancia.parcela}`) : null
     let [ dataConceptos ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
 
+    /**
+     * Formatea la fecha de hoy
+     * @returns String
+     */
+    const formatearFecha = (fecha) => {
+        return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() + 1 < 10) ? '0' : ''}${fecha.getDate()}`
+    }
+
+    /**
+     * Devuelve la fecha mínima que puede seleccionar el usuario de salida.
+     * @returns String
+     */
+    const fechaMinimaSalida = () => {
+        let fecha_minima = new Date(fechaInicio) < new Date() ? new Date() : new Date(fechaInicio)
+        fecha_minima.setDate(fecha_minima.getDate() + 1)
+        return formatearFecha(fecha_minima)
+    }
+
     return(
         <section className="estancia">
             <button onClick={() => navigate('..', { replace: true })} className='boton_cierre'><i className="fa-solid fa-xmark"></i></button>
@@ -51,9 +69,9 @@ export default function Estancia () {
                         </div>
                         <div>
                             <i className="fa-solid fa-calendar-days"></i>
-                            <input disabled type="date" name="estanciaFechaInicio" id="estanciaFechaInicio" value={fechaInicio} />
+                            <input disabled type="date" name="estanciaFechaInicio" id="estanciaFechaInicio" min={formatearFecha(new Date())} value={fechaInicio} onChange={e => setFechaInicio(e.target.value)} />
                             <p className='raya_fechas'>-</p>
-                            <input disabled type="date" name="estanciaFechaFin" id="estanciaFechaFin" value={fechaFin} />
+                            <input disabled type="date" name="estanciaFechaFin" id="estanciaFechaFin" min={fechaMinimaSalida()} value={fechaFin} onChange={e => setFechaFin(e.target.value)} />
                         </div>
                     </div>
                     <h2>CONCEPTOS</h2>

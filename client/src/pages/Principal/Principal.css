@@ -138,6 +138,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: rgba(139, 139, 139, 0.3);
+    z-index: 2;
 }
 
 .principal__cabecera nav {
@@ -220,7 +221,7 @@
 .principal__cabecera__perfil__circulo {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     height: 5rem;
     width: 5rem;
     border-radius: 50%;
@@ -239,8 +240,9 @@
 }
 
 .principal__cabecera__perfil__circulo img {
-    height: 100%;
-    width: 100%;
+  min-height: 100%;
+  width: 100%;
+  object-fit: cover;
 }
 
 .principal__cabecera__perfil__links {

@@ -3,6 +3,7 @@ import './RegistroActividad.css'
 import { LoginContext } from '../../../context/LoginContext'
 import { useFetch } from '../../../hooks/useFetch'
 import { Outlet, useNavigate } from 'react-router-dom'
+import EstanciaSimple from '../Estancia/EstanciaSimple/EstanciaSimple'
 
 export default function RegistroActividad () {
 
@@ -90,8 +91,15 @@ export default function RegistroActividad () {
                         </div>
                     ) : (
                         estanciasFiltradas ? (
-                            estanciasFiltradas.map(estancia => {
-                                return <EstanciaRegistro {...estancia} handlerEstancia={() => navigate(`/principal/registro-actividad/${estancia.estancia_accion._id}`)} />
+                            estanciasFiltradas.sort((a, b) => {
+                                const id_zona_A = a.estancia.parcela.toUpperCase()
+                                const id_zona_B = b.estancia.parcela.toUpperCase()
+    
+                                if(id_zona_A < id_zona_B) return -1
+                                if(id_zona_A > id_zona_B) return 1
+                                else return 0
+                            }).map(estancia => {
+                                return <EstanciaSimple {...estancia} handlerEstancia={() => navigate(`/principal/registro-actividad/${estancia.estancia_accion._id}`)} />
                             })
                         ) : (
                             <div className="registro_actividad__estancias__vacias">
@@ -104,35 +112,5 @@ export default function RegistroActividad () {
             </div>
             <Outlet />
         </div>
-    )
-}
-
-function EstanciaRegistro ({ estancia, estancia_accion, handlerEstancia }) {
-
-    let [ dataUsuario ] = useFetch(`${import.meta.env.VITE_API_HOST}${estancia_accion.tipo_usuario}/id/${estancia_accion.id_usuario}`)
-
-    return (
-            <div className="estancia_registro" onClick={handlerEstancia}>
-                <div className="estancia_registro__imagen">
-                    <img title={dataUsuario?.results.usuario} src={`${import.meta.env.VITE_API_HOST}static/${dataUsuario?.results.imagen}`} alt="IMAGEN-USUARIO" />
-                </div>
-                <div className="estancia_registro__informacion">
-                    <div>
-                        <i className="fa-solid fa-user"></i>
-                        <p>{estancia.nombre}</p>
-                    </div>
-                    <div className="estancia_registro__informacion__raya"></div>
-                    <div>
-                        <i className="fa-solid fa-phone"></i>
-                        <p>{estancia.telefono || '-'}</p>
-                    </div>
-                    <div className="estancia_registro__informacion__raya"></div>
-                    <div>
-                        <i className="fa-solid fa-calendar-days"></i>
-                        <p>{estancia.fecha_inicio.replaceAll('-', '/')} - {estancia.fecha_fin.replaceAll('-', '/')}</p>
-                    </div>
-                </div>
-                <div className={`estancia_registro__estado ${estancia_accion.estado === 'reserva' ? 'estancia_registro__estado__reserva' : estancia_accion.estado === 'entrada' ? 'estancia_registro__estado__entrada' : 'estancia_registro__estado__salida'}`}></div>
-            </div>
     )
 }

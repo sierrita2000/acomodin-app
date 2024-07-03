@@ -1,0 +1,119 @@
+.entradas {
+    height: fit-content;
+    min-height: calc(100vh - 6.5rem);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+.entradas__menu {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.entradas__menu > .entradas__menu__links {
+    height: fit-content;
+    width: 18rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--Montserrat);
+    font-size: 18px;
+    font-weight: bold;
+    text-decoration: none;
+    color: whitesmoke;
+    background-color: var(--azulGastado);
+    padding: .4rem 0;
+    margin: 0 1.5rem;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 3px, rgba(0, 0, 0, 0.4) 0px 2px 3px;
+}
+
+.entradas__menu > .active {
+    transform: scale(1.05);
+    background-color: var(--azulOscuro);
+    font-weight: bolder;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+.entradas__menu > a:hover {
+    transform: scale(1.05);
+}
+
+.entradas__outlet {
+    width: 100%;
+    padding: 2rem;
+}
+
+/* BOTON CREAR RESERVA */
+
+.entradas__entradas__realizadas__boton_add_entrada {
+    display: flex;
+    align-items: flex-start;
+}
+
+.entradas__entradas__realizadas__boton_add_entrada button {
+    font-family: var(--Montserrat);
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: whitesmoke;
+    background-color: var(--verdeOscuro);
+    padding: .4rem 3rem;
+    margin: 1rem 1.5rem 2rem;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+}
+
+.entradas__entradas__realizadas__boton_add_entrada img {
+    height: 4rem;
+    filter: drop-shadow(0px 3px 3px rgba(0, 0, 0, 0.5));
+}
+
+.entradas__entradas__realizadas__boton_add_entrada img:nth-child(1) {
+    transform: rotateY(180deg);
+}
+
+/* BOTON CREAR RESERVA */
+
+/* RESERVAS SIN LLEGAR */
+
+.entradas__reservas_sin_llegar,
+.entradas__entradas__realizadas {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.entradas__reservas_sin_llegar .entradas__reservas_sin_llegar__buscador {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin: 0 0 1.5rem;
+}
+
+.entradas__reservas_sin_llegar .entradas__reservas_sin_llegar__buscador input {
+    width: 20rem;
+    font-size: 18px;
+    border-bottom: 2px solid var(--negro);
+    padding: .4rem 1rem .4rem .2rem;
+}
+
+.entradas__reservas_sin_llegar .entradas__reservas_sin_llegar__buscador input:placeholder-shown {
+    font-style: italic;
+}
+
+.entradas__reservas_sin_llegar .entradas__reservas_sin_llegar__buscador button {
+    position: absolute;
+    right: 0;
+    padding: .5rem;
+    font-size: 20px;
+    color: var(--negro);
+}
+
+/* FIN RESERVAS SIN LLEGAR */

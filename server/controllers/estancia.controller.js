@@ -7,27 +7,18 @@ const { Zona } = require('../models/Zona')
 const devolverEstanciaActualYReservasFuturasDeParcela = async (req, res, next) => {
     try {
         const { id_parcela } = req.params
-        const fecha_actual = new Date()
+        const fecha_actual = new Date().setHours(0, 0, 0, 0)
 
         // Estancias que incluyan la parcela con id "id_parcela" y que sean de hoy o más adelante. 
         await Estancia.find({ parcela: id_parcela }).exec()
             .then(async results => {
                 if(results.length > 0) {
-                    const estancias_parcela = results.filter(estancia => new Date(estancia.fecha_fin) > fecha_actual)
+                    const estancias_parcela = results.filter(estancia => (new Date(estancia.fecha_fin) >= fecha_actual))
+                    
                     if (estancias_parcela.length > 0) {
-                        const promises = results.map(async estancia => {
+                        const promises = estancias_parcela.map(async estancia => {
                             const results_estancia_accion = await EstanciasAccion.find({ id_estancia: estancia._id }).exec()
-
-                            let obj_estancia_accion = results_estancia_accion[0]
-
-                            if(results_estancia_accion.length > 1) {
-                                results_estancia_accion.shift()
-                                results_estancia_accion.forEach(ea => {
-                                    if(new Date(ea.fecha) > new Date(obj_estancia_accion.fecha)) {
-                                        obj_estancia_accion = ea
-                                    }
-                                })
-                            }
+                            const obj_estancia_accion = estanciaAccionMasReciente(results_estancia_accion)
 
                             return { estancia: estancia, estancia_accion: obj_estancia_accion }
                         })
@@ -149,33 +140,31 @@ const devolverEstadoParcelaDia = async (req, res, next) => {
         const { id_parcela, fecha } = req.params
 
         estanciaParcelaEnFecha(id_parcela, fecha)
-            .then(async estancia => {
-                if (estancia) {
-                    if (new Date(estancia.fecha_inicio) < new Date(fecha) && new Date(estancia.fecha_fin) > new Date(fecha)) {
-                        res.status(200).send(new ResponseAPI('ok', 'estado parcela', 'ocupada'))
-                    } else {
-                        await EstanciasAccion.find({ id_estancia: estancia._id }).exec()
+            .then(async estancias => {
+                if (estancias.length > 0) {
+                    if (estancias.length === 1) {
+                        await EstanciasAccion.find({ id_estancia: estancias[0]._id }).exec()
                             .then(results_estancia_accion => {
                                 const estancia_accion_mas_reciente = estanciaAccionMasReciente(results_estancia_accion)
-                                let estado = ''
-                                if (estancia_accion_mas_reciente.estado === 'reserva') {
-                                    if (fecha === estancia.fecha_inicio) {
-                                        estado = 'reservada'
-                                    } else {
-                                        estado = 'salida prevista para hoy'
-                                    }
-                                } else if (estancia_accion_mas_reciente.estado === 'entrada') {
-                                    estado = 'ocupada'
-                                } else if (estancia_accion_mas_reciente.estado === 'salida') {
-                                    estado = 'libre'
-                                }
+                                const estado = devolverEstado(estancia_accion_mas_reciente, estancias[0], fecha)
 
-                                res.status(200).send(new ResponseAPI('ok', `estado parcela ${fecha}`, estado))
+                                res.status(200).send(new ResponseAPI('ok', `estado parcela ${fecha}`, [estado]))
                             })
                             .catch(error => {  throw new Error(error)})
+                    } else {
+                        const promises = estancias.map(async estancia => {
+                            const result_estancia_accion = await EstanciasAccion.find({ id_estancia: estancia._id }).exec()
+                            const estancia_accion_mas_reciente = estanciaAccionMasReciente(result_estancia_accion)
+                            return devolverEstado(estancia_accion_mas_reciente, estancia, fecha)
+                        })
+
+                        Promise.all(promises)
+                            .then(estados_estancias_acciones => {
+                                res.status(200).send(new ResponseAPI('ok', `estado parcela ${fecha}`, estados_estancias_acciones))
+                            })
                     }
                 } else {
-                    res.status(200).send(new ResponseAPI('ok', `estado parcela ${fecha}`, 'libre'))
+                    res.status(200).send(new ResponseAPI('ok', `estado parcela ${fecha}`, ['libre']))
                 }
             })
             .catch(error => { throw new Error(error) })
@@ -190,7 +179,7 @@ const devolverEstadoParcelaDia = async (req, res, next) => {
  * @param {Response} res 
  * @param {Function} next 
  */
-const devolverEstanciasPorFiltros = async (req, res, next) => {
+const devolverEstanciasPorEstadoYFecha = async (req, res, next) => {
     try {
         const { id_camping, fecha, estado } = req.params
 
@@ -230,11 +219,159 @@ const devolverEstanciasPorFiltros = async (req, res, next) => {
     }
 }
 
-module.exports = { devolverEstanciaActualYReservasFuturasDeParcela, crearEstancia, devolverEstanciaPorId, devolverEstadoParcelaDia, devolverEstanciasPorFiltros }
+/**
+ * Devuelve todas las estancias de un camping cumpliendo unos filtros.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverEstanciasPorFiltros = async (req, res, next) => {
+    try {
+        const { id_camping } = req.params
+        const { filtros, estado } = req.body
+
+        await Estancia.find({ id_camping, ...filtros }).exec()
+            .then(results_estancias => {
+                if (results_estancias.length > 0) {
+                    const results_estancias_accion = results_estancias.map(async estancia => {
+                        const estancia_accion = await EstanciasAccion.findOne({ id_estancia: estancia._id, estado }).exec()
+                        if(estancia_accion) return { estancia, estancia_accion }
+                        else return []
+                    })
+
+                    Promise.all(results_estancias_accion)
+                        .then(results => {
+                            const new_results = results.flat()
+                            new_results.length > 0 
+                                ? res.status(200).send(new ResponseAPI('ok', `Estancias filtradas`, new_results))
+                                : res.status(404).send(new ResponseAPI('not-found', `No existen estancias para los filtros`, []))
+                        })
+                        .catch(err => { throw new Error(err) })
+                } else {
+                    res.status(404).send(new ResponseAPI('not-found', `No existen estancias para el camping con id ${id_camping}`, []))
+                }
+            })
+            .catch(error => { throw new Error(error) })
+    } catch(error) {
+        next(error)
+    }
+}
+
+/**
+ * Devuelve todas las reservas del día actual que aun no han llegado.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverReservasHoySinLlegar = async (req, res, next) => {
+    try {
+        const { id_camping } = req.params
+
+        await Estancia.find({ id_camping, fecha_inicio: formatearFecha(new Date()) }).exec()
+            .then(results_estancias => {
+                if (results_estancias.length > 0) {
+                    const results_estancias_accion = results_estancias.map(async estancia => {
+                        const estancia_accion = await EstanciasAccion.find({ id_estancia: estancia._id }).exec()
+                        const estancia_accion_mas_reciente = estanciaAccionMasReciente(estancia_accion)
+                        if(estancia_accion_mas_reciente.estado === 'reserva') return { estancia, estancia_accion: estancia_accion_mas_reciente }
+                        else return []
+                    })
+
+                    Promise.all(results_estancias_accion)
+                        .then(results => {
+                            const new_results = results.flat()
+                            new_results.length > 0 
+                                ? res.status(200).send(new ResponseAPI('ok', `Estancias con reserva para hoy sin realizar`, new_results))
+                                : res.status(404).send(new ResponseAPI('not-found', `No existen estancias con reserva para hoy`, []))
+                        })
+                        .catch(err => { throw new Error(err) })
+                } else {
+                    res.status(404).send(new ResponseAPI('not-found', `No existen estancias para el camping con id ${id_camping}`, []))
+                }
+            })
+            .catch(error => { throw new Error(error) })
+    } catch(error) {
+        next(error)
+    }
+}
+
+/**
+ * Devuelve todas las entradas con fecha de salida el día actual que aun no han salido.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverEntradasHoySinSalir = async (req, res, next) => {
+    try {
+        const { id_camping } = req.params
+
+        await Estancia.find({ id_camping, fecha_fin: formatearFecha(new Date()) }).exec()
+            .then(results_estancias => {
+                if (results_estancias.length > 0) {
+                    const results_estancias_accion = results_estancias.map(async estancia => {
+                        const estancia_accion = await EstanciasAccion.find({ id_estancia: estancia._id }).exec()
+                        const estancia_accion_mas_reciente = estanciaAccionMasReciente(estancia_accion)
+                        if(estancia_accion_mas_reciente.estado === 'entrada') return { estancia, estancia_accion: estancia_accion_mas_reciente }
+                        else return []
+                    })
+
+                    Promise.all(results_estancias_accion)
+                        .then(results => {
+                            const new_results = results.flat()
+                            new_results.length > 0 
+                                ? res.status(200).send(new ResponseAPI('ok', `Estancias con salida para hoy sin realizar`, new_results))
+                                : res.status(404).send(new ResponseAPI('not-found', `No existen estancias con salida para hoy`, []))
+                        })
+                        .catch(err => { throw new Error(err) })
+                } else {
+                    res.status(404).send(new ResponseAPI('not-found', `No existen estancias para el camping con id ${id_camping}`, []))
+                }
+            })
+            .catch(error => { throw new Error(error) })
+    } catch(error) {
+        next(error)
+    }
+}
+
+module.exports = { devolverEstanciaActualYReservasFuturasDeParcela, crearEstancia, devolverEstanciaPorId, devolverEstadoParcelaDia, devolverEstanciasPorEstadoYFecha, devolverEstanciasPorFiltros, devolverReservasHoySinLlegar, devolverEntradasHoySinSalir }
 
 /**************************************************************************************************************/
 /**************************************************************************************************************/
 /**************************************************************************************************************/
+
+/**
+* Formatea la fecha de hoy
+* @returns String
+*/
+const formatearFecha = (fecha) => {
+    return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() + 1 < 10) ? '0' : ''}${fecha.getDate()}`
+}
+
+/**
+ * Devuelve el estado de una parcela.
+ * @param {Object} estancia_accion 
+ * @param {Object} estancia 
+ */
+const devolverEstado = (estancia_accion, estancia, fecha) => {
+    let estado = ''
+    if (estancia_accion.estado === 'reserva') {
+        if (fecha === estancia.fecha_fin) {
+            estado = 'fin de reserva hoy'
+        } else {
+            estado = 'reservada'
+        }
+    } else if (estancia_accion.estado === 'entrada') {
+        if (fecha === estancia.fecha_fin) {
+            estado = 'salida prevista para hoy'
+        } else {
+            estado = 'ocupada'
+        }
+    } else if (estancia_accion.estado === 'salida') {
+        estado = 'libre'
+    }
+
+    return estado
+}
 
 /**
  * Devuelve la instancia de estancia_accion más reciente
@@ -260,14 +397,14 @@ const estanciaAccionMasReciente = (lista_estancias_accion) => {
  * @param {Date} fecha
  * @returns Object
  */
-const estanciaParcelaEnFecha = async (parcela, fecha) => {
+const  estanciaParcelaEnFecha = async (parcela, fecha) => {
     let estancia = null
     const fecha_ = new Date(fecha)
 
     const resultsEstancias = await Estancia.find({ parcela }).exec()
 
     if (resultsEstancias.length > 0) {
-        estancia = resultsEstancias.find(estancia => (new Date(estancia.fecha_inicio) <= fecha_) && (new Date(estancia.fecha_fin) >= fecha_))
+        estancia = resultsEstancias.filter(estancia => (new Date(estancia.fecha_inicio) <= fecha_) && (new Date(estancia.fecha_fin) >= fecha_))
     }
 
     return estancia

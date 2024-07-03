@@ -122,10 +122,27 @@
     border: 2px solid red;
 }
 
-#formReservaPreferencias {
+#formReservaPreferencias,
+#formReservaParcelas {
     width: 100%;
     display: flex;
     justify-content: space-between;
+}
+
+.reserva_select_parcelas {
+    width: 12rem;
+    padding: .3rem;
+    background-color: transparent;
+    font-family: var(--Crimson);
+    font-size: 18px;
+    color: var(--negro);
+    border: 1px solid var(--negro);
+    border-radius: none;
+    outline: none;
+}
+
+.error_select_nulo {
+    border: 2px solid red;
 }
 
 #formReservaPreferencias > div {
@@ -146,7 +163,7 @@
     width: 90%;
     display: flex;
     align-items: center;
-    margin: .4rem 0;
+    margin: .2rem 0;
 }
 
 .formulario_reserva__preferencia p {
@@ -161,7 +178,7 @@
     color: var(--negro);
 }
 
-#formReservaParcelas {
+.form__reserva_parcelas {
     width: 100%;
     font-family: var(--Crimson);
     font-size: 18px;
@@ -169,6 +186,8 @@
     padding: .6rem .8rem;
     border: 1px solid var(--negro);
 }
+
+
 
 #forReservaComentarios {
     height: 8rem;

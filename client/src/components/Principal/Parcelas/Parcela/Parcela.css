@@ -204,7 +204,7 @@
   width: fit-content;
   border: 1px solid var(--negro);
   padding: .2rem .4rem;
-  margin: 0 0 0 .5rem;
+  margin: .2rem 0 .2rem .5rem;
   font-family: var(--Crimson);
   font-style: italic;
   letter-spacing: 1px;
@@ -382,24 +382,42 @@
   justify-content: space-around;
 }
 
-.parcelas__reservas__estancia__info p {
+.parcelas__reservas__estancia__info .parcelas__reservas__estancia__info__campo {
+  height: 100%;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  font-family: var(--Crimson);
-  font-size: 22px;
-  color: var(--negro);
+  padding: 0 2rem;
 }
 
-.parcelas__reservas__estancia__info p:nth-child(-n+3) {
+.parcelas__reservas__estancia__info .parcelas__reservas__estancia__info__campo:nth-child(-n+3) {
   width: 25%;
 }
 
-.parcelas__reservas__estancia__info p:nth-child(5) {
+.parcelas__reservas__estancia__info .parcelas__reservas__estancia__info__campo:nth-child(4) {
   width: 50%;
+}
+
+.parcelas__reservas__estancia__info .parcelas__reservas__estancia__info__campo i {
+  font-size: 1.2rem;
+  color: var(--negro);
+  margin: 0 0 1rem;
+}
+
+.parcelas__reservas__estancia__info p {
+  font-family: var(--Crimson);
+    font-size: 18px;
+    color: var(--negro);
 }
 
 .parcelas__reservas__estancia__info span {
   height: 4rem;
+  width: 2px;
+  background-color: var(--negro);
+}
+
+.parcelas__reservas__estancia__info__raya {
+  height: 5rem;
   width: 2px;
   background-color: var(--negro);
 }

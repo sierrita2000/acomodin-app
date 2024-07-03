@@ -16,6 +16,9 @@ import MiCamping from './components/Principal/MiCamping/MiCamping'
 import FormularioReservas from './components/Principal/FormularioReservas/FormularioReservas'
 import RegistroActividad from './components/Principal/RegistroActividad/RegistroActividad'
 import Estancia, { loader as estanciaLoader } from './components/Principal/Estancia/Estancia'
+import Reservas from './components/Principal/Reservas/Reservas'
+import Entradas, { EntradasRealizadas, ReservasSinLlegar } from './components/Principal/Hoy/Entradas/Entradas'
+import Salidas, { SalidasRealizadas, SalidasSinRealizar } from './components/Principal/Hoy/Salidas/Salidas'
 
 const router = createBrowserRouter([
   {
@@ -52,7 +55,12 @@ const router = createBrowserRouter([
         children: [
           {
             path: '/principal/parcelas/:id_parcela/formulario-reserva',
-            element: <FormularioReservas reserva={true} />
+            element: <FormularioReservas reserva={true} selectVisible={false} />
+          },
+          {
+            path: '/principal/parcelas/:id_estancia_accion',
+            element: <Estancia />,
+            loader: estanciaLoader
           }
         ]
       },
@@ -69,15 +77,82 @@ const router = createBrowserRouter([
       },
       {
         path: '/principal/reservas',
-        element: <h1>Reservas</h1>
+        element: <Reservas />,
+        children: [
+          {
+            path: '/principal/reservas/:id_estancia_accion',
+            element: <Estancia />,
+            loader: estanciaLoader
+          },
+          {
+            path: '/principal/reservas/crear-reserva',
+            element: <FormularioReservas reserva={true} selectVisible={true} />
+          }
+        ]
       },
       {
         path: '/principal/entradas',
-        element: <h1>Entradas</h1>
+        element: <Entradas />,
+        children: [
+          {
+            path: '/principal/entradas/reservas-sin-llegar',
+            element: <ReservasSinLlegar />,
+            children: [
+              {
+                path: '/principal/entradas/reservas-sin-llegar/:id_estancia_accion',
+                element: <Estancia />,
+                loader: estanciaLoader
+              }
+            ]
+          },
+          {
+            path: '/principal/entradas/entradas',
+            element: <EntradasRealizadas />,
+            children: [
+              {
+                path: '/principal/entradas/entradas:id_estancia_accion',
+                element: <Estancia />,
+                loader: estanciaLoader
+              },
+              {
+                path: '/principal/entradas/entradas/crear-entrada',
+                element: <FormularioReservas reserva={false} selectVisible={true} />
+              }
+            ]
+          },
+          {
+            path: '/principal/entradas/estado-camping',
+            element: <p>Estado actual del camping</p>
+          }
+        ]
       },
       {
         path: '/principal/salidas',
-        element: <h1>Salidas</h1>
+        element: <Salidas />,
+        children: [
+          {
+            path: '/principal/salidas/salidas-sin-realizar',
+            element: <SalidasSinRealizar />,
+            children: [
+              {
+                path: '/principal/salidas/salidas-sin-realizar:id_estancia_accion',
+                element: <Estancia />,
+                loader: estanciaLoader
+              }
+            ]
+          },
+          {
+            path: '/principal/salidas/salidas',
+            element: <SalidasRealizadas />,
+            children: [
+              {
+                path: '/principal/salidas/salidas:id_estancia_accion',
+                element: <Estancia />,
+                loader: estanciaLoader
+              }
+            ]
+          }
+        ]
       },
       {
         path: '/principal/perfil',

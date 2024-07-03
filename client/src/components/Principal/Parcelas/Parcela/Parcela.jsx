@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 import { useFetch } from '../../../../hooks/useFetch'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import './Parcela.css'
 import Estancia from '../../Estancia/Estancia'
 
 export default function Parcela ({ id_parcela }) {
+
+    const navigate = useNavigate()
 
     /**
      * Formatea la fecha de hoy
@@ -82,10 +84,16 @@ export default function Parcela ({ id_parcela }) {
                             </div>
                             <div className="parcela__informacion__estado">
                                 <h4>estado actual</h4>
-                                <div className={`parcela__informacion__estado__circulo ${dataEstadoParcela?.results}`}>
-                                    <p>{dataEstadoParcela?.results}</p>
+                                    {
+                                        dataEstadoParcela?.results.map(estado => {
+                                            return (
+                                                <div className={`parcela__informacion__estado__circulo ${estado === 'libre' ? 'libre' : (estado === 'fin de reserva hoy' || estado === 'reservada') ? 'reservada' : 'ocupada'}`}>
+                                                    <p>{estado}</p>
+                                                </div>
+                                            )
+                                        })
+                                    }
                                 </div>
-                            </div>
                             <div className="parcela__informacion__tipos">
                                 <h4>tipos</h4>
                                 <div className="parcela__informacion__tipos__lista">
@@ -131,7 +139,7 @@ export default function Parcela ({ id_parcela }) {
                                         <div className="parcelas__reservas">
                                                 {
                                                     reservasOrdenadas().map(reserva => {
-                                                        return <EstanciaReservas { ...reserva } />
+                                                        return <EstanciaReservas { ...reserva } handlerMostrarReserva={() => navigate(`/principal/parcelas/${reserva.estancia_accion._id}`)} />
                                                     })
                                                 }
                                         </div>
@@ -155,21 +163,30 @@ export default function Parcela ({ id_parcela }) {
     )
 }
 
-function EstanciaReservas({ estancia, estancia_accion }) {
+function EstanciaReservas({ estancia, estancia_accion, handlerMostrarReserva }) {
 
     let [ dataUsuario ] = useFetch(`${import.meta.env.VITE_API_HOST}${estancia_accion.tipo_usuario === 'acomodador' ? 'acomodador/' : 'camping/'}id/${estancia_accion.id_usuario}`)
 
     return(
-        <div className="parcelas__reservas__estancia">
+        <div onClick={handlerMostrarReserva} className="parcelas__reservas__estancia">
             <div className="parcelas__reservas__estancia__imagen">
                 <img src={`${import.meta.env.VITE_API_HOST}static/${dataUsuario?.results.imagen}`} alt="IMAGEN-USUARIO" />
             </div>
             <div className="parcelas__reservas__estancia__info">
-                <p>{estancia.nombre}</p>
-                <span></span>
-                <p>{estancia.telefono || '-'}</p>
-                <span></span>
-                <p>{estancia.fecha_inicio.replaceAll('-', '/')} - {estancia.fecha_fin.replaceAll('-', '/')}</p>
+                <div className='parcelas__reservas__estancia__info__campo'>
+                    <i className="fa-solid fa-user"></i>
+                    <p>{estancia.nombre}</p>
+                </div>
+                <div className="parcelas__reservas__estancia__info__raya"></div>
+                <div className='parcelas__reservas__estancia__info__campo'>
+                    <i className="fa-solid fa-phone"></i>
+                    <p>{estancia.telefono || '-'}</p>
+                </div>
+                <div className="parcelas__reservas__estancia__info__raya"></div>
+                <div className='parcelas__reservas__estancia__info__campo'>
+                    <i className="fa-solid fa-calendar-days"></i>
+                    <p>{estancia.fecha_inicio.replaceAll('-', '/')} - {estancia.fecha_fin.replaceAll('-', '/')}</p>
+                </div>
             </div>
         </div>
     )

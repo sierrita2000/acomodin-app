@@ -6,7 +6,7 @@ import { LoginContext } from '../../../context/LoginContext'
 import Mensaje from '../../Mensaje/Mensaje'
 import Concepto from './Concepto/Concepto'
 
-export default function FormularioReservas ({ reserva }) {
+export default function FormularioReservas ({ reserva, selectVisible }) {
 
     const { id_parcela } = useParams()
     const navigate = useNavigate()
@@ -18,17 +18,20 @@ export default function FormularioReservas ({ reserva }) {
     const [ fechaInicio, setFechaInicio ] = useState('')
     const [ fechaFin, setFechaFin ] = useState('')
     const [ conceptos, setConceptos ] = useState(new Array())
+    const [ parcela, setParcela ] = useState(id_parcela || "0")
     const [ preferencias, setPreferencias ] = useState(new Array())
     const [ comentarios, setComentarios ] = useState('')
 
     const [ loadingReserva, setLoadingReserva ] = useState(false)
-    const [ errorReserva, setErrorReserva ] = useState(0) // 0: no hay error; 1: error de campos vacíos; 2: error de conceptos
+    const [ errorReserva, setErrorReserva ] = useState(0) // 0: no hay error; 1: error de campos vacíos; 2: error de conceptos; 3: Si es una entarda directa y no ha seleccionado ninguna parcela.
 
     const [ mensaje, setMensaje ] = useState(null)
 
+    const [ dataParcela, setDataParcela ] = useState(null)
+
     let [ dataConceptos ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
-    let [ dataParcela ] = id_parcela ? useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${id_parcela}`) : null
     let [ dataCamping ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? `acomodador/${loginContext[0][0]}/devolver-camping` : `camping/id/${loginContext[0][0]}`}`)
+    let [ dataParcelaCamping ] = useFetch(`${import.meta.env.VITE_API_HOST}parcelas/devolver-parcelas/id_camping/${loginContext[0][1] === 0 ? dataUsuario?.results.id_camping : loginContext[0][0]}`)
 
     /**
      * Handler del botón de añadir preferencia
@@ -106,6 +109,7 @@ export default function FormularioReservas ({ reserva }) {
      * Crea una estancia en la BBDD
      */
     const crearEstancia = async () => {
+        // comprobar errores.
         if (nombre === '' || fechaInicio === '' || fechaFin === '') {
             setErrorReserva(1)
             document.getElementById('formularioReservas').scrollIntoView({ behavior: 'smooth' })
@@ -118,10 +122,16 @@ export default function FormularioReservas ({ reserva }) {
             return
         }
 
+        if(!reserva && (parcela === "0")) {
+            setErrorReserva(3)
+            document.getElementById('formularioReservas').scrollIntoView({ behavior: 'smooth' })
+            return
+        }
+
         setLoadingReserva(true)
 
-        const obj_estancia = { nombre, telefono, fecha_inicio: fechaInicio, fecha_fin: fechaFin, conceptos, parcela: id_parcela, id_camping: dataCamping?.results._id }
-        const obj_estancia_accion = { id_usuario: loginContext[0][0], tipo_usuario: (loginContext[0][1] === 0 ? 'acomodador' : 'camping'), fecha: formatearFecha(new Date()), estado: 'reserva', comentarios }
+        const obj_estancia = { nombre, telefono, fecha_inicio: fechaInicio, fecha_fin: fechaFin, conceptos, parcela: (parcela === "0") ? parcela : null, caracteristicas: (preferencias.length > 0) ? preferencias : null, id_camping: dataCamping?.results._id }
+        const obj_estancia_accion = { id_usuario: loginContext[0][0], tipo_usuario: (loginContext[0][1] === 0 ? 'acomodador' : 'camping'), fecha: formatearFecha(new Date()), estado: reserva ? 'reserva' : 'entrada', comentarios }
         
         const response = await fetch(`${import.meta.env.VITE_API_HOST}estancias/crear-estancia`, {
             method: 'POST',
@@ -138,18 +148,31 @@ export default function FormularioReservas ({ reserva }) {
         }
     }
 
+    /**
+     * Cada vez que el usuario actualiza la parcela, aparece la información de esta.
+     */
     useEffect(() => {
-        if (id_parcela) {
+        setPreferencias(new Array())
+        fetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${parcela}`)
+            .then(response => response.json())
+            .then(data => { setDataParcela(data.results) })
+    }, [parcela])
+
+    /**
+     * Cada vez que el usuario actualiza la parcela, cambian los conceptos
+     */
+    useEffect(() => {
+        if (parcela != "0") {
             const adultos_nenes = dataConceptos?.results.filter(c => (c.nombre === 'adultos' || c.nombre === 'niños')).map(c => c._id)
             const conceptos_generales = dataCamping?.results.conceptos.filter(c => ['665a0165c5f8973c88844b8a', '665a0165c5f8973c88844b89', '665a0165c5f8973c88844b88'].includes(c))
-            if (dataParcela?.results.electricidad) conceptos_generales?.push('665a0165c5f8973c88844b8b')
-            const array_conceptos = conceptos_generales ? dataParcela?.results.tipos.concat(conceptos_generales).concat(adultos_nenes).map(c => [c, 0]) : null
+            if (dataParcela?.electricidad) conceptos_generales?.push('665a0165c5f8973c88844b8b')
+            const array_conceptos = conceptos_generales ? dataParcela?.tipos.concat(conceptos_generales).concat(adultos_nenes).map(c => [c, 0]) : null
             setConceptos(array_conceptos)
         } else {
-            const array_conceptos = dataConceptos?.results.map(concepto => [concepto._id, 0])
+            const array_conceptos = dataConceptos?.results.filter(concepto => dataCamping?.results.conceptos.includes(concepto._id)).map(concepto => [concepto._id, 0])
             setConceptos(array_conceptos)
         }
-    }, [dataParcela, dataConceptos, dataCamping])
+    }, [dataParcela, dataConceptos, dataCamping, parcela])
 
     return(
         <div className="formulario_reservas">
@@ -190,14 +213,43 @@ export default function FormularioReservas ({ reserva }) {
                             }
                         </div>
                     </section>
+                    { errorReserva === 3 && <p className="texto_error">Debes seleccionar una parcela</p> }
+                    <section className='formulario_reserva__section__column'>
+                        <label htmlFor="formReservaParcelas">parcelas</label>
+                        <div id="formReservaParcelas" name="formReservaParcelas">
+                            {
+                                (selectVisible) ? (
+                                        <select className={`reserva_select_parcelas ${(errorReserva === 3 && parcela === "0") && 'error_select_nulo'}`} name="selectParcelas" id="selectParcelas" onChange={e => setParcela(e.target.value)}>
+                                            <option value="0" selected>-</option>
+                                            {
+                                                dataParcelaCamping?.results.sort((a, b) => {
+                                                    const id_zona_A = a.nombre.toUpperCase()
+                                                    const id_zona_B = b.nombre.toUpperCase()
+                
+                                                    if(id_zona_A < id_zona_B) return -1
+                                                    if(id_zona_A > id_zona_B) return 1
+                                                    else return 0
+                                                }).map(parcela => {
+                                                    return <option value={parcela._id}>{parcela.nombre}</option>
+                                                })
+                                            }
+                                        </select>
+                                ) : (
+                                    <div className="form__reserva_parcelas">
+                                        <p>{dataParcela ? dataParcela?.nombre : '-'}</p>
+                                    </div>
+                                )
+                            }
+                        </div>
+                    </section>
                     {
-                        !id_parcela && (
+                        (reserva && (parcela === "0")) && (
                             <section className='formulario_reserva__section__column'>
                                 <label htmlFor="formReservaPreferencias">preferencias</label>
                                 <div id="formReservaPreferencias" name="formReservaPreferencias" >
                                     <div>
                                         {
-                                            dataParcela?.results.caracteristicas.filter(caracteristica => !preferencias.includes(caracteristica)).map(preferencia => {
+                                            dataCamping?.results.caracteristicas.filter(caracteristica => !preferencias.includes(caracteristica)).map(preferencia => {
                                                 return(
                                                     <div className="formulario_reserva__preferencia">
                                                         <p>{preferencia}</p>
@@ -223,12 +275,6 @@ export default function FormularioReservas ({ reserva }) {
                             </section>
                         )
                     }
-                    <section className='formulario_reserva__section__column'>
-                        <label htmlFor="formReservaParcelas">parcelas</label>
-                        <div id="formReservaParcelas" name="formReservaParcelas">
-                            {dataParcela?.results.nombre}
-                        </div>
-                    </section>
                     <section className='formulario_reserva__section__column'>
                         <label htmlFor='forReservaComentarios'>comentarios del acomodador</label>
                         <textarea name="forReservaComentarios" id="forReservaComentarios" placeholder='Escribe aquí los comentarios que quieras...' value={comentarios} onChange={e => setComentarios(e.target.value)}></textarea>

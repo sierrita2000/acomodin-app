@@ -29,6 +29,40 @@ const devolverParcelasPorZona = async (req, res, next) => {
 }
 
 /**
+ * Devuelve todas las parcelas de un camping
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverParcelasPorCamping = async (req, res, next) => {
+    try {
+        const { id_camping } = req.params
+        
+        await Zona.find({ id_camping }).exec()
+            .then(resultsZonas => {
+                if(resultsZonas.length > 0) {
+                    const promises = resultsZonas.map(async zona => {
+                        const parcelas_zona = await Parcela.find({ id_zona: zona._id }).exec()
+                        return parcelas_zona
+                    })
+
+                    Promise.all(promises)
+                        .then(promises_parcelas => {
+                            res.status(200).send(new ResponseAPI('ok', `Parcelas del camping con id ${id_camping}`, promises_parcelas.flat()))
+                        })
+                } else {
+                    res.status(404).send(new ResponseAPI('not-found', `No existen zonas para el camping con id ${id_camping}`, []))
+                }
+            })
+            .catch(error => {
+                throw new Error(error)
+            })
+    } catch(error) {
+        next(error)
+    }
+}
+
+/**
  * Devuleve una parcel por si ID.
  * @param {Request} req 
  * @param {Response} res 
@@ -40,10 +74,10 @@ const devolverParceaPorId = async (req, res, next) => {
 
         await Parcela.findById(id).exec()
             .then(results => { res.status(200).send(new ResponseAPI('ok', `Datos de la parcela con id "${id}"`, results)) })
-            .catch(error => { res.status(404).send(new ResponseAPI('not-found', `No existe una parcela con el id "${id}"`, error)) })
+            .catch(error => { res.status(404).send(new ResponseAPI('not-found', `No existe una parcela con el id "${id}"`, null)) })
     } catch (error) {
         throw new Error(error)
     }
 }
 
-module.exports = { devolverParcelasPorZona, devolverParceaPorId }
+module.exports = { devolverParcelasPorZona, devolverParceaPorId, devolverParcelasPorCamping }
