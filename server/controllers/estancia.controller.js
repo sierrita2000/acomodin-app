@@ -84,23 +84,32 @@ const crearEstancia = async (req, res, next) => {
     try {
         const { estancia, estancia_accion } = req.body
 
-        huecosLibresCampingPorFecha(estancia.id_camping, estancia.fecha_inicio, estancia.fecha_fin)
+        const tipos_acomodacion_estancia = estancia.conceptos.filter(c => ['665a0165c5f8973c88844b82', '665a0165c5f8973c88844b81', '665a0165c5f8973c88844b86', '665a0165c5f8973c88844b85', '665a0165c5f8973c88844b87', '665a0165c5f8973c88844b84', '665a0165c5f8973c88844b83'].includes(c[0])).map(tipo => tipo[0])
+
+        huecosLibresCampingPorFecha(estancia.id_camping, estancia.fecha_inicio, estancia.fecha_fin) // Comprobamos si queda hueco libre en el camping
             .then(resultHuecosLibresCamping => {
                 if (resultHuecosLibresCamping > 0) {
-                    if (estancia.parcela) {
-                        validarParcelaLibrePorFecha(estancia.parcela, estancia.fecha_inicio, estancia.fecha_fin)
-                            .then(async resultsValidarParcelaFecha => {
-                                if (resultsValidarParcelaFecha) { // Crea la estancia.
+                    parcelasLibresPorFechaYTipos(estancia.id_camping, estancia.fecha_inicio, estancia.fecha_fin, tipos_acomodacion_estancia) // Comprobamos si de las parcelas sin reserva asignada alguna es del tipo de la nueva reserva
+                        .then(parcelas_libres_fecha_tipos => {
+                            if(parcelas_libres_fecha_tipos.length > 0) {
+                                if (estancia.parcela) {
+                                    validarParcelaLibrePorFecha(estancia.parcela, estancia.fecha_inicio, estancia.fecha_fin) // Comprobamos si la parcela está libre durante las fechas dadas
+                                        .then(async resultsValidarParcelaFecha => {
+                                            if (resultsValidarParcelaFecha) { // Crea la estancia.
+                                                grabarEstancia(estancia, estancia_accion, res)
+                                            } else { // Devuelve el número de huecos libres que quedan en el camping
+                                                res.status(200).send(new ResponseAPI('not-allowed', `Esta parcela está ocupada para las fechas ${estancia.fecha_inicio.replaceAll('-', '/')} - ${estancia.fecha_fin.replaceAll('-', '/')}.`, { huecosLibresCamping: resultHuecosLibresCamping }))
+                                            }
+                                        })
+                                } else { // Reserva sin parcela especificada.
                                     grabarEstancia(estancia, estancia_accion, res)
-                                } else { // Devuelve el número de huecos libres que quedan en el camping
-                                    res.status(200).send(new ResponseAPI('not-allowed', `Esta parcela está ocupada para las fechas ${estancia.fecha_inicio.replace('-', '/')} - ${estancia.fecha_fin.replace('-', '/')}.`, { huecosLibresCamping: resultHuecosLibresCamping }))
                                 }
-                            })
-                    } else { // Reserva sin parcela especificada.
-                        grabarEstancia(estancia, estancia_accion, res)
-                    }
+                            } else {
+                                res.status(200).send(new ResponseAPI('not-allowed', `No quedan huecos libres para los tipos seleccionados para las fechas ${estancia.fecha_inicio.replaceAll('-', '/')} - ${estancia.fecha_fin.replaceAll('-', '/')}.`, { huecosLibresCamping: resultHuecosLibresCamping }))
+                            }
+                        })
                 } else {
-                    res.status(200).send(new ResponseAPI('not-allowed', `No hay hueco en el camping entre las fechas ${estancia.fecha_inicio.replace('-', '/')} - ${estancia.fecha_fin.replace('-', '/')}.`, null))
+                    res.status(200).send(new ResponseAPI('not-allowed', `No hay hueco en el camping entre las fechas ${estancia.fecha_inicio.replaceAll('-', '/')} - ${estancia.fecha_fin.replaceAll('-', '/')}.`, null))
                 }
             })
     } catch(error) {
@@ -146,6 +155,7 @@ const devolverEstadoParcelaDia = async (req, res, next) => {
                         await EstanciasAccion.find({ id_estancia: estancias[0]._id }).exec()
                             .then(results_estancia_accion => {
                                 const estancia_accion_mas_reciente = estanciaAccionMasReciente(results_estancia_accion)
+                                console.log(estancia_accion_mas_reciente)
                                 const estado = devolverEstado(estancia_accion_mas_reciente, estancias[0], fecha)
 
                                 res.status(200).send(new ResponseAPI('ok', `estado parcela ${fecha}`, [estado]))
@@ -333,7 +343,51 @@ const devolverEntradasHoySinSalir = async (req, res, next) => {
     }
 }
 
-module.exports = { devolverEstanciaActualYReservasFuturasDeParcela, crearEstancia, devolverEstanciaPorId, devolverEstadoParcelaDia, devolverEstanciasPorEstadoYFecha, devolverEstanciasPorFiltros, devolverReservasHoySinLlegar, devolverEntradasHoySinSalir }
+/**
+ * Elimina una estancia por su ID.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const eliminarEstancia = async (req, res, next) => {
+    try {
+        const { id } = req.params
+
+        const resultsEstancia = await Estancia.findByIdAndDelete(id).exec()
+
+        const resultsEstanciaAcciones = await EstanciasAccion.deleteMany({ id_estancia: id }).exec()
+
+        Promise.all([resultsEstancia, resultsEstanciaAcciones])
+            .then(results => {
+                res.status(200).send(new ResponseAPI('ok', `Estancia con id ${id} eliminada`, results))
+            })
+            .catch(error => { throw new Error(error) })
+
+    } catch(error) {
+        next(error)
+    }
+}
+
+/**
+ * Actualiza una estancia.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const editarEstancia = async (req, res, next) => {
+    try {
+        const { id } = req.params
+        const { updates } = req.body
+
+        await Estancia.findByIdAndUpdate(id, { ...updates }, { returnDocument: 'after' }).exec()
+            .then(results => { res.status(200).send(new ResponseAPI('ok', `Estancia con id ${id} actualizada`, results)) })
+            .catch(error => { throw new Error(error) })
+        } catch(error) {
+        next(error)
+    }
+}
+
+module.exports = { devolverEstanciaActualYReservasFuturasDeParcela, crearEstancia, devolverEstanciaPorId, devolverEstadoParcelaDia, devolverEstanciasPorEstadoYFecha, devolverEstanciasPorFiltros, devolverReservasHoySinLlegar, devolverEntradasHoySinSalir, eliminarEstancia, editarEstancia }
 
 /**************************************************************************************************************/
 /**************************************************************************************************************/
@@ -385,6 +439,8 @@ const estanciaAccionMasReciente = (lista_estancias_accion) => {
     lista_estancias_accion?.forEach(estancia_accion => {
         if (new Date(estancia_accion.fecha) > new Date(estancia_accion_mas_reciente.fecha)) {
             estancia_accion_mas_reciente = estancia_accion
+        } else if(estancia_accion.fecha === estancia_accion_mas_reciente.fecha) {
+            estancia_accion_mas_reciente = [estancia_accion, estancia_accion_mas_reciente].find(e_a => e_a.estado === 'entrada')
         }
     })
 
@@ -398,7 +454,7 @@ const estanciaAccionMasReciente = (lista_estancias_accion) => {
  * @returns Object
  */
 const  estanciaParcelaEnFecha = async (parcela, fecha) => {
-    let estancia = null
+    let estancia = []
     const fecha_ = new Date(fecha)
 
     const resultsEstancias = await Estancia.find({ parcela }).exec()
@@ -440,7 +496,7 @@ const validarParcelaLibrePorFecha = async (parcela, fecha_inicio, fecha_fin) => 
  * @returns Number
  */
 const huecosLibresCampingPorFecha = async (id_camping, fecha_inicio, fecha_fin) => {
-    const promises = [cantidadParcelasCamping(id_camping), cantidadEstanciasCampingPorFecha(id_camping, fecha_inicio, fecha_fin)]
+    const promises = [cantidadParcelasCamping(id_camping), cantidadHuecosOcupadosCampingPorFecha(id_camping, fecha_inicio, fecha_fin)]
 
     const huecos_libres = await Promise.all(promises)
     return huecos_libres[0]-huecos_libres[1]
@@ -470,13 +526,13 @@ const cantidadParcelasCamping = async (id_camping) => {
 }
 
 /**
- * Devuelve el número de parcelas libres de un camping entre dos fechas.
+ * Devuelve el número de huecos que habrá ocupados entre dos fechas.
  * @param {String} id_camping 
  * @param {Date} fecha_inicio 
  * @param {Date} fecha_fin 
  * @returns Number
  */
-const cantidadEstanciasCampingPorFecha = async (id_camping, fecha_inicio, fecha_fin) => {
+const cantidadHuecosOcupadosCampingPorFecha = async (id_camping, fecha_inicio, fecha_fin) => {
     let cantidad_parcelas = 0
     const fecha_inicio_nueva_estancia = new Date(fecha_inicio)
     const fecha_fin_nueva_estancia = new Date(fecha_fin)
@@ -484,9 +540,97 @@ const cantidadEstanciasCampingPorFecha = async (id_camping, fecha_inicio, fecha_
     const resultsEstancias = await Estancia.find({ id_camping }).exec()
 
     if(resultsEstancias.length > 0) {
-        const parcelas_dentro_de_fecha = resultsEstancias.filter(estancia => (new Date(estancia.fecha_inicio) < fecha_fin_nueva_estancia) && (new Date(estancia.fecha_fin) > fecha_inicio_nueva_estancia))
-        cantidad_parcelas = parcelas_dentro_de_fecha.length
+        const estancias_dentro_de_fecha = resultsEstancias.filter(estancia => (new Date(estancia.fecha_inicio) < fecha_fin_nueva_estancia) && (new Date(estancia.fecha_fin) > fecha_inicio_nueva_estancia))
+        // comprobar que no hay dos estancias con la misma parcela en el array
+        estancias_dentro_de_fecha.forEach((estancia_filtrada, indice) => {
+            if(estancia_filtrada.parcela) {
+                if(estancias_dentro_de_fecha.filter(e => e.parcela && (e.parcela.toString() === estancia_filtrada.parcela.toString())).length > 1) {
+                    estancias_dentro_de_fecha.splice(indice, 1)                    
+              }
+            }
+        })
+        cantidad_parcelas = estancias_dentro_de_fecha.length
     }
 
     return cantidad_parcelas
+}
+
+/**
+ * Devuelve las parcelas libres de un camping en unas fechas dadas, y que incluyan unos tipos de acomodación.
+ * @param {string} id_camping 
+ * @param {Date} fecha_inicio 
+ * @param {Date} fecha_fin 
+ * @param {Array} tipos 
+ * @returns Array
+ */
+const parcelasLibresPorFechaYTipos = async (id_camping, fecha_inicio, fecha_fin, tipos) => {
+    let lista_parcelas = new Array()
+
+    const fecha_inicio_nueva_estancia = new Date(fecha_inicio)
+    const fecha_fin_nueva_estancia = new Date(fecha_fin)
+
+    const resultsEstancias = await Estancia.find({ id_camping }).exec()
+
+    if(resultsEstancias.length > 0) {
+        // Estancias con parcela asignada dentro de las fechas
+        const estancias_dentro_de_fecha = resultsEstancias.filter(estancia => (estancia.parcela) && ((new Date(estancia.fecha_inicio) < fecha_fin_nueva_estancia) && (new Date(estancia.fecha_fin) > fecha_inicio_nueva_estancia)))
+        
+        // Parcelas ocupadas dentro de las fechas
+        const parcelas_ocupadas_en_fechas = estancias_dentro_de_fecha.map(estancia => estancia.parcela)
+
+        // Zonas del camping
+        const resultsZonas = await Zona.find({ id_camping }).exec()
+        const zonas_camping = resultsZonas.map(zona => zona._id)
+
+        // Parcelas del camping que no estén ocupadas
+        const resultsParcelas = await Parcela.find({ _id: { $nin: parcelas_ocupadas_en_fechas }, id_zona: { $in: zonas_camping }}).exec()
+
+        // Sacamos las parcelas que incluyan los tipos de la reserva
+        resultsParcelas.forEach(parcela => {
+            let parcela_valida = true
+
+            tipos.forEach(tipo => {
+                if(!parcela.tipos.includes(tipo)) parcela_valida = false
+            })
+
+            parcela_valida && lista_parcelas.push(parcela)
+        })
+    }
+
+    return lista_parcelas
+}
+
+/**
+ * Devuelve las estancias sin parcela asignada que incluyan los tipos dados entre dos fechas
+ * @param {string} id_camping 
+ * @param {Date} fecha_inicio 
+ * @param {Date} fecha_fin 
+ * @param {Array} tipos 
+ * @returns Array 
+ */
+const reservasSinParcelaPorFechaYtipo = async (id_camping, fecha_inicio, fecha_fin, tipos) => {
+    let lista_estancias = new Array()
+
+    const fecha_inicio_nueva_estancia = new Date(fecha_inicio)
+    const fecha_fin_nueva_estancia = new Date(fecha_fin)
+
+    const resultsEstancias = await Estancia.find({ id_camping, parcela: null }).exec()
+
+    if(resultsEstancias.length > 0) {
+        // Estancias dentro de fechas sin parcela asignada
+        const estancias_dentro_de_fecha = resultsEstancias.filter(estancia => (new Date(estancia.fecha_inicio) < fecha_fin_nueva_estancia) && (new Date(estancia.fecha_fin) > fecha_inicio_nueva_estancia))
+    
+        // Sacamos las estancias que incluyan los tipos de la reserva
+        estancias_dentro_de_fecha.forEach(estancia => {
+            let estancia_valida = true
+
+            tipos.forEach(tipo => {
+                if(!estancia.conceptos.includes(tipo)) estancia_valida = false
+            })
+
+            estancia_valida && lista_estancias.push(estancia)
+        })
+    }
+
+    return lista_estancias
 }

@@ -36,6 +36,7 @@ export default function Principal () {
      */
     const cerrarSesion = () => {
         loginContext[1](null)
+        sessionStorage.clear()
         navigate('/login', { replace: true })
     }
 

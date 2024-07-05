@@ -74,7 +74,7 @@ const devolverParceaPorId = async (req, res, next) => {
 
         await Parcela.findById(id).exec()
             .then(results => { res.status(200).send(new ResponseAPI('ok', `Datos de la parcela con id "${id}"`, results)) })
-            .catch(error => { res.status(404).send(new ResponseAPI('not-found', `No existe una parcela con el id "${id}"`, null)) })
+            .catch(() => { res.status(404).send(new ResponseAPI('not-found', `No existe una parcela con el id "${id}"`, null)) })
     } catch (error) {
         throw new Error(error)
     }

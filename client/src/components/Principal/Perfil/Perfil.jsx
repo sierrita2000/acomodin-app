@@ -8,6 +8,8 @@ export default function Perfil () {
 
     const loginContext = useContext(LoginContext)
 
+    console.log(loginContext[0])
+
     const [ actualizacion, setActualizacion ] = useOutletContext()
 
     let [ data, error, loading ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador': 'camping'}/id/${loginContext[0][0]}`)

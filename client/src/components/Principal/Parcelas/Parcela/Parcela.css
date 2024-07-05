@@ -208,6 +208,7 @@
   font-family: var(--Crimson);
   font-style: italic;
   letter-spacing: 1px;
+  text-align: center;
 }
 
 .reservada {

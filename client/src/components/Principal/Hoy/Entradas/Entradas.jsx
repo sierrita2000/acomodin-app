@@ -106,7 +106,7 @@ export function EntradasRealizadas () {
                 })
             })
                 .then(response => response.json())
-                .then(data => setReservas(data.results))
+                .then(data => setEntradas(data.results))
                 .finally(() => setLoading(false))
         }
     }, [dataCamping])

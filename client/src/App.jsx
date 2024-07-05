@@ -7,7 +7,7 @@ import Error from './pages/Error/Error404/Error'
 import Completado from './components/Registro/PantallaCompletado/Completado'
 import Principal from './pages/Principal/Principal'
 import { LoginContext } from './context/LoginContext'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Perfil from './components/Principal/Perfil/Perfil'
 import PanelEdicion from './components/Principal/Perfil/PanelEdicion/PanelEdicion'
 import PanelPassword from './components/Principal/Perfil/PanelPassword/PanelPassword'
@@ -178,7 +178,8 @@ const router = createBrowserRouter([
 
 function App() {
 
-  const [ user, setUser ] = useState(null) // user = [ _id, tipo (0->acomodador // 1->camping) ]
+  const usuario_session = sessionStorage.getItem("usuario")
+  const [ user, setUser ] = useState(usuario_session ? [ usuario_session.split(',')[0], parseInt(usuario_session.split(',')[1]) ] : null) // user = [ _id, tipo (0->acomodador // 1->camping) ]
 
   return (
     <LoginContext.Provider value={[user, setUser]}> 

@@ -3,11 +3,12 @@ import './Reservas.css'
 import { useFetch } from '../../../hooks/useFetch'
 import { LoginContext } from '../../../context/LoginContext'
 import EstanciaSimple from '../Estancia/EstanciaSimple/EstanciaSimple'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate, useOutletContext } from 'react-router-dom'
 
 export default function Reservas () {
 
     const navigate = useNavigate()
+    let location = useLocation()
 
     const loginContext = useContext(LoginContext)
     let [ dataUsuario ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador/' : 'camping/'}id/${loginContext[0][0]}`)
@@ -43,7 +44,7 @@ export default function Reservas () {
         if(nombre) filtros.nombre = nombre
         if(telefono) filtros.telefono = telefono
         if(fechaInicio) filtros.fecha_inicio = fechaInicio
-        if(parcela != "0") filtros.parcela = parcela
+        if(parcela != "0") filtros.parcela = (parcela === 'sin_parcela') ? null : parcela
 
         setLoading(true)
         const response = await fetch(`${import.meta.env.VITE_API_HOST}estancias/devolver-estancias-filtros/id_camping/${loginContext[0][1] === 0 ? dataUsuario?.results.id_camping : loginContext[0][0]}`, {
@@ -63,7 +64,7 @@ export default function Reservas () {
 
     useEffect(() => {
         aplicarFiltros(null)
-    }, [])
+    }, [location])
 
     return(
         <div className="reservas">
@@ -89,7 +90,8 @@ export default function Reservas () {
                     <div className="reservas__filtros__filtro">
                         <label htmlFor="reservasFiltroParcela">parcela:</label>
                         <select name="reservasFiltroParcela" id="reservasFiltroParcela" value={parcela} onChange={e => setParcela(e.target.value)}>
-                            <option value="0" selected>-</option>
+                            <option value="0">-</option>
+                            <option value="sin_parcela">SIN PARCELA</option>
                             {
                                 dataParcelaCamping?.results.sort((a, b) => {
                                     const id_zona_A = a.nombre.toUpperCase()
@@ -123,8 +125,15 @@ export default function Reservas () {
                             <div className="dot-spinner__dot"></div>
                         </div>
                     ) : (
-                        reservas ? (
-                            reservas.map(reserva => {
+                        reservas?.length > 0 ? (
+                            reservas.sort((a, b) => {
+                                const id_zona_A = a.estancia.parcela ? a.estancia.parcela.toUpperCase() : '-'
+                                const id_zona_B = b.estancia.parcela ? b.estancia.parcela.toUpperCase() : '-'
+    
+                                if(id_zona_A < id_zona_B) return -1
+                                if(id_zona_A > id_zona_B) return 1
+                                else return 0
+                            }).map(reserva => {
                                 return <EstanciaSimple {...reserva} handlerEstancia={() => navigate(`/principal/reservas/${reserva.estancia_accion._id}`)} />
                             })
                         ) : (

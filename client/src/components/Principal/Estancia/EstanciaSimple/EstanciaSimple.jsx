@@ -4,7 +4,7 @@ import { useFetch } from '../../../../hooks/useFetch'
 export default function EstanciaSimple ({ estancia, estancia_accion, handlerEstancia }) {
 
     let [ dataUsuario ] = useFetch(`${import.meta.env.VITE_API_HOST}${estancia_accion.tipo_usuario}/id/${estancia_accion.id_usuario}`)
-    let [ dataParcela ] = estancia.parcela ? useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${estancia.parcela}`) : null
+    let [ dataParcela ] = useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${estancia.parcela || 0}`)
 
     return(
         <div className="estancia_simple" onClick={handlerEstancia} >

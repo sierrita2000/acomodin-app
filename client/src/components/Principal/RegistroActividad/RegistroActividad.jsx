@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react'
 import './RegistroActividad.css'
 import { LoginContext } from '../../../context/LoginContext'
 import { useFetch } from '../../../hooks/useFetch'
-import { Outlet, useNavigate } from 'react-router-dom'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import EstanciaSimple from '../Estancia/EstanciaSimple/EstanciaSimple'
 
 export default function RegistroActividad () {
@@ -11,6 +11,7 @@ export default function RegistroActividad () {
     let [ dataUsuario ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador/' : 'camping/'}id/${loginContext[0][0]}`)
 
     const navigate = useNavigate()
+    const location = useLocation()
 
     /**
      * Formatea la fecha de hoy
@@ -42,7 +43,7 @@ export default function RegistroActividad () {
 
     useEffect(() => {
         aplicarFiltros()
-    }, [])
+    }, [location])
 
     return(
         <div className="registro_actividad">
@@ -92,8 +93,8 @@ export default function RegistroActividad () {
                     ) : (
                         estanciasFiltradas ? (
                             estanciasFiltradas.sort((a, b) => {
-                                const id_zona_A = a.estancia.parcela.toUpperCase()
-                                const id_zona_B = b.estancia.parcela.toUpperCase()
+                                const id_zona_A = a.estancia.parcela ? a.estancia.parcela.toUpperCase() : '-'
+                                const id_zona_B = b.estancia.parcela ? b.estancia.parcela.toUpperCase() : '-'
     
                                 if(id_zona_A < id_zona_B) return -1
                                 if(id_zona_A > id_zona_B) return 1

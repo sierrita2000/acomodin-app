@@ -9,13 +9,21 @@ import Concepto from './Concepto/Concepto'
 export default function FormularioReservas ({ reserva, selectVisible }) {
 
     const { id_parcela } = useParams()
-    const navigate = useNavigate()
+    const navigate = useNavigate() 
+
+    /**
+     * Formatea la fecha de hoy
+     * @returns String
+     */
+    const formatearFecha = (fecha) => {
+        return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() + 1 < 10) ? '0' : ''}${fecha.getDate()}`
+    }
 
     const loginContext = useContext(LoginContext)
 
     const [ nombre, setNombre ] = useState('')
     const [ telefono, setTelefono ] = useState('')
-    const [ fechaInicio, setFechaInicio ] = useState('')
+    const [ fechaInicio, setFechaInicio ] = useState(reserva ? '' : formatearFecha(new Date()))
     const [ fechaFin, setFechaFin ] = useState('')
     const [ conceptos, setConceptos ] = useState(new Array())
     const [ parcela, setParcela ] = useState(id_parcela || "0")
@@ -52,14 +60,6 @@ export default function FormularioReservas ({ reserva, selectVisible }) {
         const preferencias_copia = preferencias.filter(p => p != preferencia)
 
         setPreferencias(preferencias_copia)
-    } 
-
-    /**
-     * Formatea la fecha de hoy
-     * @returns String
-     */
-    const formatearFecha = (fecha) => {
-        return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() + 1 < 10) ? '0' : ''}${fecha.getDate()}`
     }
 
     /**
@@ -98,7 +98,9 @@ export default function FormularioReservas ({ reserva, selectVisible }) {
         const tipos_acomodacion_reserva = conceptos.filter(c => tipos_acomodacion.includes(c[0]) && (c[1] > 0))
         const concepto_adulto_reserva = conceptos.filter(c => (c[0] === concepto_adulto) && (c[1] > 0))
         
-        if((tipos_acomodacion_reserva.length === 0) && concepto_adulto_reserva.length === 0) {
+        console.log(conceptos.filter(c => (c[0] === concepto_adulto)), conceptos)
+
+        if((tipos_acomodacion_reserva.length === 0) || (concepto_adulto_reserva.length === 0)) {
             comprobacion = false
         }
 
@@ -130,7 +132,7 @@ export default function FormularioReservas ({ reserva, selectVisible }) {
 
         setLoadingReserva(true)
 
-        const obj_estancia = { nombre, telefono, fecha_inicio: fechaInicio, fecha_fin: fechaFin, conceptos, parcela: (parcela === "0") ? parcela : null, caracteristicas: (preferencias.length > 0) ? preferencias : null, id_camping: dataCamping?.results._id }
+        const obj_estancia = { nombre, telefono, fecha_inicio: fechaInicio, fecha_fin: fechaFin, conceptos, parcela: (parcela != "0") ? parcela : null, caracteristicas: (preferencias.length > 0) ? preferencias : null, id_camping: dataCamping?.results._id }
         const obj_estancia_accion = { id_usuario: loginContext[0][0], tipo_usuario: (loginContext[0][1] === 0 ? 'acomodador' : 'camping'), fecha: formatearFecha(new Date()), estado: reserva ? 'reserva' : 'entrada', comentarios }
         
         const response = await fetch(`${import.meta.env.VITE_API_HOST}estancias/crear-estancia`, {
@@ -174,6 +176,13 @@ export default function FormularioReservas ({ reserva, selectVisible }) {
         }
     }, [dataParcela, dataConceptos, dataCamping, parcela])
 
+    useEffect(() => {
+        if(!reserva) {
+            const input_fecha_inicio = document.getElementById('formReservaFechaInicio')
+            input_fecha_inicio.setAttribute('disabled', true)
+        }
+    }, [])
+
     return(
         <div className="formulario_reservas">
             <div className="formulario_reservas__modal">
@@ -208,7 +217,7 @@ export default function FormularioReservas ({ reserva, selectVisible }) {
                         <div id="formReservaConceptos" name="formReservaConceptos">
                             {
                                 dataConceptos?.results.filter(c => conceptos?.map(con => con[0]).includes(c._id)).map((concepto, indice) => {
-                                    return <Concepto key={concepto._id} nombre={concepto.nombre} imagen={concepto.imagen} conceptos={conceptos} setConceptos={setConceptos} indice={indice} disabled={false} />
+                                    return <Concepto key={concepto._id} id={concepto._id} nombre={concepto.nombre} imagen={concepto.imagen} conceptos={conceptos} setConceptos={setConceptos} disabled={false} />
                                 })
                             }
                         </div>

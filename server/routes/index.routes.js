@@ -6,8 +6,8 @@ const multer = require('multer')
 const { registrarZonas, devolverZonas, actualizarZonas } = require('../controllers/zona.controller')
 const { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping, actualizarAcomodadoresCamping, devolverCampingDeAcomodador } = require('../controllers/acomodador.controller')
 const { devolverParceaPorId, devolverParcelasPorZona, devolverParcelasPorCamping } = require('../controllers/parcela.controller')
-const { crearEstancia, devolverEstanciaPorId, devolverEstanciaActualYReservasFuturasDeParcela, devolverEstadoParcelaDia, devolverEstanciasPorEstadoYFecha, devolverEstanciasPorFiltros, devolverEntradasHoySinSalir, devolverReservasHoySinLlegar } = require('../controllers/estancia.controller')
-const { devolverEstanciaPorIdAccion } = require('../controllers/estancia-accion.controller')
+const { crearEstancia, devolverEstanciaPorId, devolverEstanciaActualYReservasFuturasDeParcela, devolverEstadoParcelaDia, devolverEstanciasPorEstadoYFecha, devolverEstanciasPorFiltros, devolverEntradasHoySinSalir, devolverReservasHoySinLlegar, eliminarEstancia, editarEstancia } = require('../controllers/estancia.controller')
+const { devolverEstanciaPorIdAccion, crearLlegadaSalidaReserva } = require('../controllers/estancia-accion.controller')
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -73,8 +73,14 @@ router.get("/estancias/devolver-entradas-hoy-sin-salir/id_camping/:id_camping", 
 router.post("/estancias/crear-estancia", crearEstancia)
 router.post("/estancias/devolver-estancias-filtros/id_camping/:id_camping", devolverEstanciasPorFiltros)
 
-// RUTAS DE ESTANCIAS_ACCION
+router.put("/estancia/editar/id/:id", editarEstancia)
 
+router.delete("/estancia/eliminar/id/:id", eliminarEstancia)
+
+// RUTAS DE ESTANCIAS_ACCION
 router.get("/estancia-accion/id/:id", devolverEstanciaPorIdAccion)
+
+router.post("/estancia/marcar-llegada/id_estancia/:id_estancia", crearLlegadaSalidaReserva)
+router.post("/estancia/marcar-salida/id_estancia/:id_estancia", crearLlegadaSalidaReserva)
 
 module.exports = { router }

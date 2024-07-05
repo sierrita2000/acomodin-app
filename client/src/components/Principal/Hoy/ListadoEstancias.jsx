@@ -23,8 +23,8 @@ export default function ListadoEstancias ({ estancias, loading, texto_estancias_
                 ) : (
                     estancias.length > 0 ? (
                         estancias?.sort((a, b) => {
-                            const id_zona_A = a.estancia.parcela.toUpperCase()
-                            const id_zona_B = b.estancia.parcela.toUpperCase()
+                            const id_zona_A = a.estancia.parcela ? a.estancia.parcela.toUpperCase() : '-'
+                            const id_zona_B = b.estancia.parcela ? b.estancia.parcela.toUpperCase() : '-'
 
                             if(id_zona_A < id_zona_B) return -1
                             if(id_zona_A > id_zona_B) return 1
