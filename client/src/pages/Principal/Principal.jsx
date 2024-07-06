@@ -68,7 +68,13 @@ export default function Principal () {
                         <div className="principal__cabecera">
                             <button className='principal__cabecera__btn_menu-bars'><i className="fa-solid fa-bars"></i></button>
                             <nav>
-                                <NavLink to='/principal/calendario-reservas' className='principal__cabecera__nav_boton'>CALENDARIO</NavLink>
+                                <div className='principal__cabecera__nav__boton_hoy'>
+                                    <p>CAMPING</p>
+                                    <div className='principal__cabecera__nav__boton_hoy__links'>
+                                        <NavLink to='/principal/camping/estado' className='principal__cabecera__nav_boton'>ESTADO</NavLink>
+                                        <NavLink to='/principal/camping/calendario' className='principal__cabecera__nav_boton'>CALENDARIO</NavLink>
+                                    </div>
+                                </div>
                                 <NavLink to='/principal/parcelas' className='principal__cabecera__nav_boton'>PARCELAS</NavLink>
                                 <NavLink to='/principal/registro-actividad' className='principal__cabecera__nav_boton'>REGISTRO ACTIVIDAD</NavLink>
                                 <NavLink to='/principal/reservas' className='principal__cabecera__nav_boton'>RESERVAS</NavLink>

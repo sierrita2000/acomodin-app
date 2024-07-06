@@ -146,7 +146,11 @@ export default function FormularioReservas ({ reserva, selectVisible }) {
 
         if(data) { 
             setLoadingReserva(false)
-            setMensaje({ mensaje: data.message, accionAceptar: () => { navigate(-1, {replace: true, state: { actualizacion: true }}) } }) 
+            if(data.status === 'ok') {
+                setMensaje({ mensaje: data.message, accionAceptar: () => { navigate(-1, {replace: true, state: { actualizacion: true }}) } }) 
+            } else {
+                setMensaje({ mensaje: data.message, accionAceptar: () => { setMensaje('') } }) 
+            }
         }
     }
 
@@ -211,17 +215,6 @@ export default function FormularioReservas ({ reserva, selectVisible }) {
                             <input className={`formulario_reservas__input__fechas ${(errorReserva === 1 && fechaFin === '') && 'error_campo_vacio'}`} type="date" name="formReservaFechaFin" id="formReservaFechaFin" min={fechaMinimaSalida()} value={fechaFin} onChange={e => setFechaFin(e.target.value)} />
                         </div>
                     </section>
-                    { errorReserva === 2 && <p className='texto_error'>Debes seleccionar al menos un adulto, y un tipo de acampada</p> }
-                    <section className='formulario_reserva__section__column'>
-                        <label htmlFor="formReservaConceptos">conceptos<p>*</p></label>
-                        <div id="formReservaConceptos" name="formReservaConceptos">
-                            {
-                                dataConceptos?.results.filter(c => conceptos?.map(con => con[0]).includes(c._id)).map((concepto, indice) => {
-                                    return <Concepto key={concepto._id} id={concepto._id} nombre={concepto.nombre} imagen={concepto.imagen} conceptos={conceptos} setConceptos={setConceptos} disabled={false} />
-                                })
-                            }
-                        </div>
-                    </section>
                     { errorReserva === 3 && <p className="texto_error">Debes seleccionar una parcela</p> }
                     <section className='formulario_reserva__section__column'>
                         <label htmlFor="formReservaParcelas">parcelas</label>
@@ -248,6 +241,17 @@ export default function FormularioReservas ({ reserva, selectVisible }) {
                                         <p>{dataParcela ? dataParcela?.nombre : '-'}</p>
                                     </div>
                                 )
+                            }
+                        </div>
+                    </section>
+                    { errorReserva === 2 && <p className='texto_error'>Debes seleccionar al menos un adulto, y un tipo de acampada</p> }
+                    <section className='formulario_reserva__section__column'>
+                        <label htmlFor="formReservaConceptos">conceptos<p>*</p></label>
+                        <div id="formReservaConceptos" name="formReservaConceptos">
+                            {
+                                dataConceptos?.results.filter(c => conceptos?.map(con => con[0]).includes(c._id)).map((concepto, indice) => {
+                                    return <Concepto key={concepto._id} id={concepto._id} nombre={concepto.nombre} imagen={concepto.imagen} conceptos={conceptos} setConceptos={setConceptos} disabled={false} />
+                                })
                             }
                         </div>
                     </section>

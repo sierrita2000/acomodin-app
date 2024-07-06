@@ -242,6 +242,22 @@
     color: var(--negro);
 }
 
+.estancia__estancia__informacion__parcela > section {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.estancia__estancia__informacion__parcela > section button {
+    font-family: var(--Montserrat);
+    font-weight: bold;
+    background-color: var(--verdeOscuro);
+    color: whitesmoke;
+    padding: .1rem 1rem;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
+}
+
 .estancia__estancia__informacion__parcela__parcela {
     font-family: var(--Crimson);
     font-size: 22px;
@@ -329,3 +345,10 @@
 }
 
 /* BOTONES */
+
+.estancia_error {
+    font-family: var(--Crimson);
+    font-size: 16px;
+    font-style: italic;
+    color: red;
+}

@@ -43,7 +43,7 @@ export default function Login() {
         if (data.status === 'ok') {
             loginContext[1]([data.results._id, tipoUsuario])
             sessionStorage.setItem("usuario", [data.results._id, tipoUsuario].toString())
-            navigate('/principal/calendario-reservas')
+            navigate('/principal/entradas/reservas-sin-llegar')
         } else {
             alert(data.message)
         }

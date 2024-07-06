@@ -1,0 +1,208 @@
+.modal_parcelas {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+.modal_parcelas__modal {
+    height: fit-content;
+    max-height: 80%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 2px solid var(--negro);
+    background: url('../../../../../fondo.png');
+    background-size: 100%;
+    padding: 1rem;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+.modal_parcelas__modal > button {
+    font-size: 20px;
+    color: var(--negro);
+    align-self: flex-end;
+}
+
+.modal_parcelas__modal > h2 {
+    font-family: var(--Crimson);
+    font-size: 20px;
+    color: var(--negro);
+    margin: 0 0 1.5rem;
+}
+
+/* LISTADO PARCELAS */
+
+.modal_parcelas__modal__parcelas .dot-spinner {
+    --uib-size: 6rem;
+    margin: 2rem 0 3rem;
+}
+
+.modal_parcelas__modal__parcelas {
+    height: 16rem;
+    width: 100%;
+    border: 1px solid var(--negro);
+    border-radius: 2px;
+    padding: 1.2rem;
+    background-color: whitesmoke;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+}
+
+.modal_parcelas__modal__parcelas__lista {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal_parcelas__modal__parcelas__lista_vacia {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal_parcelas__modal__parcelas__lista_vacia p {
+    font-family: var(--Montserrat);
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--negro);
+}
+
+.modal_parcelas__modal__parcelas__lista_vacia img {
+    height: 10rem;
+    filter: drop-shadow(0 2px 2px var(--negro));
+}
+
+/* PARCELA */
+
+.modal_parcelas__parcela {
+    position: relative;
+    height: 6rem;
+    width: 95%;
+    display: flex;
+    border: 1px solid var(--negro);
+    margin: 0 0 1rem;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    cursor: pointer;
+    transition: all .1s ease-in-out;
+}
+
+.modal_parcelas__parcela:hover {
+    transform: scale(1.01);
+}
+
+.modal_parcelas__parcela section:nth-child(1),
+.modal_parcelas__parcela section:nth-child(4) {
+    height: 100%;
+    border-right: 1px solid var(--negro);
+}
+
+.modal_parcelas__parcela section:nth-child(1) {
+    width: 15%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: var(--Crimson);
+    font-weight: bold;
+    font-size: 18px;
+    background-color: rgb(172, 189, 206);
+}
+
+.modal_parcelas__parcela section:nth-child(2) {
+    height: 100%;
+    width: 50%;
+    border-right: 1px solid var(--negro);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    overflow-x: scroll;
+    scrollbar-width: thin;
+    background-color: var(--azulClaro);
+}
+
+.modal_parcelas__parcela section:nth-child(2) img {
+    height: 60%;
+    margin: 0 .5rem;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.6));
+}
+
+.modal_parcelas__parcela section:nth-child(3) {
+    height: 100%;
+    width: 25%;
+    display: flex;
+    flex-direction: column;
+    padding: .4rem;
+    border-right: 1px solid var(--negro);
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    background-color: rgb(172, 189, 206);
+}
+
+.modal_parcelas__parcela section:nth-child(3) p {
+    font-family: var(--Crimson);
+    font-size: 16px;
+    color: var(--negro);
+    margin: .2rem 0;
+}
+
+.modal_parcelas__parcela section:nth-child(4) {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background-color: var(--azulClaro);
+}
+
+.modal_parcelas__parcela section:nth-child(4) .luz {
+    height: 60%;
+    margin: 0 .5rem;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.6));
+}
+
+.modal_parcelas__parcela section:nth-child(4) .sin_luz {
+    height: 60%;
+    margin: 0 .5rem;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.6)) grayscale(95%);
+}
+
+.modal_parcelas__parcela__circulo {
+    position: absolute;
+    top: -1rem;
+    right: -1rem;
+    font-size: 2rem;
+    color: var(--verdeGastado);
+    filter: drop-shadow(0 0 2px var(--negro));
+}
+
+/* FIN PARCELA */
+
+/* FIN LISTADO PARCELAS */
+
+/* BOTONES */
+
+.modal_parcelas__modal__botones button {
+    width: 12rem;
+    font-family: var(--Montserrat);
+    font-weight: bold;
+    font-size: 18px;
+    color: whitesmoke;
+    background-color: var(--verdeOscuro);
+    padding: .3rem 0;
+    margin: 1rem 1.5rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+}
+
+/* BOTONES */

@@ -7,7 +7,7 @@ import Error from './pages/Error/Error404/Error'
 import Completado from './components/Registro/PantallaCompletado/Completado'
 import Principal from './pages/Principal/Principal'
 import { LoginContext } from './context/LoginContext'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import Perfil from './components/Principal/Perfil/Perfil'
 import PanelEdicion from './components/Principal/Perfil/PanelEdicion/PanelEdicion'
 import PanelPassword from './components/Principal/Perfil/PanelPassword/PanelPassword'
@@ -19,6 +19,7 @@ import Estancia, { loader as estanciaLoader } from './components/Principal/Estan
 import Reservas from './components/Principal/Reservas/Reservas'
 import Entradas, { EntradasRealizadas, ReservasSinLlegar } from './components/Principal/Hoy/Entradas/Entradas'
 import Salidas, { SalidasRealizadas, SalidasSinRealizar } from './components/Principal/Hoy/Salidas/Salidas'
+import Estado from './components/Principal/Estado/Estado'
 
 const router = createBrowserRouter([
   {
@@ -46,8 +47,19 @@ const router = createBrowserRouter([
     errorElement: <Error primerNumero={4} segundoNumero={1} mensaje={"¡No puedes acceder a esta página sin autorización!"} ruta={"/login"} textoBoton={"INICIAR SESIÓN"} />,
     children: [
       {
-        path: '/principal/calendario-reservas',
-        element: <h1>Calendario reservas</h1>
+        path: '/principal/camping/estado',
+        element: <Estado />,
+        children: [
+          {
+            path: '/principal/camping/estado/:id_estancia_accion',
+            element: <Estancia />,
+            loader: estanciaLoader
+          }
+        ]
+      },
+      {
+        path: '/principal/camping/calendario',
+        element: <h1>Calendario Camping</h1>
       },
       {
         path: '/principal/parcelas',
@@ -119,10 +131,6 @@ const router = createBrowserRouter([
                 element: <FormularioReservas reserva={false} selectVisible={true} />
               }
             ]
-          },
-          {
-            path: '/principal/entradas/estado-camping',
-            element: <p>Estado actual del camping</p>
           }
         ]
       },

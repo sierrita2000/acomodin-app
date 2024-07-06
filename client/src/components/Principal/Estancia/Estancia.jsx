@@ -6,6 +6,7 @@ import Concepto from '../FormularioReservas/Concepto/Concepto'
 import Mensaje from '../../Mensaje/Mensaje'
 import { LoginContext } from '../../../context/LoginContext'
 import _ from 'lodash'
+import ModalParcelas from './ModalParcelas/ModalParcelas'
 
 export const loader = ({ params }) => {
     const id_estancia_accion = params.id_estancia_accion
@@ -19,6 +20,7 @@ export default function Estancia () {
 
     const loginContext = useContext(LoginContext)
 
+    // atributos de la estancia
     const [ nombre, setNombre ] = useState(estancia.estancia.nombre || '')
     const [ telefono, setTelefono ] = useState(estancia.estancia.telefono || '-')
     const [ fechaInicio, setFechaInicio ] = useState(estancia.estancia.fecha_inicio || '')
@@ -28,18 +30,28 @@ export default function Estancia () {
     const [ parcela, setParcela ] = useState(estancia.estancia.parcela || "0")
     const [ comentarios, setComentarios ] = useState(estancia.estancia.comentarios || '')
 
+    // Atributos del mesaje
     const [ mensaje, setMensaje ] = useState('')
-    const [ accionAceptar, setAccionAceptar ] = useState(0) // 1 --> eliminar; 2 --> editar 
+    const [ accionAceptar, setAccionAceptar ] = useState(0) // 1 --> eliminar; 2 --> marcar llegada; 3 --> editar; 4 --> marcar salida 
 
+    // Acciona la edición
     const [ modificar, setModificar ] = useState(false)
+
+    // Controla la aparición del modal de parcelas disponibles
+    const [ modalParcelas, setModalParcelas ] = useState(false)
+
+    // Datos de la parcela seleccionada
+    const [ dataParcela, setDataParcela ] = useState(null)
+
+    // Errores
+    const [ error, setError ] = useState(0) // 0 --> ningun error; 1 --> datos vacios; 2 --> conceptos invalidos; 3 --> parcela vacia
 
     const navigate = useNavigate()
 
     let [ dataUsuarioEstancia ] = useFetch(`${import.meta.env.VITE_API_HOST}${estancia.estancia_accion.tipo_usuario}/id/${estancia.estancia_accion.id_usuario}`)
-    let [ dataParcela ] = useFetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${parcela || 0}`)
     let [ dataConceptos ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
     let [ dataCamping ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? `acomodador/${loginContext[0][0]}/devolver-camping` : `camping/id/${loginContext[0][0]}`}`)
-    let [ dataParcelaCamping ] = useFetch(`${import.meta.env.VITE_API_HOST}parcelas/devolver-parcelas/id_camping/${loginContext[0][1] === 0 ? dataUsuario?.results.id_camping : loginContext[0][0]}`)
+    let [ dataEstanciaMasReciente ] = useFetch(`${import.meta.env.VITE_API_HOST}estancia/id/${estancia.estancia._id}`)
 
     /**
      * Formatea la fecha de hoy
@@ -71,6 +83,51 @@ export default function Estancia () {
         if(new Date(fechaInicio) < new Date(fechaFin)) {
             setFechaFin('')
         }
+    }
+
+    /**
+     * Devuelve los tipos de acomodación requeridos en la estancia
+     * @returns array
+     */
+    const devolverTiposAcomodacionEstancia = () => {
+        const conceptos_acomodacion = dataConceptos?.results.filter(concepto => ['bungalows', 'tipis', 'autocaravanas', 'carros tienda', 'caravanas', 'tiendas', 'campers'].includes(concepto.nombre)).map(tipo => tipo._id)
+        const tipos_estancia_requeridos = conceptos.filter(concepto => conceptos_acomodacion.includes(concepto[0]) && (concepto[1] > 0)).map(t => t[0])
+
+        return tipos_estancia_requeridos
+    }
+
+    /**
+     * Comprueba que ni el nombre ni el telefono esté vacío
+     * @returns boolean
+     */
+    const comprobarDatosValidos = () => {
+        if(!nombre || !telefono) {
+            return false
+        }
+
+        return true
+    }
+
+    /**
+     * Comprueba que al menos en la reserva hay seleccionado un adulto y un tipo de acomodación
+     * @returns Boolean
+     */
+    const comprobarConceptosValidos = () => {
+        let comprobacion = true
+
+        const tipos_acomodacion = dataConceptos?.results.filter(concepto => ['bungalows', 'tipis', 'autocaravanas', 'caravanas', 'tiendas', 'campers', 'carros tienda'].includes(concepto.nombre)).map(tipo => tipo._id)
+        const concepto_adulto = dataConceptos?.results.filter(concepto => concepto.nombre === 'adultos')[0]._id
+
+        const tipos_acomodacion_reserva = conceptos.filter(c => tipos_acomodacion.includes(c[0]) && (c[1] > 0))
+        const concepto_adulto_reserva = conceptos.filter(c => (c[0] === concepto_adulto) && (c[1] > 0))
+        
+        console.log(conceptos.filter(c => (c[0] === concepto_adulto)), conceptos)
+
+        if((tipos_acomodacion_reserva.length === 0) || (concepto_adulto_reserva.length === 0)) {
+            comprobacion = false
+        }
+
+        return comprobacion
     }
 
     /**
@@ -108,11 +165,12 @@ export default function Estancia () {
             .then(data => {
                 setMensaje(data.status === 'ok' ? ((estado === 'entrada') ? `Reserva a nombre de ${nombre} instalada en la parcela ${dataParcela?.results.nombre}` : `Estancia a nombre de ${nombre} ha dejado libre la parcela ${dataParcela?.results.nombre}`) : data.messsage)
                 setAccionAceptar(0)
+                navigate('/principal/entradas/entradas', { replace: true })
             })
     }
 
     /**
-     * Función para actualizar una estancia dada
+     * Función para actualizar una estancia dada. Acción aceptar del botón guardar
      */
     const funcionEditarEstancia = async () => {
         const updates = new Object()
@@ -120,38 +178,43 @@ export default function Estancia () {
         // Comprobamos cambios
         if(nombre != estancia.estancia.nombre) updates.nombre = nombre
         if(telefono != estancia.estancia.telefono) updates.telefono = telefono
-        if(fechaInicio != estancia.estancia.fecha_inicio) updates.fecha_inicio = fechaInicio
-        if(fechaFin != estancia.estancia.fecha_fin) updates.fecha_fin = fechaFin
+        updates.fecha_inicio = fechaInicio
+        updates.fecha_fin = fechaFin
         if(comentarios != estancia.estancia_accion.comentarios) updates.comentarios = comentarios
-        if((estancia.estancia.parcela && (parcela != estancia.estancia.parcela)) || (!estancia.estancia.parcela && (parcela != "0"))) updates.parcela = parcela === "0" ? null : parcela
-        /*for (const concepto of conceptos) {
-            if(!(estancia.estancia.conceptos).find(c => (c[0]===concepto[0]) && (c[1]===concepto[1]))) {
-                updates.conceptos = conceptos
-                break
-            }
-        }*/
+        updates.parcela = parcela === "0" ? null : parcela
         updates.conceptos = conceptos
-        if(!_.isEqual(caracteristicas, estancia.estancia.caracteristicas)) updates.caracteristicas = caracteristicas
-
-        /*if(Object.keys(updates).length === 0) {
-            setMensaje("No has editado ningún campo")
-            setAccionAceptar(0)
-            modificarEstancia()
-            return
-        }*/
+        updates.caracteristicas = caracteristicas
 
         const response = await fetch(`${import.meta.env.VITE_API_HOST}estancia/editar/id/${estancia.estancia._id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ updates })
+            body: JSON.stringify({ updates, id_camping: dataCamping?.results._id, tipos: devolverTiposAcomodacionEstancia() })
         })
         const data = await response.json()
 
-        setMensaje(data.status === 'ok' ? `${estancia.estancia_accion.estado} a nombre de ${nombre} actualizada correctamente` : data.messsage)
+    
+        if(data.status === 'ok') {
+            setMensaje(`${estancia.estancia_accion.estado} a nombre de ${nombre} actualizada correctamente`)
+            modificarEstancia()
+        } else {
+            console.log(data.message)
+            setMensaje(data.message)
+        }
         setAccionAceptar(0)
-        modificarEstancia()
+    }
+
+    /**
+     * Función de aceptar para maracar la llegada de una parcela sin parcela asignada
+     */
+    const funcionEditarEstanciaSinParcela = () => {
+        // Dejamos de mostrar el mensaje
+        setMensaje('')
+        setAccionAceptar(0)
+
+        // Activamos la modificación
+        setModificar(true)
     }
 
     /**
@@ -163,10 +226,18 @@ export default function Estancia () {
     }
 
     /**
-     * Elimina una estancia
+     * Marca la llegada de una reserva con parcela asignada
      */
-    const marcarLlegada = () => {
-        setMensaje(`¿Seguro que deseas marcar que la reserva a nombre de ${nombre} se ha instalado en la parcela ${parcela}?`)
+    const marcarLlegadaSinParcela = () => {
+        setMensaje(`Debes escoger una parcela para la reserva a nombre de ${nombre}`)
+        setAccionAceptar(5)
+    }
+
+    /**
+     * Marca la llegada de una reserva con parcela asignada
+     */
+    const marcarLlegadaConParcela = () => {
+        setMensaje(`¿Seguro que deseas marcar que la reserva a nombre de ${nombre} se ha instalado en la parcela ${dataParcela?.results.nombre}?`)
         setAccionAceptar(2)
     }
 
@@ -174,12 +245,24 @@ export default function Estancia () {
      * Edita una estancia
      */
     const editarEstancia = () => {
+        if(!comprobarDatosValidos()) {
+            setError(1)
+            document.getElementById('datosReservaTitulo').scrollIntoView({ behavior: 'smooth' })
+            return
+        }
+
+        if(!comprobarConceptosValidos()) {
+            setError(2)
+            document.getElementById('conceptosReservaTitulo').scrollIntoView({ behavior: 'smooth' })
+            return
+        }
+
         setMensaje(`¿Seguro que quieres editar esta estancia?`)
         setAccionAceptar(3)
     }
 
     /**
-     * Matca la salida de una entrada
+     * Marca la salida de una entrada
      */
     const marcarSalida= () => {
         setMensaje(`¿Seguro que quieres resgitrar la salida de la parcela ${dataParcela?.results.nombre}?`)
@@ -208,6 +291,26 @@ export default function Estancia () {
         setModificar(!modificar)
     }
 
+    /**
+     * Volver a datos iniciales
+     */
+    const resetearEstancia = () => {
+        setNombre(estancia.estancia.nombre || '')
+        setTelefono(estancia.estancia.telefono || '-')
+        setFechaInicio(estancia.estancia.fecha_inicio || '')
+        setFechaFin(estancia.estancia.fecha_fin || '')
+        setConceptos(estancia.estancia.conceptos || new Array())
+        setCaracteristicas(estancia.estancia.caracteristicas || new Array())
+        setParcela(estancia.estancia.parcela || "0")
+        setComentarios(estancia.estancia.comentarios || '')
+    }
+
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_API_HOST}parcelas/id/${parcela || 0}`)
+            .then(response => response.json())
+            .then(data => setDataParcela(data))
+    }, [parcela])
+
     useEffect(() => {
         if((parcela === estancia.estancia.parcela) || (!estancia.estancia.parcela && (parcela === "0"))) {
             setConceptos(estancia.estancia.conceptos)
@@ -228,6 +331,14 @@ export default function Estancia () {
             } else {
                 nuevos_conceptos = dataCamping?.results.conceptos.map(id_concepto => [id_concepto, 0])
             }
+
+            estancia.estancia.conceptos.forEach(concepto => {
+                const posicion = nuevos_conceptos.findIndex(c => c[0] === concepto[0])
+
+                if(posicion != -1) {
+                    nuevos_conceptos[posicion][1] = concepto[1]
+                }
+            })
             
             setConceptos(nuevos_conceptos)
         }
@@ -244,7 +355,8 @@ export default function Estancia () {
                     </div>
                 </div>
                 <div className="estancia__estancia__informacion">
-                    <h2>DATOS RESERVA</h2>
+                    <h2 id='datosReservaTitulo'>DATOS RESERVA</h2>
+                    { error === 1 && <p className='estancia_error'>*Los campos nombre y telefono deben estar rellenos</p> }
                     <div className="estancia__estancia__informacion__datos">
                         <div>
                             <i className="fa-solid fa-user"></i>
@@ -261,7 +373,8 @@ export default function Estancia () {
                             <input disabled type="date" name="estanciaFechaFin" id="estanciaFechaFin" min={fechaMinimaSalida()} value={fechaFin} onChange={e => setFechaFin(e.target.value)} />
                         </div>
                     </div>
-                    <h2>CONCEPTOS</h2>
+                    <h2 id='conceptosReservaTitulo'>CONCEPTOS</h2>
+                    { error === 2 && <p className='estancia_error'>*Debes seleccionar mínimo un adulto y un tipo de acomodación</p> }
                     <div className="estancia__estancia__informacion__conceptos">
                         {
                             dataConceptos?.results.filter(c => conceptos.map(c => c[0]).includes(c._id)).map(concepto => {
@@ -316,29 +429,14 @@ export default function Estancia () {
                         <section className="estancia__estancia__informacion__parcela_tipo">
                             <section className="estancia__estancia__informacion__parcela">
                                 <h2>PARCELA</h2>
-                                {
-                                    modificar ? (
-                                        <select className={`reserva_select_parcelas`} name="selectParcelas" id="selectParcelas" value={parcela} onChange={e => setParcela(e.target.value)}>
-                                            <option value="0" selected>-</option>
-                                            {
-                                                dataParcelaCamping?.results.sort((a, b) => {
-                                                    const id_zona_A = a.nombre.toUpperCase()
-                                                    const id_zona_B = b.nombre.toUpperCase()
-                
-                                                    if(id_zona_A < id_zona_B) return -1
-                                                    if(id_zona_A > id_zona_B) return 1
-                                                    else return 0
-                                                }).map(parcela => {
-                                                    return <option value={parcela._id}>{parcela.nombre}</option>
-                                                })
-                                            }
-                                        </select>
-                                    ) : (
-                                        <div className="estancia__estancia__informacion__parcela__parcela">
-                                            {(parcela != "0") ? dataParcela?.results.nombre : '-'}
-                                        </div>
-                                    )
-                                }
+                                <section>
+                                    <div className="estancia__estancia__informacion__parcela__parcela">
+                                        {(parcela != "0") ? dataParcela?.results?.nombre : '-'}
+                                    </div>
+                                    {
+                                        modificar && <button onClick={() => setModalParcelas(true)}>ASIGNAR PARCELAS</button>
+                                    }
+                                </section>
                             </section>
                             <section className="estancia__estancia__informacion__tipo">
                                 <h2>TIPO</h2>
@@ -354,21 +452,24 @@ export default function Estancia () {
                 </div>
             </div>
             <div className="estancia__botones">
-                <button onClick={() => { modificar ? editarEstancia() : modificarEstancia() }}>{ modificar ? 'GUARDAR' : 'EDITAR' }</button>
+                {((dataEstanciaMasReciente?.results.estancia_accion.estado === estancia.estancia_accion.estado) && (estancia.estancia_accion.estado != 'salida')) && <button onClick={() => { modificar ? editarEstancia() : modificarEstancia() }}>{ modificar ? 'GUARDAR' : 'EDITAR' }</button>}
                 {
                     !modificar ? (
                         <>
                             <button onClick={eliminarEstancia}>ELIMINAR</button>
-                            { estancia.estancia.fecha_inicio === formatearFecha(new Date()) && <button onClick={marcarLlegada}>MARCAR LLEGADA</button> }
-                            { estancia.estancia.fecha_fin === formatearFecha(new Date()) && <button onClick={marcarSalida}>MARCAR SALIDA</button> }
+                            { ((estancia.estancia.fecha_inicio === formatearFecha(new Date())) && (dataEstanciaMasReciente?.results.estancia_accion.estado === 'reserva')) && <button onClick={() => { (parcela != '0') ? marcarLlegadaConParcela() : marcarLlegadaSinParcela() }}>MARCAR LLEGADA</button> }
+                            { ((estancia.estancia.fecha_fin === formatearFecha(new Date())) && (dataEstanciaMasReciente?.results.estancia_accion.estado === 'entrada')) && <button onClick={marcarSalida}>MARCAR SALIDA</button> }
                         </>
                     ) : (
-                        <button onClick={() => modificarEstancia()}>CANCELAR</button>
+                        <button onClick={() => {modificarEstancia(); resetearEstancia(); setError(0)}}>CANCELAR</button>
                     )
                 }
             </div>
             {
-                mensaje && <Mensaje mensaje={mensaje} accionCancelar={() => {setMensaje(''), setAccionAceptar(0)}} accionAceptar={(accionAceptar === 0) ? () => {setMensaje('')} : (accionAceptar === 1) ? funcionEliminarEstancia : (accionAceptar === 2) ? () => {funcionMarcarEntradaOSalida('entrada')} : (accionAceptar === 3) ? funcionEditarEstancia : () => {funcionMarcarEntradaOSalida('salida')} } />
+                mensaje && <Mensaje mensaje={mensaje} accionCancelar={() => {setMensaje(''); setAccionAceptar(0)}} accionAceptar={(accionAceptar === 0) ? () => {setMensaje('')} : (accionAceptar === 1) ? funcionEliminarEstancia : (accionAceptar === 2) ? () => {funcionMarcarEntradaOSalida('entrada')} : (accionAceptar === 3) ? funcionEditarEstancia : (accionAceptar === 4) ? () => {funcionMarcarEntradaOSalida('salida')} : funcionEditarEstanciaSinParcela } />
+            }
+            {
+                modalParcelas && <ModalParcelas fecha_inicio={fechaInicio} fecha_fin={fechaFin} tipos={devolverTiposAcomodacionEstancia()} caracteristicas={caracteristicas} id_camping={dataCamping?.results._id} handlerCerrarModal={() => {setModalParcelas(false)}} parcela={parcela} setParcela={setParcela} parcelaAsignada={estancia.estancia.parcela} />
             }
         </section>
     )

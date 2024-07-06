@@ -48,6 +48,14 @@
     background-color: whitesmoke;
 }
 
+.filtros__fecha input::-webkit-clear-button {
+    display: none;
+}
+
+.filtros__fecha input[type="date"]::-moz-clear {
+    display: none;
+}
+
 .filtros__boton {
     font-family: var(--Montserrat);
     font-weight: bold;

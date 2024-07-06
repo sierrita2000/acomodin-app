@@ -32,7 +32,7 @@ export default function RegistroActividad () {
      */
     const aplicarFiltros = async () => {
         setLoading(true)
-        const response = await fetch(`${import.meta.env.VITE_API_HOST}estancias/id_camping/${loginContext[0][1] === 0 ? dataUsuario?.results.id_camping : loginContext[0][0]}/filtros/fecha/${fecha}/estado/${estado}`)
+        const response = await fetch(`${import.meta.env.VITE_API_HOST}estancias/id_camping/${loginContext[0][1] === 0 ? dataUsuario?.results.id_camping : loginContext[0][0]}/filtros/fecha/${fecha || 'null'}/estado/${estado}`)
         const data = await response.json()
 
         if (data.status != 'error') {
@@ -51,12 +51,12 @@ export default function RegistroActividad () {
                 <section>
                     <div className="filtros__fecha">
                         <label htmlFor="filtrosFecha">fecha:</label>
-                        <input type="date" name="filtrosFecha" id="filtrosFecha" value={fecha} onChange={e => setFecha(e.target.value)} />
+                        <input required type="date" name="filtrosFecha" id="filtrosFecha" value={fecha} onChange={e => setFecha(e.target.value)} />
                     </div>
                     <div className="filtros__estado">
                         <label htmlFor="filtrosEstado">estado:</label>
-                        <select name="filtrosEstado" id="filtrosEstado" onChange={e => setEstado(e.target.value)}>
-                            <option value="todos" selected>todos</option>
+                        <select name="filtrosEstado" id="filtrosEstado" value={estado} onChange={e => setEstado(e.target.value)}>
+                            <option value="todos">todos</option>
                             <option value="entrada">entrada</option>
                             <option value="reserva">reserva</option>
                             <option value="salida">salida</option>

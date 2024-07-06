@@ -1,9 +1,8 @@
-import { NavLink, Outlet, useNavigate } from 'react-router-dom'
+import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import './Entradas.css'
 import { LoginContext } from '../../../../context/LoginContext'
 import { useFetch } from '../../../../hooks/useFetch'
 import { useContext, useEffect, useState } from 'react'
-import EstanciaSimple from '../../Estancia/EstanciaSimple/EstanciaSimple'
 import ListadoEstancias from '../ListadoEstancias'
 
 export default function Entradas () {
@@ -15,8 +14,6 @@ export default function Entradas () {
                     isPending ? "entradas__menu__links" : isActive ? "entradas__menu__links active" : "entradas__menu__links"}>RESERVAS SIN LLEGAR</NavLink>
                 <NavLink to='/principal/entradas/entradas'className={({ isActive, isPending }) =>
                     isPending ? "entradas__menu__links" : isActive ? "entradas__menu__links active" : "entradas__menu__links"}>ENTRADAS</NavLink>
-                <NavLink to='/principal/entradas/estado-camping'className={({ isActive, isPending }) =>
-                    isPending ? "entradas__menu__links" : isActive ? "entradas__menu__links active" : "entradas__menu__links"}>ESTADO DEL CAMPING</NavLink>
             </section>
             <section className="entradas__outlet">
                 <Outlet />
@@ -29,6 +26,8 @@ export function ReservasSinLlegar () {
 
     const loginContext = useContext(LoginContext)
     let [ dataCamping ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? `acomodador/${loginContext[0][0]}/devolver-camping` : `camping/id/${loginContext[0][0]}`}`)
+
+    const location = useLocation()
 
     const [ reservas, setReservas ] = useState(new Array())
     const [ loading, setLoading ] = useState(true)
@@ -55,7 +54,7 @@ export function ReservasSinLlegar () {
         if(dataCamping) {
             filtrarReservasPorBusqueda()
         }
-    }, [dataCamping])
+    }, [dataCamping, location])
 
     return(
         <div className="entradas__reservas_sin_llegar">
@@ -79,6 +78,8 @@ export function EntradasRealizadas () {
 
     const loginContext = useContext(LoginContext)
     let [ dataCamping ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? `acomodador/${loginContext[0][0]}/devolver-camping` : `camping/id/${loginContext[0][0]}`}`)
+
+    const location = useLocation()
 
     const [ entradas, setEntradas ] = useState(new Array())
     const [ loading, setLoading ] = useState(true)
@@ -109,7 +110,7 @@ export function EntradasRealizadas () {
                 .then(data => setEntradas(data.results))
                 .finally(() => setLoading(false))
         }
-    }, [dataCamping])
+    }, [dataCamping, location])
 
     return(
         <div className="entradas__entradas__realizadas">

@@ -53,16 +53,7 @@ const devolverEstanciaPorId = async (req, res, next) => {
             .then(async results_estancia => {
                 await EstanciasAccion.find({ id_estancia: id }).exec()
                     .then(results_estancia_accion => {
-                        let obj_estancia_accion = results_estancia_accion[0]
-
-                        if(results_estancia_accion.length > 1) {
-                            results_estancia_accion.shift()
-                            results_estancia_accion.forEach(ea => {
-                                if(new Date(ea.fecha) > new Date(obj_estancia_accion.fecha)) {
-                                    obj_estancia_accion = ea
-                                }
-                            })
-                        }
+                        let obj_estancia_accion = estanciaAccionMasReciente(results_estancia_accion)
 
                         res.status(200).send(new ResponseAPI('ok', `Estancia con id ${id}`, { estancia: results_estancia, estancia_accion: obj_estancia_accion }))
                     })
@@ -89,9 +80,6 @@ const crearEstancia = async (req, res, next) => {
         huecosLibresCampingPorFecha(estancia.id_camping, estancia.fecha_inicio, estancia.fecha_fin) // Comprobamos si queda hueco libre en el camping
             .then(resultHuecosLibresCamping => {
                 if (resultHuecosLibresCamping > 0) {
-                    parcelasLibresPorFechaYTipos(estancia.id_camping, estancia.fecha_inicio, estancia.fecha_fin, tipos_acomodacion_estancia) // Comprobamos si de las parcelas sin reserva asignada alguna es del tipo de la nueva reserva
-                        .then(parcelas_libres_fecha_tipos => {
-                            if(parcelas_libres_fecha_tipos.length > 0) {
                                 if (estancia.parcela) {
                                     validarParcelaLibrePorFecha(estancia.parcela, estancia.fecha_inicio, estancia.fecha_fin) // Comprobamos si la parcela está libre durante las fechas dadas
                                         .then(async resultsValidarParcelaFecha => {
@@ -102,12 +90,15 @@ const crearEstancia = async (req, res, next) => {
                                             }
                                         })
                                 } else { // Reserva sin parcela especificada.
-                                    grabarEstancia(estancia, estancia_accion, res)
+                                    parcelasLibresPorFechaYTipos(estancia.id_camping, estancia.fecha_inicio, estancia.fecha_fin, tipos_acomodacion_estancia)
+                                        .then(parcelas_libres_fecha_tipos => {
+                                            if(parcelas_libres_fecha_tipos.length > 0) {
+                                                grabarEstancia(estancia, estancia_accion, res)
+                                            } else {
+                                                res.status(200).send(new ResponseAPI('not-allowed', `No quedan huecos libres para los tipos seleccionados para las fechas ${estancia.fecha_inicio.replaceAll('-', '/')} - ${estancia.fecha_fin.replaceAll('-', '/')}.`, { huecosLibresCamping: resultHuecosLibresCamping }))
+                                            }
+                                        })
                                 }
-                            } else {
-                                res.status(200).send(new ResponseAPI('not-allowed', `No quedan huecos libres para los tipos seleccionados para las fechas ${estancia.fecha_inicio.replaceAll('-', '/')} - ${estancia.fecha_fin.replaceAll('-', '/')}.`, { huecosLibresCamping: resultHuecosLibresCamping }))
-                            }
-                        })
                 } else {
                     res.status(200).send(new ResponseAPI('not-allowed', `No hay hueco en el camping entre las fechas ${estancia.fecha_inicio.replaceAll('-', '/')} - ${estancia.fecha_fin.replaceAll('-', '/')}.`, null))
                 }
@@ -155,7 +146,6 @@ const devolverEstadoParcelaDia = async (req, res, next) => {
                         await EstanciasAccion.find({ id_estancia: estancias[0]._id }).exec()
                             .then(results_estancia_accion => {
                                 const estancia_accion_mas_reciente = estanciaAccionMasReciente(results_estancia_accion)
-                                console.log(estancia_accion_mas_reciente)
                                 const estado = devolverEstado(estancia_accion_mas_reciente, estancias[0], fecha)
 
                                 res.status(200).send(new ResponseAPI('ok', `estado parcela ${fecha}`, [estado]))
@@ -197,7 +187,8 @@ const devolverEstanciasPorEstadoYFecha = async (req, res, next) => {
             .then(results_estancias => {
                 if (results_estancias.length > 0) {
                     const results_estancias_accion = results_estancias.map(async estancia => {
-                        const filtros = { id_estancia:estancia._id, fecha }
+                        const filtros = { id_estancia:estancia._id }
+                        if(fecha != 'null') filtros.fecha = fecha
                         if(estado != 'todos') filtros.estado = estado
 
                         const estancia_acciones = await EstanciasAccion.find(filtros).exec()
@@ -377,10 +368,38 @@ const eliminarEstancia = async (req, res, next) => {
 const editarEstancia = async (req, res, next) => {
     try {
         const { id } = req.params
-        const { updates } = req.body
+        const { updates, id_camping, tipos } = req.body
 
-        await Estancia.findByIdAndUpdate(id, { ...updates }, { returnDocument: 'after' }).exec()
-            .then(results => { res.status(200).send(new ResponseAPI('ok', `Estancia con id ${id} actualizada`, results)) })
+        huecosLibresCampingPorFecha(id_camping, updates.fecha_inicio, updates.fecha_fin, id)    
+            .then(hueco_libre_camping => {
+                if(hueco_libre_camping > 0) {
+                    if(updates.parcela) { // Si hay parcela validar que esté libre para esas fechas
+                        validarParcelaLibrePorFecha(updates.parcela, updates.fecha_inicio, updates.fecha_fin, id)
+                            .then(async results_validar_parcela => {
+                                if(results_validar_parcela) {
+                                    await Estancia.findByIdAndUpdate(id, { ...updates }, { returnDocument: 'after' }).exec()
+                                        .then(results => { res.status(200).send(new ResponseAPI('ok', `Estancia con id ${id} actualizada`, results)) })
+                                        .catch(error => { throw new Error(error) })
+                                } else {
+                                    res.status(200).send(new ResponseAPI('not-allowed', `No hay hueco en la parcela entre ${updates.fecha_inicio.replaceAll('-', '/')} y ${updates.fecha_fin.replaceAll('-', '/')}`, null))
+                                }
+                            })
+                    } else { // Sin parcela validar que hay una parcela libre del tipo seleccionado
+                        parcelasLibresPorFechaYTipos(id_camping, updates.fecha_inicio, updates.fecha_fin, tipos)
+                            .then(async results_validar_parcelas => {
+                                if(results_validar_parcelas) {
+                                    await Estancia.findByIdAndUpdate(id, { ...updates }, { returnDocument: 'after' }).exec()
+                                        .then(results => { res.status(200).send(new ResponseAPI('ok', `Estancia con id ${id} actualizada`, results)) })
+                                        .catch(error => { throw new Error(error) })
+                                } else {
+                                    res.status(200).send(new ResponseAPI('not-allowed', `No hay hueco en el camping entre ${updates.fecha_inicio.replaceAll('-', '/')} y ${updates.fecha_fin.replaceAll('-', '/')} para los tipos seleccionados`, null))
+                                }
+                            })
+                    }
+                } else {
+                    res.status(200).send(new ResponseAPI('not-allowed', `No hay hueco en el camping entre ${updates.fecha_inicio.replaceAll('-', '/')} y ${updates.fecha_fin.replaceAll('-', '/')}`, null))
+                }
+            })
             .catch(error => { throw new Error(error) })
         } catch(error) {
         next(error)
@@ -453,7 +472,7 @@ const estanciaAccionMasReciente = (lista_estancias_accion) => {
  * @param {Date} fecha
  * @returns Object
  */
-const  estanciaParcelaEnFecha = async (parcela, fecha) => {
+const estanciaParcelaEnFecha = async (parcela, fecha) => {
     let estancia = []
     const fecha_ = new Date(fecha)
 
@@ -473,12 +492,16 @@ const  estanciaParcelaEnFecha = async (parcela, fecha) => {
  * @param {Date} fecha_fin 
  * @returns Boolean
  */
-const validarParcelaLibrePorFecha = async (parcela, fecha_inicio, fecha_fin) => {
+const validarParcelaLibrePorFecha = async (parcela, fecha_inicio, fecha_fin, estancia_opcional = null) => {
     let parcela_libre = true
     const fecha_inicio_nueva_estancia = new Date(fecha_inicio)
     const fecha_fin_nueva_estancia = new Date(fecha_fin)
 
     const resultsEstancias = await Estancia.find({ parcela }).exec()
+
+    if(estancia_opcional) {
+        if(resultsEstancias.findIndex(estancia => estancia._id.toString() === estancia_opcional) != -1) resultsEstancias.splice(resultsEstancias.findIndex(estancia => estancia._id.toString() === estancia_opcional), 1)
+    }
 
     if (resultsEstancias.length > 0) {
         const estancias_parcela_en_fechas = resultsEstancias.filter(estancia => (new Date(estancia.fecha_inicio) < fecha_fin_nueva_estancia) && (new Date(estancia.fecha_fin) > fecha_inicio_nueva_estancia))
@@ -495,8 +518,8 @@ const validarParcelaLibrePorFecha = async (parcela, fecha_inicio, fecha_fin) => 
  * @param {Date} fecha_fin  
  * @returns Number
  */
-const huecosLibresCampingPorFecha = async (id_camping, fecha_inicio, fecha_fin) => {
-    const promises = [cantidadParcelasCamping(id_camping), cantidadHuecosOcupadosCampingPorFecha(id_camping, fecha_inicio, fecha_fin)]
+const huecosLibresCampingPorFecha = async (id_camping, fecha_inicio, fecha_fin, estancia_opcional = null) => { // Estancia opcional, para el caso de que quiera calcular el hueco sin contar con la estancia que estoy editando
+    const promises = [cantidadParcelasCamping(id_camping), cantidadHuecosOcupadosCampingPorFecha(id_camping, fecha_inicio, fecha_fin, estancia_opcional)]
 
     const huecos_libres = await Promise.all(promises)
     return huecos_libres[0]-huecos_libres[1]
@@ -532,12 +555,16 @@ const cantidadParcelasCamping = async (id_camping) => {
  * @param {Date} fecha_fin 
  * @returns Number
  */
-const cantidadHuecosOcupadosCampingPorFecha = async (id_camping, fecha_inicio, fecha_fin) => {
+const cantidadHuecosOcupadosCampingPorFecha = async (id_camping, fecha_inicio, fecha_fin, estancia_opcional = null) => {
     let cantidad_parcelas = 0
     const fecha_inicio_nueva_estancia = new Date(fecha_inicio)
     const fecha_fin_nueva_estancia = new Date(fecha_fin)
 
     const resultsEstancias = await Estancia.find({ id_camping }).exec()
+
+    if(estancia_opcional) {
+        if(resultsEstancias.findIndex(estancia => estancia._id.toString() === estancia_opcional) != -1) resultsEstancias.splice(resultsEstancias.findIndex(estancia => estancia._id.toString() === estancia_opcional), 1)
+    }
 
     if(resultsEstancias.length > 0) {
         const estancias_dentro_de_fecha = resultsEstancias.filter(estancia => (new Date(estancia.fecha_inicio) < fecha_fin_nueva_estancia) && (new Date(estancia.fecha_fin) > fecha_inicio_nueva_estancia))
