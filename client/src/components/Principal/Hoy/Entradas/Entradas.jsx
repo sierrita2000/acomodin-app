@@ -67,7 +67,7 @@ export function ReservasSinLlegar () {
                         </form>
                     )
             }
-            <ListadoEstancias estancias={reservas} loading={loading} texto_estancias_vacias={'NO HAY RESERVAS PENDIENTES PARA HOY'} url={`/principal/entradas/entradas-sin-llegar/`} />
+            <ListadoEstancias estancias={reservas} loading={loading} texto_estancias_vacias={'NO HAY RESERVAS PENDIENTES PARA HOY'} url={`/principal/entradas/reservas-sin-llegar/`} />
         </div>
     )
 }

@@ -101,7 +101,7 @@ export default function Estancia () {
      * @returns boolean
      */
     const comprobarDatosValidos = () => {
-        if(!nombre || !telefono) {
+        if(!nombre || !telefono || !fechaInicio || !fechaFin) {
             return false
         }
 
@@ -156,7 +156,8 @@ export default function Estancia () {
             tipo_usuario: loginContext[0][1] === 0 ? 'acomodador' : 'camping',
             fecha: formatearFecha(new Date()),
             comentarios: comentarios,
-            estado: estado
+            estado: estado,
+            parcela: parcela
         }
 
         const response = await fetch(`${import.meta.env.VITE_API_HOST}estancia/marcar-${estado === 'entrada' ? 'llegada' : 'salida'}/id_estancia/${estancia.estancia._id}`, {
@@ -168,9 +169,12 @@ export default function Estancia () {
         })
         const data = await response.json()
 
-        if(data) {
-            setMensaje(data.status === 'ok' ? ((estado === 'entrada') ? `Reserva a nombre de ${nombre} instalada en la parcela ${dataParcela?.results.nombre}` : `Estancia a nombre de ${nombre} ha dejado libre la parcela ${dataParcela?.results.nombre}`) : data.message)
+        if(data.status === 'ok') {
+            setMensaje(((estado === 'entrada') ? `Reserva a nombre de ${nombre} instalada en la parcela ${dataParcela?.results.nombre}` : `Estancia a nombre de ${nombre} ha dejado libre la parcela ${dataParcela?.results.nombre}`))
             (estado === 'entrada') ? navigate('/principal/entradas/entradas', { replace: true }) : navigate('/principal/salidas/salidas', { replace: true }) 
+        } else if(data.status === 'not-allowed') {
+            setMensaje(`Debes marcar antes la salida que hay prevista en la parcela "${dataParcela?.results.nombre}"`)
+            setAccionAceptar(0)
         }
     }
 
@@ -384,7 +388,7 @@ export default function Estancia () {
                 </div>
                 <div className="estancia__estancia__informacion">
                     <h2 id='datosReservaTitulo'>DATOS RESERVA</h2>
-                    { error === 1 && <p className='estancia_error'>*Los campos nombre y telefono deben estar rellenos</p> }
+                    { error === 1 && <p className='estancia_error'>*Los campos nombre, telefono y las fechas deben estar rellenos</p> }
                     <div className="estancia__estancia__informacion__datos">
                         <div>
                             <i className="fa-solid fa-user"></i>

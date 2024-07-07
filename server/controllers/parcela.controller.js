@@ -143,7 +143,54 @@ const devolverParcelasLibresEntreFechasConConceptos = async (req, res, next) => 
     }
 }
 
-module.exports = { devolverParcelasPorZona, devolverParceaPorId, devolverParcelasPorCamping, devolverParcelasLibresEntreFechasConConceptos, devolverParcelasOcupadasCampingEnFecha }
+/**
+ * Devuleve las parcelas de las zonas que cumplan con los filtros
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverZonasYParcelasConFiltros = async (req, res, next) => {
+    try {
+        const { id_camping } = req.params
+        const { caracteristicas, tipos, tamano, electricidad } = req.body
+
+        obj_filtros = new Object()
+        if(caracteristicas) obj_filtros.caracteristicas = { $all: caracteristicas }
+        if(tipos) obj_filtros.tipos = { $all: tipos }
+        if(tamano) obj_filtros.tamano = tamano
+        if(electricidad) obj_filtros.electricidad = electricidad
+
+        const results_zonas = await Zona.find({ id_camping }).exec()
+        if(results_zonas.length > 0) {
+            const response_parcelas = results_zonas.map(async zona => {
+                const results_parcelas_zona = await Parcela.find({ ...obj_filtros, id_zona: zona._id }).exec()
+                return { zona: zona, parcelas: results_parcelas_zona.sort((a, b) => {
+                                                                        const nameA = a.nombre.toUpperCase()
+                                                                        const nameB = b.nombre.toUpperCase()
+                                                                        if (nameA < nameB) {
+                                                                            return -1
+                                                                        }
+                                                                        if (nameA > nameB) {
+                                                                            return 1
+                                                                        }
+                                                                        return 0;
+                                                                    }) }
+            })
+
+            Promise.all(response_parcelas)
+                .then(results => {
+                    res.status(200).send(new ResponseAPI('ok', `Zonas y parcelas filtradas del camping con id ${id_camping}`, results))
+                })
+                .catch(error => { throw new Error(error) })
+        } else {
+            throw new Error(`No hay zonas para el camping con id ${id_camping}`)
+        }
+    } catch(error) {
+        next(error)
+    }
+}
+
+module.exports = { devolverParcelasPorZona, devolverParceaPorId, devolverParcelasPorCamping, devolverParcelasLibresEntreFechasConConceptos, devolverParcelasOcupadasCampingEnFecha, devolverZonasYParcelasConFiltros }
 
 
 /********************************************************************************************/

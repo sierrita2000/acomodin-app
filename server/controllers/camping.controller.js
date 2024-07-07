@@ -16,6 +16,8 @@ const registrarCamping = async (req, res, next) => {
 
         const datosCamping = JSON.parse(req.body.datosCamping)
 
+        const fecha_creacion = new Date().getFullYear()
+
         bcrypt.hash(datosCamping.password, 10)
             .then(async passwordHash => {
                 const new_camping = new Camping({ 
@@ -26,7 +28,8 @@ const registrarCamping = async (req, res, next) => {
                     imagen: imagenCamping,
                     tamanos: tamanos.split(',') || [],
                     caracteristicas: caracteristicas.split(',') || [],
-                    conceptos: tipos.split(',').concat(['665a0165c5f8973c88844b8d', '665a0165c5f8973c88844b8c'])
+                    conceptos: tipos.split(',').concat(['665a0165c5f8973c88844b8d', '665a0165c5f8973c88844b8c']),
+                    fecha_creacion
                 })
 
                 await new_camping.save()
@@ -193,4 +196,3 @@ const actualizarPasswordCamping = async (req, res, next) => {
 }
 
 module.exports = { registrarCamping, devolverCamping, devolverCampingPorID, actualizarDatosCamping, actualizarPasswordCamping, actualizarCamping }
-

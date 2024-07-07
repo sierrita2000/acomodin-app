@@ -35,7 +35,7 @@ const devolverEstanciaPorIdAccion = async (req, res, next) => {
 const crearLlegadaSalidaReserva = async (req, res, next) => {
     try {
         const { id_estancia } = req.params
-        const { id_usuario, tipo_usuario, fecha, comentarios, estado } = req.body
+        const { id_usuario, tipo_usuario, fecha, comentarios, estado, parcela } = req.body
 
         const obj_estancia_accion = new EstanciasAccion({
             id_estancia,
@@ -46,9 +46,22 @@ const crearLlegadaSalidaReserva = async (req, res, next) => {
             comentarios
         })
 
-        await obj_estancia_accion.save()
-            .then(results => { res.status(200).send(new ResponseAPI('ok', `${estado} de la estancia con id ${id_estancia} en el camping registrada`, results)) })
-            .catch(error => { throw new Error(error) })
+        if(estado === 'entrada') {
+            estanciaParcelaEnFecha(parcela, formatearFecha(new Date()))
+                .then(async estancia_parcela => {
+                    if(!estancia_parcela) {
+                        await obj_estancia_accion.save()
+                            .then(results => { res.status(200).send(new ResponseAPI('ok', `${estado} de la estancia con id ${id_estancia} en el camping registrada`, results)) })
+                            .catch(error => { throw new Error(error) })
+                    } else {
+                        res.status(200).send(new ResponseAPI('not-allowed', `La parcela con id ${parcela} está actualmente ocupada`, estancia_parcela))
+                    }
+                })
+        } else {
+            await obj_estancia_accion.save()
+                .then(results => { res.status(200).send(new ResponseAPI('ok', `${estado} de la estancia con id ${id_estancia} en el camping registrada`, results)) })
+                .catch(error => { throw new Error(error) })
+        }
         } catch(error) {
         next(error)
     }
@@ -97,3 +110,38 @@ const deshacerLegadaOSalida = async (req, res, next) => {
 }
 
 module.exports = { devolverEstanciaPorIdAccion, crearLlegadaSalidaReserva, deshacerLegadaOSalida }
+
+/****************************************************************************/
+/****************************************************************************/
+/****************************************************************************/
+
+/**
+ * Devuelve la estancia, si existe, de una parcela en la fecha indicada.
+ * @param {String} parcela 
+ * @param {Date} fecha
+ * @returns Object
+ */
+const estanciaParcelaEnFecha = async (parcela, fecha) => {
+    let estancia = null
+    const fecha_ = new Date(fecha)
+
+    const resultsEstancias = await Estancia.find({ parcela }).exec()
+
+    if (resultsEstancias.length > 0) {
+        estancia = resultsEstancias.find(estancia => (new Date(estancia.fecha_inicio) <= fecha_) && (new Date(estancia.fecha_fin) >= fecha_))
+        if(estancia) {
+            const estancia_accion = await EstanciasAccion.find({ id_estancia: estancia._id }).exec()
+            estancia = { estancia, estancia_accion }
+        }
+    }
+
+    return estancia
+}
+
+/**
+* Formatea la fecha de hoy
+* @returns String
+*/
+const formatearFecha = (fecha) => {
+    return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() + 1 < 10) ? '0' : ''}${fecha.getDate()}`
+}

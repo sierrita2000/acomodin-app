@@ -20,6 +20,7 @@ import Reservas from './components/Principal/Reservas/Reservas'
 import Entradas, { EntradasRealizadas, ReservasSinLlegar } from './components/Principal/Hoy/Entradas/Entradas'
 import Salidas, { SalidasRealizadas, SalidasSinRealizar } from './components/Principal/Hoy/Salidas/Salidas'
 import Estado from './components/Principal/Estado/Estado'
+import CalendarioReservas from './components/Principal/CalendarioReservas/CalendarioReservas'
 
 const router = createBrowserRouter([
   {
@@ -59,7 +60,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/principal/camping/calendario',
-        element: <h1>Calendario Camping</h1>
+        element: <CalendarioReservas />
       },
       {
         path: '/principal/parcelas',

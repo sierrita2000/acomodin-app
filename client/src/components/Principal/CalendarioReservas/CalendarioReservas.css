@@ -1,0 +1,380 @@
+.calendario_reservas {
+    height: fit-content;
+    min-height: calc(100vh - 6.5rem);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.calendario_reservas > section {
+    height: 100%;
+    width: 100%;
+    display: flex;
+}
+
+/* FILTROS */
+
+.calendario_reservas__filtros {
+    height: 100%;
+    width: 30%;
+    padding: 1rem;
+}
+
+.calendario_reservas__filtros__filtros {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: var(--azulOscuro);
+    padding: 1.5rem;
+    font-family: var(--Crimson);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+}
+
+.calendario_reservas__filtros__filtros h2 {
+    align-self: center;
+    color: whitesmoke;
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+.calendario_reservas__filtros__filtros h4 {
+    width: 100%;
+    padding: .4rem .8rem;
+    background-color: var(--azulClaro);
+    color: var(--negro);
+    font-size: 20px;
+    border-radius: 2px;
+    margin: 1.5rem 0;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 6px 12px -2px, rgba(0, 0, 0, 0.5) 0px 3px 7px -3px;
+}
+
+/* FECHAS */
+
+.calendario_reservas__filtros__filtros__fechas {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendario_reservas__filtros__filtros__fechas > input {
+    font-family: var(--Crimson);
+    font-size: 18px;
+    color: var(--negro);
+    padding: .4rem;
+    outline: none;
+    background-color: whitesmoke;
+    border: none;
+}
+
+.calendario_reservas__filtros__filtros__fechas > p {
+    font-family: var(--Montserrat);
+    font-size: 25px;
+    font-weight: bolder;
+    color: whitesmoke;
+    margin: 0 1rem;
+}
+
+/* FIN FECHAS */
+
+/* CARACTERISTICA */
+
+.filtros__caracteristica {
+    display: flex;
+    align-items: center;
+    margin: 0 0 1rem 1rem;
+}
+
+.filtros__caracteristica label div {
+    height: 1.5rem;
+    width: 1.5rem;
+    border: 1px solid var(--negro);
+    background-color: whitesmoke;
+    padding: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.filtros__caracteristica div i {
+    font-size: 12px;
+    color: whitesmoke;
+    display: none;
+}
+
+.filtros__caracteristica input {
+    display: none;
+}
+
+.filtros__caracteristica input[type="checkbox"]:checked ~ div {
+    background-color: var(--verdeClaro);
+}
+
+.filtros__caracteristica input[type="checkbox"]:checked ~ div i {
+    display: block;
+}
+
+.filtros__caracteristica p {
+    font-size: 20px;
+    font-family: var(--Crimson);
+    color: whitesmoke;
+    margin: 0 0 0 .5rem;
+}
+
+/* FIN CARACTERISTICA */
+
+/* CONCEPTOS */
+
+.filtros__conceptos {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.filtros__conceptos .figura {
+    margin: 1rem;
+}
+
+.filtros__conceptos .figura img {
+    height: 3rem;
+}
+
+.filtros__conceptos .figura h6 {
+    font-size: 12px;
+    color: whitesmoke;
+}
+
+/* CONCEPTOS */
+
+/* TAMAÑOS */
+
+#calendarioFiltrosTamanos {
+    font-family: var(--Crimson);
+    font-size: 18px;
+    color: var(--negro);
+    padding: .4rem;
+    background-color: whitesmoke;
+    border: 1px solid var(--negro);
+    outline: none;
+    margin: 0 0 0 1rem;
+}
+
+/* TAMAÑOS */
+
+.calendario_reservas__filtros__filtros > button {
+    align-self: center;
+    margin: 2rem 0 0;
+    background-color: var(--verdeOscuro);
+    color: whitesmoke;
+    font-family: var(--Montserrat);
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    padding: .3rem 2rem;
+    box-shadow: rgba(0, 0, 0, 0.5) 0px 6px 12px -2px, rgba(0, 0, 0, 0.5) 0px 3px 7px -3px;
+}
+
+/* FIN FILTROS */
+
+/* CALENDARIO */
+
+.calendario_reservas__calendario {
+    height: 100%;
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+}
+
+/* LEYENDA */
+
+.calendario_reservas__calendario__leyenda {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 1.5rem;
+}
+
+.calendario_reservas__calendario__leyenda div {
+    height: 1.5rem;
+    width: 1.5rem;
+    border: 1px solid var(--negro);
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 5px 15px -6px inset, rgba(0, 0, 0, 0.3) 0px 5px 10px -8px inset;
+}
+
+.calendario_reservas__calendario__leyenda p {
+    font-family: var(--Montserrat);
+    font-size: 18px;
+    color: var(--negro);
+    margin: 0 1.5rem 0 .4rem;
+}   
+
+/* FIN LEYENDA */
+
+/* SECCIÓN ZONAS */
+
+.calendario__zona_parcelas {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendario__zona_parcelas h6 {
+    font-family: var(--Crimson);
+    font-size: 22px;
+    font-weight: bolder;
+    letter-spacing: 1px;
+    color: whitesmoke;
+    background-color: var(--azulOscuro);
+    padding: .4rem 1rem;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+}
+
+.calendario__zona_parcelas__parcelas {
+    height: fit-content;
+    width: 100%;
+    display: flex;
+    padding: 1rem;
+    border: 1px solid var(--negro);
+    margin: 1rem 0;
+    border-radius: 2px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 5px 15px -6px inset, rgba(0, 0, 0, 0.3) 0px 5px 10px -8px inset;
+}
+
+.calendario__zona_parcelas__parcelas__nombres {
+    height: fit-content;
+    width: 7rem;
+    min-width: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2.5rem .5rem 0;
+}
+
+.calendario__zona_parcelas__parcelas__nombres p {
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    font-family: var(--Crimson);
+    font-size: 20px;
+    margin: .8rem 0;
+}
+
+/* SECCIÓN DIAS MESES */
+
+.calendario__zona_parcelas__parcelas__dias {
+    height: fit-content;
+    width: calc(100% - 6rem);
+    display: flex;
+    flex-direction: column;
+    overflow-x: scroll;
+    scrollbar-width: thin;
+    border: 1px solid var(--negro);
+    border-radius: 2px;
+    padding: 0 .5rem;
+}
+
+.calendario__zona_parcelas__parcelas__dias__meses {
+    height: 2.5rem;
+    width: fit-content;
+    display: flex;
+    padding: .5rem 0;
+}
+
+.calendario__zona_parcelas__parcelas__dias__meses .meses_mes {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 2px solid var(--negro);
+    border-right: 2px solid var(--negro);
+    margin: 0 .8rem;
+}
+
+.calendario__zona_parcelas__parcelas__dias__meses .meses_mes > div {
+    height: 1px;
+    width: inherit;
+    background-color: var(--negro);
+}
+
+.calendario__zona_parcelas__parcelas__dias__meses .meses_mes > p {
+    margin: 0 .5rem;
+    font-family: var(--Crimson);
+    font-size: 18px;
+    color: var(--negro);
+}
+
+.calendario__zona_parcelas__parcelas__dias__dias {
+    height: fit-content;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+}
+
+.calendario__zona_parcelas__parcelas__dias__dias .dias_parcela {
+    display: flex;
+    margin: .8rem 0;
+}
+
+.calendario__zona_parcelas__parcelas__dias__dias .dias_parcela .dias_parcela__dias {
+    display: flex;
+    margin: 0 .8rem;
+}
+
+/* SECCIÓN DIAS MESES */
+
+/* SECCIÓN ZONAS */
+
+/* FIN CALENDARIO */
+
+/* CUADRO DÍA */
+
+.cuadrado_dia {
+    height: 2rem;
+    width: 2rem;
+    border: 1px solid var(--negro);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 .2rem;
+    font-family: var(--Montserrat);
+    color: var(--negro);
+    cursor: pointer;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 5px 15px -6px inset, rgba(0, 0, 0, 0.3) 0px 5px 10px -8px inset;
+}
+
+.fondo-0 {
+    background-color: var(--verdeGastado);
+}
+
+.fondo-1 {
+    background-color: rgb(212, 107, 107);
+}
+
+.fondo-2 {
+    background-color: rgb(209, 170, 111);
+}
+
+.fondo-3 {
+    background-color: rgb(107, 161, 212);
+}
+
+.fondo-4 {
+    background: linear-gradient(45deg, rgb(107, 161, 212) 0%, rgb(107, 161, 212) 50%, rgb(209, 170, 111) 50%, rgb(209, 170, 111) 100%);
+}
+
+.fondo-5 {
+    background: linear-gradient(45deg, rgb(107, 161, 212) 0%, rgb(107, 161, 212) 50%, rgb(212, 107, 107) 50%, rgb(212, 107, 107) 100%);
+}
+
+/* FIN CUADRO DÍA */

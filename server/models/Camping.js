@@ -30,6 +30,10 @@ const campingSchema = new mongoose.Schema({
     },
     conceptos: {
         type: Array
+    },
+    fecha_creacion: {
+        type: String,
+        default: new Date().getFullYear()
     }
 })
 

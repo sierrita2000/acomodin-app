@@ -5,7 +5,7 @@ const { crearConceptos, devolverTodosLosConceptos } = require('../controllers/co
 const multer = require('multer')
 const { registrarZonas, devolverZonas, actualizarZonas } = require('../controllers/zona.controller')
 const { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping, actualizarAcomodadoresCamping, devolverCampingDeAcomodador } = require('../controllers/acomodador.controller')
-const { devolverParceaPorId, devolverParcelasPorZona, devolverParcelasPorCamping, devolverParcelasLibresEntreFechasConConceptos, devolverParcelasOcupadasCampingEnFecha } = require('../controllers/parcela.controller')
+const { devolverParceaPorId, devolverParcelasPorZona, devolverParcelasPorCamping, devolverParcelasLibresEntreFechasConConceptos, devolverParcelasOcupadasCampingEnFecha, devolverZonasYParcelasConFiltros } = require('../controllers/parcela.controller')
 const { crearEstancia, devolverEstanciaPorId, devolverEstanciaActualYReservasFuturasDeParcela, devolverEstadoParcelaDia, devolverEstanciasPorEstadoYFecha, devolverEstanciasPorFiltros, devolverEntradasHoySinSalir, devolverReservasHoySinLlegar, eliminarEstancia, editarEstancia } = require('../controllers/estancia.controller')
 const { devolverEstanciaPorIdAccion, crearLlegadaSalidaReserva, deshacerLegadaOSalida } = require('../controllers/estancia-accion.controller')
 
@@ -47,6 +47,7 @@ router.get("/parcelas/devolver-parcelas/id_camping/:id_camping", devolverParcela
 router.get("/parcelas/ocupadas/id_camping/:id_camping/fecha/:fecha", devolverParcelasOcupadasCampingEnFecha)
 
 router.post("/parcelas/devolver-parcelas-filtradas", devolverParcelasLibresEntreFechasConConceptos)
+router.post("/parcelas/zonas-parcelas-filtradas/id_camping/:id_camping", devolverZonasYParcelasConFiltros)
 
 // RUTAS DE ACOMODADOR
 router.get("/acomodadores/usuario/:usuario/password/:password", devolverAcomodador)
