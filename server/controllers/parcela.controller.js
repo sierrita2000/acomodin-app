@@ -63,7 +63,7 @@ const devolverParcelasOcupadasCampingEnFecha = async (req, res, next) => {
         parcelasCamping(id_camping)
             .then(parcelas_camping => {
                 const promises_parcelas_ocupadas = parcelas_camping.map(async parcela => {
-                    const estancia_en_parcela = await estanciaParcelaEnFecha(parcela._id, fecha)
+                    const estancia_en_parcela = await estanciaParcelaEnFecha(parcela._id, fecha) 
                     if(estancia_en_parcela) {
                         if(estancia_en_parcela.estancia_accion.estado === 'entrada') return 1
                         else return 0
@@ -203,7 +203,7 @@ const estanciaParcelaEnFecha = async (parcela, fecha) => {
     const resultsEstancias = await Estancia.find({ parcela }).exec()
 
     if (resultsEstancias.length > 0) {
-        const estancia_en_parcela = resultsEstancias.find(estancia => (new Date(estancia.fecha_inicio) <= fecha_) && (new Date(estancia.fecha_fin) > fecha_))
+        const estancia_en_parcela = resultsEstancias.find(estancia => (new Date(estancia.fecha_inicio) <= fecha_) && (new Date(estancia.fecha_fin) >= fecha_))
         if(estancia_en_parcela) {
             const lista_estancias_accion = await EstanciasAccion.find({ id_estancia: estancia_en_parcela._id }).exec()
             const estancia_accion_mas_reciente = estanciaAccionMasReciente(lista_estancias_accion)

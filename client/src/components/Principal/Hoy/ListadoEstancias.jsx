@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import './ListadoEstancias.css'
 import EstanciaSimple from '../Estancia/EstanciaSimple/EstanciaSimple'
 
-export default function ListadoEstancias ({ estancias, loading, texto_estancias_vacias }) {
+export default function ListadoEstancias ({ estancias, loading, texto_estancias_vacias, url }) {
 
     const navigate = useNavigate()
 
@@ -30,7 +30,7 @@ export default function ListadoEstancias ({ estancias, loading, texto_estancias_
                             if(id_zona_A > id_zona_B) return 1
                             else return 0
                         }).map(estancia => {
-                            return <EstanciaSimple { ...estancia } handlerEstancia={() => navigate(`/principal/entradas/reservas-sin-llegar/${estancia.estancia_accion._id}`)} />
+                            return <EstanciaSimple { ...estancia } handlerEstancia={() => navigate(`${url}${estancia.estancia_accion._id}`)} />
                         })
                     ) : (
                         <div className="listado_estancias__vacias">

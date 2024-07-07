@@ -122,7 +122,7 @@ const router = createBrowserRouter([
             element: <EntradasRealizadas />,
             children: [
               {
-                path: '/principal/entradas/entradas:id_estancia_accion',
+                path: '/principal/entradas/entradas/:id_estancia_accion',
                 element: <Estancia />,
                 loader: estanciaLoader
               },
@@ -143,7 +143,7 @@ const router = createBrowserRouter([
             element: <SalidasSinRealizar />,
             children: [
               {
-                path: '/principal/salidas/salidas-sin-realizar:id_estancia_accion',
+                path: '/principal/salidas/salidas-sin-realizar/:id_estancia_accion',
                 element: <Estancia />,
                 loader: estanciaLoader
               }
@@ -154,7 +154,7 @@ const router = createBrowserRouter([
             element: <SalidasRealizadas />,
             children: [
               {
-                path: '/principal/salidas/salidas:id_estancia_accion',
+                path: '/principal/salidas/salidas/:id_estancia_accion',
                 element: <Estancia />,
                 loader: estanciaLoader
               }

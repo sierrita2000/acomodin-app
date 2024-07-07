@@ -54,4 +54,46 @@ const crearLlegadaSalidaReserva = async (req, res, next) => {
     }
 }
 
-module.exports = { devolverEstanciaPorIdAccion, crearLlegadaSalidaReserva }
+/**
+ * Elimina la accion dada
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const deshacerLegadaOSalida = async (req, res, next) => {
+    try {
+        const { id } = req.params
+        
+        const estancia_accion = await EstanciasAccion.findById(id).exec()
+        if(estancia_accion.estado === 'salida') {
+            await EstanciasAccion.findByIdAndDelete(id).exec()
+                .then(() => {
+                    res.status(200).send(new ResponseAPI('ok', `Deshecha la salida de la estancia`, null))
+                })
+                .catch(error => { throw new Error(error) })
+        } else {
+            const estancia_acciones = await EstanciasAccion.find({ id_estancia: estancia_accion.id_estancia }).exec()
+            if(estancia_acciones.find(e_a => e_a.estado === 'reserva')) { // Se trata de una entrada con reserva previa
+                await EstanciasAccion.findByIdAndDelete(id).exec()
+                    .then(() => {
+                        res.status(200).send(new ResponseAPI('ok', `Deshecha la llegada de la estancia`, null))
+                    })
+                    .catch(error => { throw new Error(error) })
+            } else { // Llegada directa, sin reserva previa
+                await Estancia.findByIdAndDelete(estancia_accion.id_estancia).exec()
+                    .then(async () => {
+                        await EstanciasAccion.findByIdAndDelete(id).exec()
+                            .then(() => {
+                                res.status(200).send(new ResponseAPI('ok', `Eliminada la estancia`, null))
+                            })
+                            .catch(error => { throw new Error(error) })
+                    })
+                    .catch(error => { throw new Error(error) })
+            }
+        }
+    } catch(error) {
+        next(error)
+    }
+}
+
+module.exports = { devolverEstanciaPorIdAccion, crearLlegadaSalidaReserva, deshacerLegadaOSalida }

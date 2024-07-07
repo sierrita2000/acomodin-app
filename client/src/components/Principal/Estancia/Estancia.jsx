@@ -133,19 +133,24 @@ export default function Estancia () {
     /**
      * Función para eliminar una estancia
      */
-    const funcionEliminarEstancia = () => {
-        fetch(`${import.meta.env.VITE_API_HOST}estancia/eliminar/id/${estancia.estancia._id}`, { method: 'DELETE' })
-            .then(response => response.json())
-            .then(data => {
-                alert(data.status === 'ok' ? `Reserva a nombre de ${nombre} eliminada correctamente` : data.messsage)
-                navigate('..', { replace: true })
-            })
+    const funcionEliminarEstancia = async () => {
+        const response = await fetch(`${import.meta.env.VITE_API_HOST}estancia/eliminar/id/${estancia.estancia._id}`, { method: 'DELETE' })
+        const data = await response.json()
+
+        if(data.status === 'ok') {
+            setMensaje(`${estancia.estancia_accion.estado} a nombre de ${nombre} eliminada correctamente`)
+            modificarEstancia()
+            setAccionAceptar(6)
+        } else {
+            setMensaje(data.message)
+            setAccionAceptar(0)
+        }
     }
 
     /**
      * Función para marcar una llegada de una reserva
      */
-    const funcionMarcarEntradaOSalida = (estado) => {
+    const funcionMarcarEntradaOSalida = async (estado) => {
         const body = { 
             id_usuario: loginContext[0][0],
             tipo_usuario: loginContext[0][1] === 0 ? 'acomodador' : 'camping',
@@ -154,19 +159,19 @@ export default function Estancia () {
             estado: estado
         }
 
-        fetch(`${import.meta.env.VITE_API_HOST}estancia/marcar-${estado === 'entrada' ? 'llegada' : 'salida'}/id_estancia/${estancia.estancia._id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_HOST}estancia/marcar-${estado === 'entrada' ? 'llegada' : 'salida'}/id_estancia/${estancia.estancia._id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(body)
         })
-            .then(response => response.json())
-            .then(data => {
-                setMensaje(data.status === 'ok' ? ((estado === 'entrada') ? `Reserva a nombre de ${nombre} instalada en la parcela ${dataParcela?.results.nombre}` : `Estancia a nombre de ${nombre} ha dejado libre la parcela ${dataParcela?.results.nombre}`) : data.messsage)
-                setAccionAceptar(0)
-                navigate('/principal/entradas/entradas', { replace: true })
-            })
+        const data = await response.json()
+
+        if(data) {
+            setMensaje(data.status === 'ok' ? ((estado === 'entrada') ? `Reserva a nombre de ${nombre} instalada en la parcela ${dataParcela?.results.nombre}` : `Estancia a nombre de ${nombre} ha dejado libre la parcela ${dataParcela?.results.nombre}`) : data.message)
+            (estado === 'entrada') ? navigate('/principal/entradas/entradas', { replace: true }) : navigate('/principal/salidas/salidas', { replace: true }) 
+        }
     }
 
     /**
@@ -199,7 +204,6 @@ export default function Estancia () {
             setMensaje(`${estancia.estancia_accion.estado} a nombre de ${nombre} actualizada correctamente`)
             modificarEstancia()
         } else {
-            console.log(data.message)
             setMensaje(data.message)
         }
         setAccionAceptar(0)
@@ -215,6 +219,22 @@ export default function Estancia () {
 
         // Activamos la modificación
         setModificar(true)
+    }
+
+    /**
+     * Función que deshace la llegada o salida de una estancia
+     */
+    const funcionDeshacerLlegadaSalida = async () => {
+        const response = await fetch(`${import.meta.env.VITE_API_HOST}estancia/deshacer-accion/id_estancia_accion/${estancia.estancia_accion._id}`, { method: 'DELETE' })
+        const data = await response.json()
+
+        if(data.status === 'ok') {
+            setMensaje(`${data.message} a nombre de ${nombre}`)
+            setAccionAceptar(6)
+        } else {
+            setMensaje(data.message)
+            setAccionAceptar(0)
+        }
     }
 
     /**
@@ -239,6 +259,14 @@ export default function Estancia () {
     const marcarLlegadaConParcela = () => {
         setMensaje(`¿Seguro que deseas marcar que la reserva a nombre de ${nombre} se ha instalado en la parcela ${dataParcela?.results.nombre}?`)
         setAccionAceptar(2)
+    }
+
+    /**
+     * Deshace una entrada o salida sin eliminar la estancia
+     */
+    const deshacerLlegadaSalida = () => {
+        setMensaje(`¿Quieres deshacer ${estancia.estancia_accion.estado === 'entrada' ? 'la llegada al' : 'la salida del'} camping de la reserva de ${nombre}?`)
+        setAccionAceptar(7)
     }
 
     /**
@@ -457,8 +485,9 @@ export default function Estancia () {
                     !modificar ? (
                         <>
                             <button onClick={eliminarEstancia}>ELIMINAR</button>
-                            { ((estancia.estancia.fecha_inicio === formatearFecha(new Date())) && (dataEstanciaMasReciente?.results.estancia_accion.estado === 'reserva')) && <button onClick={() => { (parcela != '0') ? marcarLlegadaConParcela() : marcarLlegadaSinParcela() }}>MARCAR LLEGADA</button> }
-                            { ((estancia.estancia.fecha_fin === formatearFecha(new Date())) && (dataEstanciaMasReciente?.results.estancia_accion.estado === 'entrada')) && <button onClick={marcarSalida}>MARCAR SALIDA</button> }
+                            { ((estancia.estancia.fecha_inicio === formatearFecha(new Date())) && (dataEstanciaMasReciente?.results.estancia_accion.estado === 'reserva') && (dataEstanciaMasReciente?.results.estancia_accion.estado === estancia.estancia_accion.estado)) && <button onClick={() => { (parcela != '0') ? marcarLlegadaConParcela() : marcarLlegadaSinParcela() }}>MARCAR LLEGADA</button> }
+                            { ((estancia.estancia.fecha_fin === formatearFecha(new Date())) && (dataEstanciaMasReciente?.results.estancia_accion.estado === 'entrada')  && (dataEstanciaMasReciente?.results.estancia_accion.estado === estancia.estancia_accion.estado)) && <button onClick={marcarSalida}>MARCAR SALIDA</button> }
+                            { ((dataEstanciaMasReciente?.results.estancia_accion.estado === estancia.estancia_accion.estado) && (estancia.estancia_accion.estado != 'reserva')) && <button onClick={deshacerLlegadaSalida}>DESHACER {estancia.estancia_accion.estado.toUpperCase()}</button> }
                         </>
                     ) : (
                         <button onClick={() => {modificarEstancia(); resetearEstancia(); setError(0)}}>CANCELAR</button>
@@ -466,10 +495,10 @@ export default function Estancia () {
                 }
             </div>
             {
-                mensaje && <Mensaje mensaje={mensaje} accionCancelar={() => {setMensaje(''); setAccionAceptar(0)}} accionAceptar={(accionAceptar === 0) ? () => {setMensaje('')} : (accionAceptar === 1) ? funcionEliminarEstancia : (accionAceptar === 2) ? () => {funcionMarcarEntradaOSalida('entrada')} : (accionAceptar === 3) ? funcionEditarEstancia : (accionAceptar === 4) ? () => {funcionMarcarEntradaOSalida('salida')} : funcionEditarEstanciaSinParcela } />
+                mensaje && <Mensaje mensaje={mensaje} accionCancelar={() => {setMensaje(''); setAccionAceptar(0)}} accionAceptar={(accionAceptar === 0) ? () => {setMensaje('')} : (accionAceptar === 1) ? funcionEliminarEstancia : (accionAceptar === 2) ? () => {funcionMarcarEntradaOSalida('entrada')} : (accionAceptar === 3) ? funcionEditarEstancia : (accionAceptar === 4) ? () => {funcionMarcarEntradaOSalida('salida')} : (accionAceptar === 5) ? funcionEditarEstanciaSinParcela : (accionAceptar === 6) ? () => {navigate('..', { replace: true })} : (accionAceptar === 7) ? funcionDeshacerLlegadaSalida : null } />
             }
             {
-                modalParcelas && <ModalParcelas fecha_inicio={fechaInicio} fecha_fin={fechaFin} tipos={devolverTiposAcomodacionEstancia()} caracteristicas={caracteristicas} id_camping={dataCamping?.results._id} handlerCerrarModal={() => {setModalParcelas(false)}} parcela={parcela} setParcela={setParcela} parcelaAsignada={estancia.estancia.parcela} />
+                modalParcelas && <ModalParcelas fecha_inicio={fechaInicio} fecha_fin={fechaFin} tipos={devolverTiposAcomodacionEstancia()} caracteristicas={caracteristicas} id_camping={dataCamping?.results._id} handlerCerrarModal={() => {setModalParcelas(false)}} parcela={parcela} setParcela={setParcela} parcelaAsignada={estancia.estancia.parcela} /> 
             }
         </section>
     )

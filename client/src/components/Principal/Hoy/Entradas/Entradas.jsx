@@ -67,7 +67,7 @@ export function ReservasSinLlegar () {
                         </form>
                     )
             }
-            <ListadoEstancias estancias={reservas} loading={loading} texto_estancias_vacias={'NO HAY RESERVAS PENDIENTES PARA HOY'} />
+            <ListadoEstancias estancias={reservas} loading={loading} texto_estancias_vacias={'NO HAY RESERVAS PENDIENTES PARA HOY'} url={`/principal/entradas/entradas-sin-llegar/`} />
         </div>
     )
 }
@@ -119,7 +119,7 @@ export function EntradasRealizadas () {
                 <button onClick={() => navigate('/principal/entradas/entradas/crear-entrada')}>AÑADIR ENTRADA</button>
                 <img src="../../../../../figura-caravana-cesped.png" alt="FIGURA-TIENDA" />
             </section>
-            <ListadoEstancias estancias={entradas} loading={loading} texto_estancias_vacias={'NO SE HAN REGISTRADO ENTRADAS PARA HOY TODAVÍA'} />
+            <ListadoEstancias estancias={entradas} loading={loading} texto_estancias_vacias={'NO SE HAN REGISTRADO ENTRADAS PARA HOY TODAVÍA'} url={`/principal/entradas/entradas/`} />
         </div>
     )
 }

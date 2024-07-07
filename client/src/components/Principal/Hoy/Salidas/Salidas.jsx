@@ -43,7 +43,7 @@ export function SalidasSinRealizar () {
 
     return(
         <div className="salidas_sin_realizar">
-            <ListadoEstancias estancias={entradas} loading={loading} texto_estancias_vacias={'NO HAY SALIDAS PREVISTAS PARA HOY'} />
+            <ListadoEstancias estancias={entradas} loading={loading} texto_estancias_vacias={'NO HAY SALIDAS PREVISTAS PARA HOY'} url={`/principal/salidas/salidas-sin-realizar/`} />
         </div>
     )
 }
@@ -86,7 +86,7 @@ export function SalidasRealizadas () {
 
     return(
         <div className="salidas_sin_realizar">
-            <ListadoEstancias estancias={salidas} loading={loading} texto_estancias_vacias={'NO SE HA REGISTRADO NINGUNA SALIDA TODAVÍA'} />
+            <ListadoEstancias estancias={salidas} loading={loading} texto_estancias_vacias={'NO SE HA REGISTRADO NINGUNA SALIDA TODAVÍA'} url={`/principal/salidas/salidas/`} />
         </div>
     )
 }

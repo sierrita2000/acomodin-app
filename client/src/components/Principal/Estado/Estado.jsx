@@ -27,6 +27,11 @@ export default function Estado () {
     const [ reservasSinLlegar, setReservasSinLlegar ] = useState(null)
     const [ reservasEnCamping, setReservasEnCamping ] = useState(null)
 
+    const [ entradas, setEntradas ] = useState(null)
+
+    const [ salidasSinSalir, setSalidasSinSalir ] = useState(null)
+    const [ salidasRegistradas, setSalidasRegistradas ] = useState(null)
+
     let [ dataCamping ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? `acomodador/${loginContext[0][0]}/devolver-camping` : `camping/id/${loginContext[0][0]}`}`)
     
     /**
@@ -41,8 +46,8 @@ export default function Estado () {
         }
     }
 
-    /**
-     * Calcula el total de parcelas del camping
+    /** 
+     * Calcula el total de parcelas del camping ocupadas actualmente
      */
     const totalParcelasOcupadasCamping = async () => {
         const response = await fetch(`${import.meta.env.VITE_API_HOST}parcelas/ocupadas/id_camping/${dataCamping?.results._id}/fecha/${fecha}`)
@@ -54,9 +59,10 @@ export default function Estado () {
     }
 
     /**
-     * Busca las reservas de un día que no han llegado al camping
+     * Devuelve las reservas y entradas del día
+     * @returns Promise
      */
-    const calcularReservasDelDia = async () => {
+    const devolverReservasYEntradasDelDia = async () => {
         // Reservas del día
         const responseReservas = await fetch(`${import.meta.env.VITE_API_HOST}estancias/devolver-estancias-filtros/id_camping/${dataCamping?.results._id}`, {
             method: 'POST',
@@ -77,6 +83,15 @@ export default function Estado () {
         })
         const dataEntradas = await responseEntradas.json()
 
+        return Promise.all([dataReservas, dataEntradas])
+    }
+
+    /**
+     * Busca las reservas de un día que no han llegado al camping
+     */
+    const calcularReservasDelDia = async () => {
+        const [ dataReservas, dataEntradas ] = await devolverReservasYEntradasDelDia()
+
         let reservas_sin_llegar = new Array()
         let reservas_en_camping = new Array()
 
@@ -88,10 +103,71 @@ export default function Estado () {
                 } else {
                     reservas_sin_llegar.push(reserva)
                 }
-            })
+            }) 
 
             setReservasSinLlegar(reservas_sin_llegar)
             setReservasEnCamping(reservas_en_camping)
+        }
+    }
+
+    /**
+     * Busca las entradas del día
+     */
+    const calcularEntradasDelDia = async () => {
+        const [ dataReservas, dataEntradas ] = await devolverReservasYEntradasDelDia()
+
+        let entradas = new Array()
+
+        if(dataReservas.status != 'error' && dataEntradas.status != 'error') {
+            dataEntradas.results.forEach(entrada => {
+                if(!dataReservas.results.find(reserva => reserva.estancia._id === entrada.estancia._id)) {
+                    entradas.push(entrada)
+                }
+            })
+
+            setEntradas(entradas)
+        }
+    }
+
+    /**
+     * Calcula las salidas del día
+     */
+    const calcularSalidas = async () => {
+        const responseSalidasTotal = await fetch(`${import.meta.env.VITE_API_HOST}estancias/devolver-estancias-filtros/id_camping/${dataCamping?.results._id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ filtros: { fecha_fin: fecha }, estado: 'entrada' })
+        })
+        const dataSalidasTotal = await responseSalidasTotal.json()
+
+        const responseSalidasRegistradas = await fetch(`${import.meta.env.VITE_API_HOST}estancias/devolver-estancias-filtros/id_camping/${dataCamping?.results._id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ filtros: { fecha_fin: fecha }, estado: 'salida' })
+        })
+        const dataSalidasRegistradas = await responseSalidasRegistradas.json()
+
+        if(dataSalidasTotal.status != 'error' && dataSalidasRegistradas.status != 'error') {
+            let salidas_sin_registrar = new Array()
+            let salidas_registradas = new Array()
+
+            console.log(dataSalidasTotal, dataSalidasRegistradas)
+
+            dataSalidasTotal.results.forEach(estancia => {
+                const salida = dataSalidasRegistradas.results.find(salida => salida.estancia._id === estancia.estancia._id)
+                if(salida) {
+                    salidas_registradas.push(salida)
+                } else {
+                    salidas_sin_registrar.push(estancia)
+                }
+            })
+
+            setSalidasSinSalir(salidas_sin_registrar)
+            setSalidasRegistradas(salidas_registradas)
         }
     }
 
@@ -107,12 +183,16 @@ export default function Estado () {
 
         // Calcula las reservas del día
         calcularReservasDelDia()
+
+        // Calcula las entradas del día
+        calcularEntradasDelDia()
+
+        // Calcula las salidas del día
+        calcularSalidas()
     }
 
     useEffect(() => {
-        if(dataCamping) {
-            actualizarDatosEstado()
-        }
+        if(dataCamping) actualizarDatosEstado()
     }, [dataCamping])
 
     return(
@@ -153,52 +233,51 @@ export default function Estado () {
                 <section className='estado_reservas'>
                     <h2>RESERVAS</h2>
                     <section>
-                        <section className="estado_reservas__sin_llegar">
-                            <h2>RESERVAS SIN LLEGAR</h2>
-                            <div className="estado_reservas__listado">
-                                {
-                                    (reservasSinLlegar?.length > 0) ? (
-                                        reservasSinLlegar.map(reserva => {
-                                            return <EstanciaSimple { ...reserva } handlerEstancia={() => { navigate(`/principal/camping/estado/${reserva.estancia_accion._id}`) }} />
-                                        })
-                                    ) : (
-                                        <div className="estado_reservas__listado__vacio">
-                                            <p>NO HAY RESERVAS SIN LLEGAR</p>
-                                            <img src="../../../../figura-hoguera.png" alt="FIGURA-HOGUERA" />
-                                        </div>
-                                    )
-                                }
-                            </div>
-                            <div className="estado_reservas__total">
-                                <p>TOTAL:</p>
-                                <div>{reservasSinLlegar ? reservasSinLlegar.length : 0}</div>
-                            </div>
-                        </section>
-                        <section className="estado_reservas__instaladas">
-                            <h2>RESERVAS EN EL CAMPING</h2>
-                            <div className="estado_reservas__listado">
-                                {
-                                    (reservasEnCamping?.length > 0) ? (
-                                        reservasEnCamping.map(reserva => {
-                                            return <EstanciaSimple { ...reserva } handlerEstancia={() => { navigate(`/principal/camping/estado/${reserva.estancia_accion._id}`) }} />
-                                        })
-                                    ) : (
-                                        <div className="estado_reservas__listado__vacio">
-                                            <p>NO HAY RESERVAS QUE HAYAN LLEGADO</p>
-                                            <img src="../../../../figura-hoguera.png" alt="FIGURA-HOGUERA" />
-                                        </div>
-                                    )
-                                }
-                            </div>
-                            <div className="estado_reservas__total">
-                                <p>TOTAL:</p>
-                                <div>{reservasEnCamping ? reservasEnCamping.length : 0}</div>
-                            </div>
-                        </section>
+                        <EstadoEstancias titulo={'RESERVAS SIN LLEGAR'} texto_estancias_vacias={'NO HAY RESERVAS SIN LLEGAR'} estancias={reservasSinLlegar} />
+                        <EstadoEstancias titulo={'RESERVAS EN EL CAMPING'} texto_estancias_vacias={'NO HAY RESERVAS QUE HAYAN LLEGADO'} estancias={reservasEnCamping} />
+                    </section>
+                </section>
+            </section>
+            <section className="estado__salidas_entradas">
+                <section className='estado_entradas'>
+                    <EstadoEstancias titulo={'ENTRADAS'} texto_estancias_vacias={'NO HAY ENTRADAS'} estancias={entradas} />
+                </section>
+                <section className='estado_reservas'>
+                    <h2>SALIDAS</h2>
+                    <section>
+                        <EstadoEstancias titulo={'SALIDAS SIN REGISTRAR'} texto_estancias_vacias={'NO HAY SALIDAS PREVISTAS PARA EL DÍA'} estancias={salidasSinSalir} />
+                        <EstadoEstancias titulo={'SALIDAS REGISTRADAS'} texto_estancias_vacias={'NO HAY SALIDAS REGISTRADAS'} estancias={salidasRegistradas} />
                     </section>
                 </section>
             </section>
             <Outlet />
         </div>
+    )
+}
+
+function EstadoEstancias ({ titulo, texto_estancias_vacias, estancias }) {
+
+    return(
+            <section className="estado_estancias">
+                <h2>{titulo}</h2>
+                <div className="estado_estancias__listado">
+                    {
+                        (estancias?.length > 0) ? (
+                            estancias.map(estancia => {
+                                return <EstanciaSimple { ...estancia } handlerEstancia={() => { navigate(`/principal/camping/estado/${estancia.estancia_accion._id}`) }} />
+                            })
+                        ) : (
+                            <div className="estado_estancias__listado__vacio">
+                                <p>{texto_estancias_vacias}</p>
+                                <img src="../../../../figura-hoguera.png" alt="FIGURA-HOGUERA" />
+                            </div>
+                        )
+                    }
+                </div>
+                <div className="estado_estancias__total">
+                    <p>TOTAL:</p>
+                    <div>{estancias ? estancias.length : 0}</div>
+                </div>
+            </section>
     )
 }

@@ -7,7 +7,7 @@ const { registrarZonas, devolverZonas, actualizarZonas } = require('../controlle
 const { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping, actualizarAcomodadoresCamping, devolverCampingDeAcomodador } = require('../controllers/acomodador.controller')
 const { devolverParceaPorId, devolverParcelasPorZona, devolverParcelasPorCamping, devolverParcelasLibresEntreFechasConConceptos, devolverParcelasOcupadasCampingEnFecha } = require('../controllers/parcela.controller')
 const { crearEstancia, devolverEstanciaPorId, devolverEstanciaActualYReservasFuturasDeParcela, devolverEstadoParcelaDia, devolverEstanciasPorEstadoYFecha, devolverEstanciasPorFiltros, devolverEntradasHoySinSalir, devolverReservasHoySinLlegar, eliminarEstancia, editarEstancia } = require('../controllers/estancia.controller')
-const { devolverEstanciaPorIdAccion, crearLlegadaSalidaReserva } = require('../controllers/estancia-accion.controller')
+const { devolverEstanciaPorIdAccion, crearLlegadaSalidaReserva, deshacerLegadaOSalida } = require('../controllers/estancia-accion.controller')
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -85,5 +85,7 @@ router.get("/estancia-accion/id/:id", devolverEstanciaPorIdAccion)
 
 router.post("/estancia/marcar-llegada/id_estancia/:id_estancia", crearLlegadaSalidaReserva)
 router.post("/estancia/marcar-salida/id_estancia/:id_estancia", crearLlegadaSalidaReserva)
+
+router.delete("/estancia/deshacer-accion/id_estancia_accion/:id", deshacerLegadaOSalida)
 
 module.exports = { router }

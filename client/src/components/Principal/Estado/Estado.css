@@ -73,23 +73,25 @@
     height: 30rem;
     width: 100%;
     display: flex;
+    justify-content: space-between;
+    margin: 0 0 1.5rem;
 }
 
 /* SECCIÓN DATOS PARCELAS */
 
 .estado__parcelas {
     height: 100%;
-    width: 30%;
+    width: 29%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 4rem 0 0;
+    padding: 4rem 2rem 0;
 }
 
 .estado__parcelas__caja {
     position: relative;
     height: 95%;
-    width: 80%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -151,6 +153,7 @@
     color: var(--negro);
     border: 1px solid var(--negro);
     box-shadow: rgba(50, 50, 93, 0.25) 0px 5px 15px -6px inset, rgba(0, 0, 0, 0.3) 0px 5px 10px -8px inset;
+    background-color: rgba(245, 245, 245, 0.4);
 }
 
 /* FIN SECCIÓN DATOS PARCELAS */
@@ -159,37 +162,48 @@
 
 .estado_reservas {
     height: 100%;
-    width: 70%;
+    width: 69%;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 1rem 0 0;
 }
 
 .estado_reservas > section {
-    display: flex;
     height: inherit;
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
 }
 
-.estado_reservas__sin_llegar,
-.estado_reservas__instaladas {
+/* SECCIÓN RESERVAS */
+
+/* SECCIÓN DATOS PARCELAS Y RESERVAS */
+
+/* SECCIÓN ESTANCIAS */
+
+.estado_estancias h2 {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: .4rem 0;
+    background-color: rgb(59, 59, 59);
+    font-family: var(--Crimson);
+    font-size: 22px;
+    font-weight: bolder;
+    letter-spacing: 1px;
+    color: whitesmoke;
+    border-radius: 2px;
+}
+
+.estado_estancias {
     height: inherit;
-    width: 50%;
+    width: 49%;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.estado_reservas__sin_llegar {
-    padding: 1rem .4rem 1rem 0;
-}
-
-.estado_reservas__instaladas {
-    padding: 1rem 0 1rem .4rem;   
-}
-
-.estado_reservas__listado {
+.estado_estancias__listado {
     height: inherit;
     width: 100%;
     border: 1px solid var(--negro);
@@ -204,7 +218,7 @@
     box-shadow: rgba(50, 50, 93, 0.25) 0px 15px 25px -16px inset, rgba(0, 0, 0, 0.3) 0px 15px 20px -18px inset;
 }
 
-.estado_reservas__total {
+.estado_estancias__total {
     display: flex;
     align-items: center;
     font-family: var(--Crimson);
@@ -212,12 +226,12 @@
     color: var(--negro);
 }
 
-.estado_reservas__total p {
+.estado_estancias__total p {
     font-weight: bold;
     margin: 0 .5rem 0 0;
 }
 
-.estado_reservas__total div {
+.estado_estancias__total div {
     height: 2rem;
     width: 4rem;
     display: flex;
@@ -228,7 +242,7 @@
     box-shadow: rgba(50, 50, 93, 0.25) 0px 5px 15px -6px inset, rgba(0, 0, 0, 0.3) 0px 5px 10px -8px inset;
 }
 
-.estado_reservas__listado__vacio {
+.estado_estancias__listado__vacio {
     height: 100%;
     width: 100%;
     display: flex;
@@ -237,7 +251,7 @@
     align-items: center;
 }
 
-.estado_reservas__listado__vacio p {
+.estado_estancias__listado__vacio p {
     font-family: var(--Montserrat);
     font-size: 20px;
     font-weight: bold;
@@ -245,54 +259,111 @@
     margin: 0 0 .5rem;
 }
 
-.estado_reservas__listado__vacio img {
+.estado_estancias__listado__vacio img {
     height: 12rem;
     filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.6));
 }
 
 /* ESTANCIA */
 
-.estado_reservas__listado .estancia_simple {
+.estado_estancias__listado .estancia_simple {
     height: 5rem;
     width: 90%;
 }
 
-.estado_reservas__listado .estancia_simple .estancia_simple__imagen {
+.estado_estancias__listado .estancia_simple .estancia_simple__imagen {
     height: 5rem;
     width: 5rem;
 }
 
-.estado_reservas__listado .estancia_simple  .estancia_simple__informacion {
+.estado_estancias__listado .estancia_simple  .estancia_simple__informacion {
     width: calc(100% - 8rem);
 }
 
-.estado_reservas__listado .estancia_simple .estancia_simple__estado {
+.estado_estancias__listado .estancia_simple .estancia_simple__estado {
     width: 3rem;
 }
 
-.estado_reservas__listado .estancia_simple .estancia_simple__informacion > div:nth-child(2n+1) {
+.estado_estancias__listado .estancia_simple .estancia_simple__informacion > div:nth-child(2n+1) {
     padding: 0 .6rem;
 }
 
-.estado_reservas__listado .estancia_simple .estancia_simple__informacion > div:nth-child(2n+1) i {
+.estado_estancias__listado .estancia_simple .estancia_simple__informacion > div:nth-child(2n+1) i {
     font-size: .8rem;
     margin: 0 0 .6rem;
 }
 
-.estado_reservas__listado .estancia_simple .estancia_simple__informacion > div:nth-child(2n+1) p {
+.estado_estancias__listado .estancia_simple .estancia_simple__informacion > div:nth-child(2n+1) p {
     font-size: 14px;
 } 
 
-.estado_reservas__listado .estancia_simple .estancia_simple__informacion > div:nth-child(5) p {
+.estado_estancias__listado .estancia_simple .estancia_simple__informacion > div:nth-child(5) p {
     text-align: center;
 }
 
-.estado_reservas__listado .estancia_simple .estancia_simple__informacion__raya {
+.estado_estancias__listado .estancia_simple .estancia_simple__informacion__raya {
     width: 2px;
 }
 
 /* FIN ESTANCIA */
 
-/* FIN SECCIÓN RESERVAS */
+/* FIN SECCIÓN ESTANCIAS */
 
-/* FIN SECCIÓN DATOS PARCELAS Y RESERVAS */
+/* SECCIÓN SALIDAS Y ENTRADAS */
+
+.estado__salidas_entradas {
+    height: 30rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.estado_entradas {
+    height: 100%;
+    width: 29%;
+    display: flex;
+    flex-direction: column;
+}
+
+.estado_entradas > .estado_estancias {
+    width: 100%;
+}
+
+/* SECCIÓN SALIDAS Y ENTRADAS */
+
+/* ESTANCIA DE ENTRADAS */
+
+
+.estado_entradas .estancia_simple {
+    height: 4rem;
+    width: 90%;
+}
+
+.estado_entradas .estancia_simple .estancia_simple__imagen {
+    height: 4rem;
+    width: 4rem;
+}
+
+.estado_estancias__listado .estancia_simple  .estancia_simple__informacion {
+    width: calc(100% - 6rem);
+}
+
+.estado_entradas .estancia_simple .estancia_simple__estado {
+    width: 2rem;
+}
+
+.estado_entradas .estancia_simple .estancia_simple__informacion > div:nth-child(2n+1) i {
+    font-size: .8rem;
+    margin: 0 0 .4rem;
+}
+
+.estado_entradas .estancia_simple .estancia_simple__informacion > div:nth-child(2n+1) p {
+    font-size: 12px;
+} 
+
+.estado_estancias__listado .estancia_simple .estancia_simple__informacion > div:nth-child(5) p {
+    text-align: center;
+    font-size: 10px;
+}
+
+/* ESTANCIA DE ENTRADAS */
