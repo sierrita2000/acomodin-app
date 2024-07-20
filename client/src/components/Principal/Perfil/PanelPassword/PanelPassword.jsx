@@ -2,11 +2,14 @@ import { useContext, useState } from 'react'
 import './PanelPassword.css'
 import { LoginContext } from '../../../../context/LoginContext'
 import { useNavigate } from 'react-router-dom'
+import Mensaje from '../../../Mensaje/Mensaje'
 
 export default function PanelPassword () {
 
     const [ error, setError ] = useState(false)
     const [ loading, setLoading ] = useState(false)
+
+    const [ mensaje, setMensaje ] = useState(null)
 
     const loginContext = useContext(LoginContext)
 
@@ -52,17 +55,21 @@ export default function PanelPassword () {
                 body: JSON.stringify({ new_password: input_password.value })
             })
             const data = await response.json()
+            
+            setLoading(false)
+
+            const obj_mensaje = new Object()
+            obj_mensaje.accionAceptar = () => { setMensaje(null); navigate('..', { replace: true }) }
 
             if (data.status === 'ok') {
-                setLoading(false)
-                alert(data.message)
-                navigate('..')
+                obj_mensaje.mensaje = data.message
+                obj_mensaje.warning = false
             } else {
-                setLoading(false)
-                alert('No se ha podido actualizar la contraseña. Intentelo más tarde')
-                console.error(data.message)
-                navigate('..')
+                obj_mensaje.mensaje = 'No se ha podido actualizar la contraseña. Intentelo más tarde'
+                obj_mensaje.warning = true
             }
+
+            setMensaje(obj_mensaje)
         }
     }
 
@@ -100,7 +107,10 @@ export default function PanelPassword () {
                             </div>
                         </div>
                     )
-                }
+            }
+            {
+                mensaje && <Mensaje mensaje={mensaje.mensaje} accionAceptar={mensaje.accionAceptar} warning={mensaje.warning} />
+            }
         </div>
     )
 }

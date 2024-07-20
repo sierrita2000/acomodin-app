@@ -489,8 +489,8 @@ export default function Estancia () {
                     !modificar ? (
                         <>
                             <button onClick={eliminarEstancia}>ELIMINAR</button>
-                            { ((estancia.estancia.fecha_inicio === formatearFecha(new Date())) && (dataEstanciaMasReciente?.results.estancia_accion.estado === 'reserva') && (dataEstanciaMasReciente?.results.estancia_accion.estado === estancia.estancia_accion.estado)) && <button onClick={() => { (parcela != '0') ? marcarLlegadaConParcela() : marcarLlegadaSinParcela() }}>MARCAR LLEGADA</button> }
-                            { ((estancia.estancia.fecha_fin === formatearFecha(new Date())) && (dataEstanciaMasReciente?.results.estancia_accion.estado === 'entrada')  && (dataEstanciaMasReciente?.results.estancia_accion.estado === estancia.estancia_accion.estado)) && <button onClick={marcarSalida}>MARCAR SALIDA</button> }
+                            { ((fechaInicio === formatearFecha(new Date())) && (dataEstanciaMasReciente?.results.estancia_accion.estado === 'reserva') && (dataEstanciaMasReciente?.results.estancia_accion.estado === estancia.estancia_accion.estado)) && <button onClick={() => { (parcela != '0') ? marcarLlegadaConParcela() : marcarLlegadaSinParcela() }}>MARCAR LLEGADA</button> }
+                            { ((fechaFin === formatearFecha(new Date())) && (dataEstanciaMasReciente?.results.estancia_accion.estado === 'entrada')  && (dataEstanciaMasReciente?.results.estancia_accion.estado === estancia.estancia_accion.estado)) && <button onClick={marcarSalida}>MARCAR SALIDA</button> }
                             { ((dataEstanciaMasReciente?.results.estancia_accion.estado === estancia.estancia_accion.estado) && (estancia.estancia_accion.estado != 'reserva')) && <button onClick={deshacerLlegadaSalida}>DESHACER {estancia.estancia_accion.estado.toUpperCase()}</button> }
                         </>
                     ) : (

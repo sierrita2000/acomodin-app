@@ -6,7 +6,7 @@ const multer = require('multer')
 const { registrarZonas, devolverZonas, actualizarZonas } = require('../controllers/zona.controller')
 const { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping, actualizarAcomodadoresCamping, devolverCampingDeAcomodador } = require('../controllers/acomodador.controller')
 const { devolverParceaPorId, devolverParcelasPorZona, devolverParcelasPorCamping, devolverParcelasLibresEntreFechasConConceptos, devolverParcelasOcupadasCampingEnFecha, devolverZonasYParcelasConFiltros } = require('../controllers/parcela.controller')
-const { crearEstancia, devolverEstanciaPorId, devolverEstanciaActualYReservasFuturasDeParcela, devolverEstadoParcelaDia, devolverEstanciasPorEstadoYFecha, devolverEstanciasPorFiltros, devolverEntradasHoySinSalir, devolverReservasHoySinLlegar, eliminarEstancia, editarEstancia } = require('../controllers/estancia.controller')
+const { crearEstancia, devolverEstanciaPorId, devolverEstanciaActualYReservasFuturasDeParcela, devolverEstadoParcelaDia, devolverEstanciasPorEstadoYFecha, devolverEstanciasPorFiltros, devolverEntradasHoySinSalir, devolverReservasHoySinLlegar, eliminarEstancia, editarEstancia, devolverEstanciasConAccionPendiente } = require('../controllers/estancia.controller')
 const { devolverEstanciaPorIdAccion, crearLlegadaSalidaReserva, deshacerLegadaOSalida } = require('../controllers/estancia-accion.controller')
 
 const storage = multer.diskStorage({
@@ -73,6 +73,7 @@ router.get("/estancia/id_parcela/:id_parcela/fecha/:fecha", devolverEstadoParcel
 router.get("/estancias/id_camping/:id_camping/filtros/fecha/:fecha/estado/:estado", devolverEstanciasPorEstadoYFecha)
 router.get("/estancias/devolver-reservas-hoy-sin-llegar/id_camping/:id_camping", devolverReservasHoySinLlegar)
 router.get("/estancias/devolver-entradas-hoy-sin-salir/id_camping/:id_camping", devolverEntradasHoySinSalir)
+router.get("/estancias/pendientes/id_camping/:id_camping", devolverEstanciasConAccionPendiente)
 
 router.post("/estancias/crear-estancia", crearEstancia)
 router.post("/estancias/devolver-estancias-filtros/id_camping/:id_camping", devolverEstanciasPorFiltros)

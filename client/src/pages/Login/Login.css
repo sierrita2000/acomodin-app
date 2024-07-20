@@ -4,6 +4,10 @@
     display: flex;
 }
 
+.login .mensaje .boton_cancelar {
+    display: none;
+}
+
 /* LOGIN IZQUIERDA */
 
 .login__izq {

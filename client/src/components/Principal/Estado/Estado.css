@@ -85,7 +85,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 4rem 2rem 0;
+    padding: 3rem 2rem 0;
 }
 
 .estado__parcelas__caja {
@@ -127,6 +127,14 @@
     align-items: center;
 }
 
+.estado__parcelas__caja__campo p {
+    font-family: var(--Crimson);
+    font-size: 14px;
+    text-align: center;
+    color: var(--negro);
+    margin: 0 0 .4rem;
+}
+
 .estado__parcelas__caja__campo h4 {
     width: 100%;
     display: flex;
@@ -142,7 +150,7 @@
 }
 
 .estado__parcelas__caja__campo .estado__parcelas__caja__campo__cantidad {
-    height: 3rem;
+    height: 2.5rem;
     width: 4.5rem;
     display: flex;
     justify-content: center;
@@ -316,6 +324,7 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    margin: 1.5rem 0 0;
 }
 
 .estado_entradas {

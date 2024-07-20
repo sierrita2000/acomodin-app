@@ -1,10 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './Inicio.css'
 import { Link, useNavigate } from 'react-router-dom'
 
 export default function Inicio () {
 
-    const [ proceso, setProceso ] = useState('importante')
+    const [ proceso, setProceso ] = useState('calendario')
     
     const navigate = useNavigate()
 
@@ -57,10 +57,10 @@ export default function Inicio () {
                     <h4>REGISTRA TU CAMPING</h4>
                     <div className="paso__contenido">
                         <div className="paso__contenido__video">
-                            <div></div>
+                            <Slider key={'paso__contenido__video__registro'} lista_imagenes={['pantalla-registro-datos.png', 'pantalla-registro-parcelas.png', 'pantalla-registro-zonas.png']} />
                         </div>
                         <div className="paso__contenido__texto">
-                            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque assumenda laboriosam soluta libero ab veniam mollitia doloribus veritatis, sequi odio repellendus eaque ea accusantium molestias, quo asperiores at, temporibus esse nihil nostrum consequuntur ut aspernatur! Sint ullam et maiores earum laborum eum quas, quis aliquam? Commodi repellendus impedit quis aspernatur.</p>
+                            <p>Para comenzar a utilizar los servicios que ofrece Acomodin, lo primero de todo será crear una cuenta para tu camping, donde especificarás todas las características del mismo, desde el nombre, correo, descripción de las parcelas y zonas que conforman el camping, métodos de acamapada aceptables... El administrador del camping podrá acceder a la web a través del correo y contraseña que especifique el la primera pantalla de registro.</p>
                         </div>
                     </div>
                 </section>
@@ -69,10 +69,12 @@ export default function Inicio () {
                     <h4>CREA LAS CUENTAS DE LOS ACOMODADORES</h4>
                     <div className="paso__contenido">
                         <div className="paso__contenido__texto">
-                            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque assumenda laboriosam soluta libero ab veniam mollitia doloribus veritatis, sequi odio repellendus eaque ea accusantium molestias, quo asperiores at, temporibus esse nihil nostrum consequuntur ut aspernatur! Sint ullam et maiores earum laborum eum quas, quis aliquam? Commodi repellendus impedit quis aspernatur.</p>
+                            <p>El administrador del camping, en la última pantalla del registro podrá crear las cuentas de acomodadores que desee. Deberá introducir el nombre del acomodador y un correo, al cual le llegará su usuario de acceso y contraseña inicial. Ambas cosas podrá cambiarlas desde su perfil en cualquier momento.</p>
                         </div>
                         <div className="paso__contenido__video">
-                            <div></div>
+                            <div>
+                                <Slider key={'paso__contenido__video__acomodadores'} lista_imagenes={['pantalla-registro-acomodadores.png', 'pantalla-registro-finalizar.png']} />
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -81,10 +83,12 @@ export default function Inicio () {
                     <h4>INICIA SESIÓN COMO ACOMODADOR</h4>
                     <div className="paso__contenido">
                         <div className="paso__contenido__video">
-                            <div></div>
+                            <div>
+                                <img src="../../../pantalla-login.png" />
+                            </div>
                         </div>
                         <div className="paso__contenido__texto">
-                            <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Neque assumenda laboriosam soluta libero ab veniam mollitia doloribus veritatis, sequi odio repellendus eaque ea accusantium molestias, quo asperiores at, temporibus esse nihil nostrum consequuntur ut aspernatur! Sint ullam et maiores earum laborum eum quas, quis aliquam? Commodi repellendus impedit quis aspernatur.</p>
+                            <p>Por último tanto los acomodadores del camping, como su administrador podrán iniciar sesión identificandose con su usario y contraseña, para poder acceder a todas las funcionalidades que ofrece la web.</p>
                         </div>
                     </div>
                 </section>
@@ -96,20 +100,20 @@ export default function Inicio () {
                             <h6 className={`titulo ${proceso === 'calendario' && 'titulo_activado'}`}>CALENDARIO</h6>
                         </div>
                         <div className="procesos__botones__boton boton2">
+                            <div title='estado' className={ `boton ${proceso === 'estado' && 'boton_activado'}` } ><i className={`fa-solid fa-chart-pie ${proceso === 'estado' && 'icono_activado'}`} title='estado'></i></div>
+                            <h6 className={`titulo ${proceso === 'estado' && 'titulo_activado'}`}>ESTADO</h6>
+                        </div>
+                        <div className="procesos__botones__boton boton3">
                             <div title='parcelas' className={ `boton ${proceso === 'parcelas' && 'boton_activado'}` } ><i className={`fa-solid fa-campground ${proceso === 'parcelas' && 'icono_activado'}`} title='parcelas'></i></div>
                             <h6 className={`titulo ${proceso === 'parcelas' && 'titulo_activado'}`}>PARCELAS</h6>
                         </div>
-                        <div className="procesos__botones__boton boton3">
+                        <div className="procesos__botones__boton boton4">
                             <div title='actividad' className={ `boton ${proceso === 'actividad' && 'boton_activado'}` } ><i className={`fa-solid fa-bookmark ${proceso === 'actividad' && 'icono_activado'}`} title='actividad'></i></div>
                             <h6 className={`titulo ${proceso === 'actividad' && 'titulo_activado'}`}>REGISTRO DE ACTIVIDAD</h6>
                         </div>
-                        <div className="procesos__botones__boton boton4">
-                            <div title='entradas' className={ `boton ${proceso === 'entradas' && 'boton_activado'}` } ><i className={`fa-solid fa-caravan ${proceso === 'entradas' && 'icono_activado'}`} title='entradas'></i></div>
-                            <h6 className={`titulo ${proceso === 'entradas' && 'titulo_activado'}`}>ENTRADAS</h6>
-                        </div>
                         <div className="procesos__botones__boton boton5">
-                            <div title='salidas' className={ `boton ${proceso === 'salidas' && 'boton_activado'}` } ><i className={`fa-solid fa-signs-post ${proceso === 'salidas' && 'icono_activado'}`} title='salidas'></i></div>
-                            <h6 className={`titulo ${proceso === 'salidas' && 'titulo_activado'}`}>SALIDAS</h6>
+                            <div title='entradas' className={ `boton ${proceso === 'entradas' && 'boton_activado'}` } ><i className={`fa-solid fa-signs-post ${proceso === 'entradas' && 'icono_activado'}`} title='entradas'></i></div>
+                            <h6 className={`titulo ${proceso === 'entradas' && 'titulo_activado'}`}>ENTRADAS Y SALIDAS</h6>
                         </div>
                         <div className="procesos__botones__boton boton6">
                             <div title='perfil' className={ `boton ${proceso === 'perfil' && 'boton_activado'}` } ><i className={`fa-solid fa-user ${proceso === 'perfil' && 'icono_activado'}`} title='perfil'></i></div>
@@ -117,8 +121,15 @@ export default function Inicio () {
                         </div>
                     </div>
                     <div className="procesos__video">
-                        <div>{ proceso.toUpperCase() }</div>
-                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere voluptate incidunt molestias beatae ducimus distinctio odit eligendi recusandae a qui ad, dolorem expedita numquam illo alias hic. Eaque molestias quis consequatur dolorum illo esse iste, rem quibusdam amet? Neque itaque ab eos? Quis accusantium perferendis libero eveniet voluptate, totam consectetur.</p>
+                        <div>
+                            <img src={`../../../pantalla-${proceso}.png`} />
+                        </div>
+                        { (proceso === 'calendario') && <p>Podrás visualizar en un calendario el estado de tus parcelas entre un máximo de 31 días cualesquiera. Además, podrás filtrar que tipo de parcelas quieres visualizar.</p> }
+                        { (proceso === 'estado') && <p>Podrás controlar la situación de tu camping cualquier día. En esta sección podrás filtrar la fecha que quieras para ver el hueco libre, las reservas, entradas y salidas de ese mismo día.</p> }
+                        { (proceso === 'parcelas') && <p>Podrás visualizar la información de todas las parcelas de tu camping, desde sus características como el tamaño, tipos de acomodación, etc hasta las reservas futuras de esa parcela.</p> }
+                        { (proceso === 'actividad') && <p>Podrás estar al día sobre la actividad de todos los empleados del camping, ya que desde esta sección podrás visualizar todas las reservas, entradas y salidas que han registrado los usuarios en un día en concreto.</p> }
+                        { (proceso === 'entradas') && <p>Ya que lo más importante es el trabajo diario, desde estas secciones podrás acceder rápidamente a las entradas, reservas y salidas que tienes pendientes en el día actual.</p> }
+                        { (proceso === 'perfil') && <p>Todos los usuarios podrán acceder a través del icono que se encunetra en la parte superior derecha de la pantalla a su perfil, donde podrán modificar todos sus datos.</p> }
                     </div>
                 </section>
             </section>
@@ -148,5 +159,52 @@ export default function Inicio () {
                 </div>
             </section>
         </section>
+    )
+}
+
+function Slider ({ lista_imagenes }) {
+
+    const [ imagen, setImagen ] = useState(0)
+
+    const slider = useRef(null)
+    const intervaloID = useRef(null)
+
+    const startInterval = () => {
+        intervaloID.current = setInterval(() => {
+            setImagen((imagen === (lista_imagenes.length - 1)) ? 0 : (imagen + 1));
+        }, 5000);
+    };
+
+    const stopInterval = () => {
+        clearInterval(intervaloID.current);
+    };
+
+    useEffect(() => {
+        if(intervaloID.current) stopInterval()
+        startInterval()
+
+        const slider__imagenes = slider.current.querySelector('.slider__imagenes')
+        const ancho_slider = slider.current.clientWidth
+
+        slider__imagenes.style.transform = `translateX(-${ancho_slider * imagen}px)`
+    }, [imagen])
+
+    return(
+        <div ref={slider} className="slider">
+            <div className="slider__imagenes">
+                {
+                    lista_imagenes.map((imagen, indice) => {
+                        return <div key={`imagen${indice}`} className={`imagen${indice}`}><img src={`../../../${imagen}`} /></div>
+                    })
+                }
+            </div>
+            <div className="slider__botones">
+                {
+                    lista_imagenes.map(( x, indice) => {
+                        return <div key={`boton_imagen_${indice}`} className={`slider__botones__boton ${(imagen === indice) && 'boton_slider_seleccionado'}`} onClick={() => setImagen(indice)} ></div>
+                    })
+                }
+            </div>
+        </div>
     )
 }

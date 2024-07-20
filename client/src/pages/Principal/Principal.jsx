@@ -86,6 +86,7 @@ export default function Principal () {
                                     </div>
                                 </div>
                                 { loginContext[0][1] === 1 && <NavLink to='/principal/mi-camping' className='principal__cabecera__nav_boton'>MI CAMPING</NavLink> }
+                                <NavLink to='/principal/pendiente' className='principal__cabecera__nav_boton boton_pendiente'>PENDIENTE</NavLink>
                             </nav>
                             <div className="principal__cabecera__perfil">
                                 <div className="principal__cabecera__perfil__circulo principal__cabecera__perfil__circulo__accionador-hover" onClick={e => desplegarPanelPerfil(e)}>

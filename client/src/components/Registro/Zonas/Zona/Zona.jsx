@@ -22,7 +22,7 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
         }
     }))
 
-    const [ borrar, setBorrar ] = useState(false)
+    const [ mensaje, setMensaje ] = useState(null)
 
     const refParcelas = useRef(null)
 
@@ -53,7 +53,7 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
         zonas_copia.splice(posicion, 1)    
 
         setZonas(zonas_copia)
-        setBorrar(false)
+        setMensaje(null)
         handleGuardarCambios()
     }
 
@@ -78,12 +78,12 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
         elemento.value = 0
 
         if (cantidad_parcelas > 0) {
-            let id_parcela = parcelasZona.length > 0 ? parcelasZona[parcelasZona.length - 1].id + 1 : 0
+            let id_parcela = parcelasZona.length + 1
 
             while (cantidad_parcelas != 0) {
                 const obj_parcela = {
                     id: id_parcela,
-                    nombre: `${nombreZona}-${id_parcela+1}`,
+                    nombre: `${nombreZona}-${id_parcela}`,
                     tamano: 'pequeña',
                     tipos: tiposZona,
                     electricidad: luzCamping ? true : false,
@@ -138,12 +138,12 @@ export default function Zona ({ guardar, id, nombre, tipos, parcelas, tiposCampi
                         <div>{parcelas.length}</div>
                     </div>
                     <div className='zona__info__boton__borrar'>
-                        <button onClick={() => setBorrar(true)}><i className="fa-solid fa-trash"></i></button>
+                        <button onClick={() => setMensaje({ mensaje: (zonas.length === 1) ? 'Debe haber un mínimo de una zona' : `¿Seguro que quieres eliminar la zona "${nombreZona}" ?`, accionCancelar: () => setMensaje(null), accionAceptar: (zonas.length === 1) ? () => setMensaje(null) : borrarZona, warning: (zonas.length === 1) ? true : false })}><i className="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             </div>
 
-            { borrar && <Mensaje mensaje={`¿Seguro que quieres eliminar la zona "${nombreZona}" ?`} accionCancelar={() => setBorrar(false)} accionAceptar={borrarZona} /> }
+            { mensaje && <Mensaje mensaje={mensaje.mensaje} accionCancelar={mensaje.accionCancelar} accionAceptar={mensaje.accionAceptar} warning={mensaje.warning} /> }
             
             <div ref={refParcelas} className="zona__parcelas">
                 <div className="zona__parcelas__parcelas">

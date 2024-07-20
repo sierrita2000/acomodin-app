@@ -12,7 +12,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, electrici
     const [ electricidadParcela, setElectricidadParcela ] = useState(electricidad)
     const [ caracteristicasParcela, setCaracteristicasParcela ] = useState(caracteristicas)
 
-    const [ borrar, setBorrar ] = useState(false)
+    const [ mensaje, setMensaje ] = useState(null)
 
     const refParcela = useRef(null)
 
@@ -25,7 +25,7 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, electrici
         const copia_parcelasZona = parcelasZona.slice(0, posicion).concat(parcelasZona.slice(posicion+1))
 
         setParcelasZona(copia_parcelasZona)
-        setBorrar(false)
+        setMensaje(null)
     }
 
     const guardarCambios = () => {
@@ -105,8 +105,8 @@ export default function Parcela ({ guardar, id, nombre, tamano, tipos, electrici
                 <button onClick={() => luzCamping && setElectricidadParcela(!electricidadParcela)}><img src={`${import.meta.env.VITE_API_HOST}static/figura-luz.png`} alt="FIGURA-LUZ" className={ electricidadParcela && 'luz__activada' } /></button>
             </div>
             <div className="parcela__boton__eliminar">
-                <button onClick={() => setBorrar(true)}><i className="fa-solid fa-trash"></i></button>
-                { borrar && <Mensaje mensaje={`¿Seguro que quieres eliminar la parcela "${nombreParcela}" ?`} accionCancelar={() => setBorrar(false)} accionAceptar={borrarParcela} /> }
+                <button onClick={() => setMensaje({ mensaje: (parcelasZona.length === 1) ? 'Debe haber mínimo 1 parcela por zona' : `¿Seguro que quieres eliminar la parcela "${nombreParcela}" ?`, accionCancelar: () => setMensaje(null), accionAceptar: (parcelasZona.length === 1) ? () => setMensaje(null) : borrarParcela, warning: (parcelasZona.length === 1) ? true: false })}><i className="fa-solid fa-trash"></i></button>
+                { mensaje && <Mensaje mensaje={mensaje.mensaje} accionCancelar={mensaje.accionCancelar} accionAceptar={mensaje.accionAceptar} warning={mensaje.warning} /> }
             </div>
         </div>
     )

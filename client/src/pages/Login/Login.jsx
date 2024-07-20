@@ -2,10 +2,13 @@ import { useContext, useState } from 'react'
 import './Login.css'
 import { useNavigate } from 'react-router-dom'
 import { LoginContext } from '../../context/LoginContext'
+import Mensaje from '../../components/Mensaje/Mensaje'
 
 export default function Login() {
 
     const [ tipoUsuario, setTiposUsuario ] = useState(0) // 0 --> acomodador, 1 --> camping
+
+    const [ errorLogin, setErrorLogin ] = useState(null)
 
     const navigate = useNavigate()
 
@@ -45,7 +48,7 @@ export default function Login() {
             sessionStorage.setItem("usuario", [data.results._id, tipoUsuario].toString())
             navigate('/principal/entradas/reservas-sin-llegar')
         } else {
-            alert(data.message)
+            setErrorLogin(data.message)
         }
     }
 
@@ -83,6 +86,7 @@ export default function Login() {
                     <img src="../../camper-artistica.png" alt="CAMPER-ARTISTICA" />
                 </div>
             </section>
+            { errorLogin && <Mensaje mensaje={errorLogin} accionAceptar={() => { setErrorLogin(null) }} warning={true} /> }
         </section>
     )
 }

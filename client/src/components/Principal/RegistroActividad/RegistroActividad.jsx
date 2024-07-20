@@ -42,8 +42,8 @@ export default function RegistroActividad () {
     }
 
     useEffect(() => {
-        aplicarFiltros()
-    }, [location])
+        dataUsuario?.results && aplicarFiltros()
+    }, [location, dataUsuario])
 
     return(
         <div className="registro_actividad">

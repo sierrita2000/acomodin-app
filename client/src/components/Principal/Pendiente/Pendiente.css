@@ -1,0 +1,39 @@
+.pendiente {
+    height: calc(100vh - 6.5rem);
+    width: 100%;
+    display: flex;
+}
+
+.pendiente > section {
+    height: 100%;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 1rem;
+}
+
+.pendiente > section > h2 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    font-family: var(--Montserrat);
+    font-size: 18px;
+    font-weight: bolder;
+    color: whitesmoke;
+    background-color: var(--azulOscuro);
+    padding: .4rem 0;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
+    margin: 0 0 1rem;
+}
+
+.pendiente > section > div {
+    height: inherit;
+    width: 100%;
+    border: 1px solid var(--negro);
+    border-radius: 2px;
+    overflow-y: scroll;
+    scrollbar-width: thin;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 15px 25px -16px inset, rgba(0, 0, 0, 0.3) 0px 15px 20px -18px inset;
+}

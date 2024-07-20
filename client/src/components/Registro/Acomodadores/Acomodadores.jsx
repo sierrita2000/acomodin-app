@@ -111,7 +111,7 @@ function Acomodador ({ indice, id, correo, nombre, acomodadores, setAcomodadores
         acomodadores_copia.splice(posicion, 1)
 
         setAcomodadores(acomodadores_copia)
-        setBorrar(false)
+        setBorrar(null)
     }
 
     useEffect(() => {
@@ -137,9 +137,9 @@ function Acomodador ({ indice, id, correo, nombre, acomodadores, setAcomodadores
                     <label htmlFor="acomodador_nombre">nombre:</label>
                     <input className={`nombre acomodador__info__info__input ${((errorPaso || error) && nombreAcomodador === "") && 'input__error'}`} type="text" name="acomodador_nombre" id="acomodador_nombre" value={nombreAcomodador} onChange={e => setNombreAcomodador(e.target.value)} />
                 </div>
-                <button onClick={() => setBorrar(true)}><i className="fa-solid fa-trash"></i></button>
-                { borrar && <Mensaje mensaje={`¿Seguro que quieres eliminar el ACOMODADOR ${indice} ?`} accionCancelar={() => setBorrar(false)} accionAceptar={borrarAcomodador} /> }
+                <button onClick={() => setBorrar({ mensaje: (acomodadores.length === 1) ? 'Debe haber mínimo 1 acomodador' : `¿Seguro que quieres eliminar el ACOMODADOR ${indice} ?`, accionCancelar: () => setBorrar(null), accionAceptar: (acomodadores.length === 1) ? () => setBorrar(null) : borrarAcomodador, warning: (acomodadores.length === 1) ? true : false })}><i className="fa-solid fa-trash"></i></button>
+                { borrar && <Mensaje mensaje={borrar.mensaje} accionCancelar={borrar.accionCancelar} accionAceptar={borrar.accionAceptar} warning={borrar.warning} /> }
             </div>
         </div>
-    )
+    ) 
 }

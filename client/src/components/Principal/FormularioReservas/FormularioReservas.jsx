@@ -37,9 +37,10 @@ export default function FormularioReservas ({ reserva, selectVisible }) {
 
     const [ dataParcela, setDataParcela ] = useState(null)
 
+    const [ dataParcelaCamping, setDataParcelaCamping ] = useState(null)
+
     let [ dataConceptos ] = useFetch(`${import.meta.env.VITE_API_HOST}conceptos/devolver-conceptos`)
     let [ dataCamping ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? `acomodador/${loginContext[0][0]}/devolver-camping` : `camping/id/${loginContext[0][0]}`}`)
-    let [ dataParcelaCamping ] = useFetch(`${import.meta.env.VITE_API_HOST}parcelas/devolver-parcelas/id_camping/${loginContext[0][1] === 0 ? dataUsuario?.results.id_camping : loginContext[0][0]}`)
 
     /**
      * Handler del botón de añadir preferencia
@@ -147,9 +148,9 @@ export default function FormularioReservas ({ reserva, selectVisible }) {
         if(data) { 
             setLoadingReserva(false)
             if(data.status === 'ok') {
-                setMensaje({ mensaje: data.message, accionAceptar: () => { navigate(-1, {replace: true, state: { actualizacion: true }}) } }) 
+                setMensaje({ mensaje: data.message, accionAceptar: () => { navigate(-1, {replace: true, state: { actualizacion: true }}) }, warning: false }) 
             } else {
-                setMensaje({ mensaje: data.message, accionAceptar: () => { setMensaje('') } }) 
+                setMensaje({ mensaje: data.message, accionAceptar: () => { setMensaje('') }, warning: true }) 
             }
         }
     }
@@ -186,6 +187,15 @@ export default function FormularioReservas ({ reserva, selectVisible }) {
             input_fecha_inicio.setAttribute('disabled', true)
         }
     }, [])
+
+    useEffect(() => {
+        if(dataCamping) {
+            fetch(`${import.meta.env.VITE_API_HOST}parcelas/devolver-parcelas/id_camping/${loginContext[0][1] === 0 ? dataCamping?.results._id : loginContext[0][0]}`)
+                .then(response => response.json())
+                .then(data => setDataParcelaCamping(data))
+                .catch(() => setDataParcelaCamping(null))
+        }
+    }, [dataCamping])
 
     return(
         <div className="formulario_reservas">
@@ -313,7 +323,7 @@ export default function FormularioReservas ({ reserva, selectVisible }) {
                 </form>
             </div>
             {
-                mensaje && <Mensaje mensaje={mensaje.mensaje} accionAceptar={mensaje.accionAceptar} />
+                mensaje && <Mensaje mensaje={mensaje.mensaje} accionAceptar={mensaje.accionAceptar} warning={mensaje.warning} />
             }
         </div>
     )

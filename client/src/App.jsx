@@ -21,6 +21,7 @@ import Entradas, { EntradasRealizadas, ReservasSinLlegar } from './components/Pr
 import Salidas, { SalidasRealizadas, SalidasSinRealizar } from './components/Principal/Hoy/Salidas/Salidas'
 import Estado from './components/Principal/Estado/Estado'
 import CalendarioReservas from './components/Principal/CalendarioReservas/CalendarioReservas'
+import Pendiente from './components/Principal/Pendiente/Pendiente'
 
 const router = createBrowserRouter([
   {
@@ -180,6 +181,10 @@ const router = createBrowserRouter([
       {
         path: '/principal/mi-camping',
         element: <MiCamping />
+      },
+      {
+        path: '/principal/pendiente',
+        element: <Pendiente />
       }
     ]
   }

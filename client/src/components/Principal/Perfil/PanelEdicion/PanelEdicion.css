@@ -11,6 +11,10 @@
     z-index: 2;
 }
 
+.panel_edicion .mensaje .boton_cancelar {
+  display: none;
+}
+
 /* MODAL */
 
 .panel_edicion__modal {
@@ -58,7 +62,7 @@
     width: 10rem;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     border-radius: 50%;
     border: 2px solid var(--negro);
     background-color: var(--azulClaro);
@@ -74,13 +78,14 @@
 }
 
 .panel_edicion__modal__imagen img {
-    height: 100%;
+  height: 100%;
     width: 100%;
+    object-fit: cover;
 }
 
 .panel_edicion__modal__imagen i {
     position: relative;
-    top: 1rem;
+    top: 1.5rem;
     font-size: 140px;
 }
 

@@ -3,6 +3,7 @@ const { Acomodador } = require('../models/Acomodador')
 const bcrypt = require('bcrypt')
 const { transporter } = require('../email/transporter')
 const { Camping } = require('../models/Camping')
+const { DuplicatedError } = require('../errors/errors')
 require('dotenv/config')
 
 /**
@@ -18,7 +19,21 @@ const registrarAcomodadores = (req, res, next) => {
         const results_acomodadores = new Array()
 
         acomodadores.forEach(async acomodador => {
-            const usuario_acomodador = `${acomodador.nombre}_${nombre_camping.replaceAll(' ', '_')}`
+            let usuario_acomodador = `${acomodador.nombre}_${nombre_camping.replaceAll(' ', '_')}`.toLowerCase()
+            let existe = false
+
+            do {
+                comprobarExistenciaNombreUsuario(usuario_acomodador)
+                    .then(existe_nombre_usuario => {
+                        if(existe_nombre_usuario) {
+                            usuario_acomodador += Math.floor(Math.random() * (9 - 1 + 1)) + 1
+                            existe = true
+                        } else {
+                            existe = false
+                        }
+                    })
+            } while(existe)
+            
             const password_acomodador = crearPasswordAleatorio()
 
             bcrypt.hash(password_acomodador, 10)
@@ -170,12 +185,19 @@ const actualizarDatosAcomodador = async (req, res, next) => {
         const objUpdate = { ...datosAcomodador }
         if (imagen) objUpdate.imagen = imagen
 
-        await Acomodador.findByIdAndUpdate(id, objUpdate, { returnDocument: 'after' }).exec()
-            .then(results => {
-                res.status(200).send(new ResponseAPI('ok', `Acomodador con id ${id} actualizado correctamente`, results))
-            })
-            .catch(error => {
-                throw new Error(error)
+        comprobarExistenciaNombreUsuario(objUpdate.usuario, id)
+            .then(async existe_nombre_usuario => {
+                if(!existe_nombre_usuario) {
+                    await Acomodador.findByIdAndUpdate(id, objUpdate, { returnDocument: 'after' }).exec()
+                        .then(results => {
+                            res.status(200).send(new ResponseAPI('ok', `Acomodador con id ${id} actualizado correctamente`, results))
+                        })
+                        .catch(error => {
+                            throw new Error(error)
+                        })
+                } else {
+                    next(new DuplicatedError('usuario', `El nombre del usuario ya existe. Escoge otro.`))
+                }
             })
 
     } catch (error) {
@@ -227,6 +249,8 @@ const actualizarAcomodadoresCamping = async (req, res, next) => {
 
         let resultado = true
 
+        const camping = await Camping.findById(id_camping).exec()
+
         await Acomodador.find({ id_camping }).exec()
             .then(results_acomodadores => {
                 const lista_id_acomodadores_bbdd = results_acomodadores.map(acomodador => acomodador._id.toString())
@@ -235,7 +259,6 @@ const actualizarAcomodadoresCamping = async (req, res, next) => {
                 const acomodadores_nuevos = acomodadores.filter(acomodador => !lista_id_acomodadores_bbdd.includes(acomodador.id))
                 const acomodadores_modificados = acomodadores.filter(acomodador => lista_id_acomodadores_bbdd.includes(acomodador.id))
 
-                console.log(acomodadores_eliminados, acomodadores_nuevos, acomodadores_modificados)
                 // Eliminado acomodadores
                 if (acomodadores_eliminados.length > 0) {
                     acomodadores_eliminados.forEach(async id_acomodador => {
@@ -247,8 +270,22 @@ const actualizarAcomodadoresCamping = async (req, res, next) => {
                 // Creando nuevos acomodadores
                 if (acomodadores_nuevos.length > 0) {
                     acomodadores_nuevos.forEach(async acomodador => {
-                        const usuario_acomodador = `${acomodador.nombre}_${Math.floor(Math.random() * 100)}`
+                        let usuario_acomodador = `${acomodador.nombre}_${camping.nombre.replaceAll(' ', '_')}`.toLowerCase()
+                        let existe = false
+
+                        do {
+                            comprobarExistenciaNombreUsuario(usuario_acomodador)
+                                .then(existe_nombre_usuario => {
+                                    if(existe_nombre_usuario) {
+                                        usuario_acomodador += Math.floor(Math.random() * (9 - 1 + 1)) + 1
+                                        existe = true
+                                    } else {
+                                        existe = false
+                                    }
+                                })
+                        } while(existe)
                         const password_acomodador = crearPasswordAleatorio()
+
                         console.log(usuario_acomodador, password_acomodador)
 
                         bcrypt.hash(password_acomodador, 10)
@@ -273,7 +310,22 @@ const actualizarAcomodadoresCamping = async (req, res, next) => {
                 // Modificando los datos de los acomodadores ya existentes
                 if (acomodadores_modificados.length > 0) {
                     acomodadores_modificados.forEach(async acomodador => {
-                        await Acomodador.findByIdAndUpdate(acomodador.id, { nombre: acomodador.nombre, correo: acomodador.correo }, {returnDocument: 'after'}).exec()
+                        let usuario_acomodador = acomodador.nombre
+                        let existe = false
+
+                        do {
+                            comprobarExistenciaNombreUsuario(usuario_acomodador, acomodador.id)
+                                .then(existe_nombre_usuario => {
+                                    if(existe_nombre_usuario) {
+                                        usuario_acomodador += Math.floor(Math.random() * (9 - 1 + 1)) + 1
+                                        existe = true
+                                    } else {
+                                        existe = false
+                                    }
+                                })
+                        } while(existe)
+
+                        await Acomodador.findByIdAndUpdate(acomodador.id, { nombre: usuario_acomodador, correo: acomodador.correo }, {returnDocument: 'after'}).exec()
                             .catch(e => { resultado = false; throw new Error(e) })
                     })
                 }
@@ -288,6 +340,16 @@ const actualizarAcomodadoresCamping = async (req, res, next) => {
 }
 
 module.exports = { registrarAcomodadores, devolverAcomodador, devolverAcomodadorPorID, actualizarDatosAcomodador, actualizarPasswordAcomodador, devolverAcomodadoresCamping, actualizarAcomodadoresCamping, devolverCampingDeAcomodador }
+
+/**
+ * Comprueba si existe ese nombre de usuario
+ * @param {String} usuario 
+ * @returns boolean
+ */
+const comprobarExistenciaNombreUsuario = async (usuario, id = null) => {
+    const acomodador = await Acomodador.find({ usuario: usuario, _id: { $ne: id } }).exec()
+    return (acomodador.length > 0) ? true : false
+}
 
 /**
  * Genera una contraseña de 12 caracteres aleatoria.

@@ -3,6 +3,7 @@ import './PanelEdicion.css'
 import { useContext, useEffect, useState } from 'react'
 import { LoginContext } from '../../../../context/LoginContext'
 import { useNavigate, useOutletContext } from 'react-router-dom'
+import Mensaje from '../../../Mensaje/Mensaje'
 
 export default function PanelEdicion () {
 
@@ -20,6 +21,7 @@ export default function PanelEdicion () {
 
     const [ guardando, setGuardando ] = useState(false)
 
+    const [ mensaje, setMensaje ] = useState(null)
 
     const [ data ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodador': 'camping'}/id/${loginContext[0][0]}`)
 
@@ -53,7 +55,6 @@ export default function PanelEdicion () {
             objDatos.telefono = telefono
         }
 
-        console.log(objDatos)
         const formData = new FormData()
         formData.append('datos', JSON.stringify(objDatos))
         if ((typeof imagen != 'string') && imagen) {
@@ -67,12 +68,13 @@ export default function PanelEdicion () {
         const data = await response.json()
 
         if (data.status === 'ok') {
-            alert('usuario actualizado correctamente')
             setGuardando(false)
             setActualizacion(!actualizacion)
-            navigate('..')
+            navigate('..', { replace: true })
         } else {
-            alert(data.message)
+            setGuardando(false)
+            setNombre(data?.results.nombre || null)
+            setMensaje(data.message)
         }
     }
 
@@ -83,7 +85,7 @@ export default function PanelEdicion () {
     return(
         <div className="panel_edicion">
             <div className="panel_edicion__modal">
-                <button onClick={() => navigate('..')} className="panel_edicion__modal__cerrar_btn"><i className="fa-solid fa-xmark"></i></button>
+                <button onClick={() => navigate('..', { replace: true })} className="panel_edicion__modal__cerrar_btn"><i className="fa-solid fa-xmark"></i></button>
                 <form>
                     <div>
                         <label htmlFor="panel_imagen">
@@ -150,6 +152,9 @@ export default function PanelEdicion () {
                     )
                 }
             </div>
+            {
+                mensaje && <Mensaje mensaje={mensaje} accionAceptar={() => setMensaje(null)} warning={true} />
+            }
         </div>
     )
 }

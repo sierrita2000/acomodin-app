@@ -155,8 +155,6 @@ export default function Estado () {
             let salidas_sin_registrar = new Array()
             let salidas_registradas = new Array()
 
-            console.log(dataSalidasTotal, dataSalidasRegistradas)
-
             dataSalidasTotal.results.forEach(estancia => {
                 const salida = dataSalidasRegistradas.results.find(salida => salida.estancia._id === estancia.estancia._id)
                 if(salida) {
@@ -218,6 +216,7 @@ export default function Estado () {
                         </div>
                         <div className="estado__parcelas__caja__campo">
                             <h4>PARCELAS OCUPADAS</h4>
+                            <p>*Previsón de parcelas ocupadas (reservas anteriores que ocupen esta fecha, reservas de hoy y las entradas sin reserva de hoy)</p>
                             <div className="estado__parcelas__caja__campo__cantidad">
                                 {parcelasOcupadas}
                             </div>

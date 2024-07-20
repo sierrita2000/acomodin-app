@@ -245,11 +245,11 @@ const devolverEstanciasPorFiltros = async (req, res, next) => {
                             const new_results = results.flat()
                             new_results.length > 0 
                                 ? res.status(200).send(new ResponseAPI('ok', `Estancias filtradas`, new_results))
-                                : res.status(404).send(new ResponseAPI('not-found', `No existen estancias para los filtros`, []))
+                                : res.status(200).send(new ResponseAPI('not-found', `No existen estancias para los filtros`, []))
                         })
                         .catch(err => { throw new Error(err) })
                 } else {
-                    res.status(404).send(new ResponseAPI('not-found', `No existen estancias para el camping con id ${id_camping}`, []))
+                    res.status(200).send(new ResponseAPI('not-found', `No existen estancias para el camping con id ${id_camping}`, []))
                 }
             })
             .catch(error => { throw new Error(error) })
@@ -406,7 +406,40 @@ const editarEstancia = async (req, res, next) => {
     }
 }
 
-module.exports = { devolverEstanciaActualYReservasFuturasDeParcela, crearEstancia, devolverEstanciaPorId, devolverEstadoParcelaDia, devolverEstanciasPorEstadoYFecha, devolverEstanciasPorFiltros, devolverReservasHoySinLlegar, devolverEntradasHoySinSalir, eliminarEstancia, editarEstancia }
+/**
+ * Devuelve todas las estancias de un camping con una acción pendiente.
+ * @param {Request} req 
+ * @param {Response} res 
+ * @param {Function} next 
+ */
+const devolverEstanciasConAccionPendiente = async (req, res, next) => {
+    try {
+        const { id_camping } = req.params
+
+        let entradas_sin_registrar = new Array()
+        let salidas_sin_registrar = new Array()
+
+        const estancias = await Estancia.find({ id_camping }).exec()
+
+        estancias.forEach(async estancia => {
+            const estancia_accion_lista = await EstanciasAccion.find({ id_estancia: estancia._id }).exec()
+            const estancia_accion = estanciaAccionMasReciente(estancia_accion_lista)
+
+            // Reserva sin llegar
+            if((estancia_accion.estado === 'reserva') && (new Date(estancia.fecha_inicio) < new Date())) {
+                entradas_sin_registrar.push({ estancia, estancia_accion })
+            }
+            // Entradas sin salir
+            if((estancia_accion.estado === 'entrada') && (new Date(estancia.fecha_fin) < new Date())) {
+                salidas_sin_registrar.push({ estancia, estancia_accion })
+            }
+        })
+    } catch(error) {
+        next(error)
+    }
+}
+
+module.exports = { devolverEstanciaActualYReservasFuturasDeParcela, crearEstancia, devolverEstanciaPorId, devolverEstadoParcelaDia, devolverEstanciasPorEstadoYFecha, devolverEstanciasPorFiltros, devolverReservasHoySinLlegar, devolverEntradasHoySinSalir, eliminarEstancia, editarEstancia, devolverEstanciasConAccionPendiente }
 
 /**************************************************************************************************************/
 /**************************************************************************************************************/

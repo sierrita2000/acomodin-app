@@ -65,7 +65,7 @@ const devolverParcelasOcupadasCampingEnFecha = async (req, res, next) => {
                 const promises_parcelas_ocupadas = parcelas_camping.map(async parcela => {
                     const estancia_en_parcela = await estanciaParcelaEnFecha(parcela._id, fecha) 
                     if(estancia_en_parcela) {
-                        if(estancia_en_parcela.estancia_accion.estado === 'entrada') return 1
+                        if(estancia_en_parcela.estancia_accion.estado === 'entrada' || estancia_en_parcela.estancia_accion.estado === 'reserva') return 1
                         else return 0
                     } else {
                         return 0

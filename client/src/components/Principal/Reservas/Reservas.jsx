@@ -29,7 +29,7 @@ export default function Reservas () {
     const [ reservas, setReservas ] = useState(null)
     const [ loading, setLoading ] = useState(false)
 
-    let [ dataParcelaCamping ] = useFetch(`${import.meta.env.VITE_API_HOST}parcelas/devolver-parcelas/id_camping/${loginContext[0][1] === 0 ? dataUsuario?.results.id_camping : loginContext[0][0]}`)
+    const [ dataParcelaCamping, setDataParcelaCamping ] = useState(null)
     
     /**
      * Realiza una busqueda de las reservas con los filtros seleccionados
@@ -63,8 +63,15 @@ export default function Reservas () {
     }
 
     useEffect(() => {
-        aplicarFiltros(null)
-    }, [location])
+        if(dataUsuario) {
+            fetch(`${import.meta.env.VITE_API_HOST}parcelas/devolver-parcelas/id_camping/${loginContext[0][1] === 0 ? dataUsuario?.results.id_camping : loginContext[0][0]}`)
+                .then(response => response.json())
+                .then(data => setDataParcelaCamping(data))
+                .catch(() => setDataParcelaCamping(null))
+
+            aplicarFiltros(null)
+        } 
+    }, [location, dataUsuario])
 
     return(
         <div className="reservas">

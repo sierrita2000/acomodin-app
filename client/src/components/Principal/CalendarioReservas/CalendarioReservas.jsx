@@ -67,7 +67,7 @@ export default function CalendarioReservas () {
      */
     const cambiarFechaInicio = (fecha_inicio) => {
         const fecha_incio_ = new Date(fecha_inicio)
-        if(!fecha_inicio) {
+        if(!fecha_inicio || (fecha_incio_ > new Date(fechaFin))) {
             return
         }
 
@@ -83,7 +83,7 @@ export default function CalendarioReservas () {
      */
     const cambiarFechaFin = (fecha_fin) => {
         const fecha_fin_ = new Date(fecha_fin)
-        if(!fecha_fin) {
+        if(!fecha_fin || (fecha_fin_ < new Date(fechaInicio))) {
             return
         }
 
@@ -150,6 +150,7 @@ export default function CalendarioReservas () {
                             <div className="calendario_reservas__filtros__filtros">
                                 <h2>FILTROS</h2>
                                 <h4>fechas</h4>
+                                <p className='filtros__mensaje_advertencia'>*El rango de las fechas no puede ser mayor que 31 días</p>
                                 <section className='calendario_reservas__filtros__filtros__fechas'>
                                     <input type="date" name="calendarioFiltrosFechaInicio" id="calendarioFiltrosFechaInicio"  value={fechaInicio} onChange={e => cambiarFechaInicio(e.target.value)} />
                                     <p>-</p>
@@ -181,7 +182,7 @@ export default function CalendarioReservas () {
                                     <option value="media">medias</option>
                                     <option value="grande">grandes</option>
                                 </select>
-                                <button>APLICAR FILTROS</button>
+                                <button onClick={zonasYParcelasDelCampingFiltradas}>APLICAR FILTROS</button>
                             </div>
                         </section>
                         <section className='calendario_reservas__calendario'>
@@ -295,54 +296,66 @@ function ZonaParcelas ({ zona, fecha_inicio, fecha_fin }) {
     }, [fecha_inicio, fecha_fin])
 
     return(
-        <section className="calendario__zona_parcelas">
+        <section className="calendario__zona_parcelas">   
             <h6>{zona.zona.nombre}</h6>
             <div className="calendario__zona_parcelas__parcelas">
-                <section className='calendario__zona_parcelas__parcelas__nombres'>
-                    {
-                        zona.parcelas.map(parcela => {
-                            return <p>{parcela.nombre}</p>
-                        })
-                    }
-                </section>
-                <section className='calendario__zona_parcelas__parcelas__dias'>
-                    <div className="calendario__zona_parcelas__parcelas__dias__meses">
-                        {
-                            dias.map(dias_ => {
-                                return(
-                                    <div className="meses_mes" style={{width: `calc(${dias_.dias.length} * 2.4rem)`}}>
-                                        <div></div>
-                                        <p>{meses[parseInt(dias_.mes) - 1].nombre}</p>
-                                        <div></div>
-                                    </div>
-                                )
-                            })
-                        }
-                    </div>
-                    <div className="calendario__zona_parcelas__parcelas__dias__dias">
-                        {
-                            zona.parcelas.map(parcela => {
-                                return(
-                                    <section className="dias_parcela">
+                {
+                    (zona.parcelas.length > 0) ? 
+                        (
+                            <>
+                                <section className='calendario__zona_parcelas__parcelas__nombres'>
+                                    {
+                                        zona.parcelas.map(parcela => {
+                                            return <p>{parcela.nombre}</p>
+                                        })
+                                    }
+                                </section>
+                                <section className='calendario__zona_parcelas__parcelas__dias'>
+                                    <div className="calendario__zona_parcelas__parcelas__dias__meses">
                                         {
-                                            dias?.map(dias_ => {
+                                            dias.map(dias_ => {
                                                 return(
-                                                    <div className="dias_parcela__dias">
-                                                        {
-                                                            dias_.dias.map(dia => {
-                                                                return <DiaCuadrado mes={dias_.mes} dia={dia} ano={dias_.ano} parcela={parcela} />
-                                                            })
-                                                        }
+                                                    <div className="meses_mes" style={{width: `calc(${dias_.dias.length} * 2.4rem)`}}>
+                                                        <div></div>
+                                                        <p>{meses[parseInt(dias_.mes) - 1].nombre}</p>
+                                                        <div></div>
                                                     </div>
                                                 )
                                             })
                                         }
-                                    </section>
-                                )
-                            })
-                        }
-                    </div>
-                </section>
+                                    </div>
+                                    <div className="calendario__zona_parcelas__parcelas__dias__dias">
+                                        {
+                                            zona.parcelas.map(parcela => {
+                                                return(
+                                                    <section className="dias_parcela">
+                                                        {
+                                                            dias?.map(dias_ => {
+                                                                return(
+                                                                    <div className="dias_parcela__dias">
+                                                                        {
+                                                                            dias_.dias.map(dia => {
+                                                                                return <DiaCuadrado mes={dias_.mes} dia={dia} ano={dias_.ano} parcela={parcela} />
+                                                                            })
+                                                                        }
+                                                                    </div>
+                                                                )
+                                                            })
+                                                        }
+                                                    </section>
+                                                )
+                                            })
+                                        }
+                                    </div>
+                                </section> 
+                            </>
+                        ) : (
+                            <div className="calendario__zona_parcelas__vacias">
+                                <p>NO HAY PARCELAS QUE CUMPLAN LOS FILTROS</p>
+                                <img src="../../../../figura-hoguera.png" alt="FIGURA-HOGUERA" />
+                            </div>
+                        )
+                }
             </div>
         </section>
     )

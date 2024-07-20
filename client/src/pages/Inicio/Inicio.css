@@ -2,7 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: var(--azulClaro);
+    background-color: rgb(228, 245, 255);
     overflow-x: hidden;
 }
 
@@ -182,7 +182,7 @@
 }
 
 .paso__contenido {
-    height: 25rem;
+    height: 23rem;
     width: 100%;
     display: flex;
     margin: 3rem 0 0;
@@ -210,13 +210,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.paso__contenido .paso__contenido__video div {
-    height: 100%;
-    width: 90%;
-    border: 4px solid var(--azulOscuro);
-    background-color: whitesmoke;
 }
 
 .inicio__servicios__paso2 h2,
@@ -326,19 +319,20 @@
 }
 
 .procesos__video div {
-    height: 25rem;
+    height: 22rem;
     width: 100%;
     max-width: 49rem;
-    border: 4px solid var(--azulOscuro);
+    border: 2px solid var(--azulOscuro);
     background-color: whitesmoke;
-    filter: drop-shadow(2px 2px 4px rgb(0, 0, 0, 0.5));
     margin: 3rem 0 1.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 60px;
-    font-family: var(--Indie);
-    color: var(--azulOscuro);
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.procesos__video div img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
 }
 
 .procesos__video p {
@@ -485,3 +479,70 @@
 }
 
 /* FIN FOOTER */
+
+/* SLIDER */
+
+.slider,
+.paso__contenido__video > div {
+    position: relative;
+    height: 100%;
+    width: 46rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    border: 2px solid var(--azulOscuro);
+    background-color: rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+}
+
+.paso__contenido__video > div > img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.slider .slider__imagenes {
+    height: 100%;
+    width: fit-content;
+    display: flex;
+    transition: all .4s ease-in-out;
+}
+
+.slider .slider__imagenes div {
+    height: 100%;
+    width: 46rem;
+    display: flex;
+    align-items: center;
+}
+
+.slider .slider__imagenes div img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.slider__botones {
+    position: absolute;
+    bottom: 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 .8rem;
+}
+
+.slider__botones__boton {
+    height: .5rem;
+    width: .5rem;
+    border-radius: 50%;
+    background-color: var(--azulOscuro);
+    margin: 0 .2rem;
+    transition: all .2s ease-in-out;
+}
+
+.boton_slider_seleccionado {
+    transform: scale(1.5);
+    background-color: var(--azulGastado);
+}
+
+/* FIN SLIDER */

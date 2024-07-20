@@ -54,6 +54,15 @@
 
 /* FECHAS */
 
+.filtros__mensaje_advertencia {
+    font-family: var(--Crimson);
+    font-style: italic;
+    font-size: 16px;
+    color: whitesmoke;
+    margin: -.5rem 0 1rem;
+    align-self: center;
+}
+
 .calendario_reservas__filtros__filtros__fechas {
     width: 100%;
     display: flex;
@@ -333,7 +342,28 @@
 
 /* SECCIÓN DIAS MESES */
 
-/* SECCIÓN ZONAS */
+/* FIN SECCIÓN ZONAS */
+
+.calendario__zona_parcelas__vacias {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.calendario__zona_parcelas__vacias p {
+    font-family: var(--Montserrat);
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: var(--negro);
+    margin: 0 0 1rem;
+}
+
+.calendario__zona_parcelas__vacias img {
+    height: 12rem;
+    filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.6));
+}
 
 /* FIN CALENDARIO */
 

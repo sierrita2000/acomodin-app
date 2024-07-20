@@ -14,6 +14,7 @@
 
 .mensaje__modal {
     max-width: 40rem;
+    min-width: 24rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -36,11 +37,20 @@
     font-size: 22px;
 }
 
+.mensaje__modal div:nth-child(2) {
+    margin: 2rem 1rem;
+}
+
 .mensaje__modal div:nth-child(2) p {
     font-family: var(--Crimson);
     font-size: 22px;
-    margin: 2rem 1rem;
     color: var(--azulOscuro);
+}
+
+.mensaje__modal div:nth-child(2) i {
+    font-size: 3rem;
+    color: var(--azulOscuro);
+    margin: 0 0 .5rem;
 }
 
 .mensaje__modal__botones {
