@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import './Salidas.css'
 import { useContext, useEffect, useState } from 'react'
 import { LoginContext } from '../../../../context/LoginContext'
@@ -30,6 +30,8 @@ export function SalidasSinRealizar () {
     const [ entradas, setEntradas ] = useState(new Array())
     const [ loading, setLoading ] = useState(true)
 
+    const location = useLocation()
+
     useEffect(() => {
         if(dataCamping) {
             setLoading(true)
@@ -39,7 +41,7 @@ export function SalidasSinRealizar () {
                 .then(data => setEntradas(data.results))
                 .finally(() => setLoading(false))
         }
-    }, [dataCamping])
+    }, [dataCamping, location])
 
     return(
         <div className="salidas_sin_realizar">
@@ -55,6 +57,8 @@ export function SalidasRealizadas () {
 
     const [ salidas, setSalidas ] = useState(new Array())
     const [ loading, setLoading ] = useState(true)
+
+    const location = useLocation()
 
     /**
      * Formatea la fecha de hoy
@@ -82,7 +86,7 @@ export function SalidasRealizadas () {
                 .then(data => setSalidas(data.results))
                 .finally(() => setLoading(false))
         }
-    }, [dataCamping])
+    }, [dataCamping, location])
 
     return(
         <div className="salidas_sin_realizar">

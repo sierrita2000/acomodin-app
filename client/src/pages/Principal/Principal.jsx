@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
 import './Principal.css'
 import { LoginContext } from '../../context/LoginContext'
-import { useFetch } from '../../hooks/useFetch'
-import { Outlet, NavLink, Link, useNavigate } from 'react-router-dom'
+import { Outlet, NavLink, Link, useNavigate, useLocation } from 'react-router-dom'
 import Mensaje from '../../components/Mensaje/Mensaje'
+import { useFetch } from '../../hooks/useFetch'
 
 export default function Principal () {
 
@@ -16,7 +16,13 @@ export default function Principal () {
     const [ data, setData ] = useState(null)
     const [ loading, setLoading ] = useState(false)
 
+    const [ pendiente, setPendiente ] = useState(null)
+    console.log(pendiente)
+
     const navigate = useNavigate()
+    const location = useLocation()
+
+    const [ dataUsuario ] = useFetch(`${import.meta.env.VITE_API_HOST}${loginContext[0][1] === 0 ? 'acomodadores/id_camping/' : 'camping/id/'}${loginContext[0][0]}`)
     
     /**
      * Desplegar el panel del perfil y cerrar sesión al pulsar sobre la imagen del usuario.
@@ -48,6 +54,16 @@ export default function Principal () {
             .then(data => setData(data))
             .finally(() => setLoading(false))
     }, [actualizacion])
+
+    useEffect(() => {
+        if(dataUsuario) {
+            fetch(`${import.meta.env.VITE_API_HOST}estancias/pendientes/id_camping/${dataUsuario.results._id}`)
+                .then(response => response.json())
+                .then(data => setPendiente(data.results))
+        }
+    }, [dataUsuario, location])
+
+    console.log(pendiente)
 
     return(
         <div className="principal">
@@ -86,7 +102,7 @@ export default function Principal () {
                                     </div>
                                 </div>
                                 { loginContext[0][1] === 1 && <NavLink to='/principal/mi-camping' className='principal__cabecera__nav_boton'>MI CAMPING</NavLink> }
-                                <NavLink to='/principal/pendiente' className='principal__cabecera__nav_boton boton_pendiente'>PENDIENTE</NavLink>
+                                { pendiente && <NavLink to='/principal/pendiente' className='principal__cabecera__nav_boton boton_pendiente'>PENDIENTE</NavLink> }
                             </nav>
                             <div className="principal__cabecera__perfil">
                                 <div className="principal__cabecera__perfil__circulo principal__cabecera__perfil__circulo__accionador-hover" onClick={e => desplegarPanelPerfil(e)}>
@@ -106,7 +122,7 @@ export default function Principal () {
                             </div>
                         </div>
                         <div className="principal__outlet">
-                            <Outlet context={[ actualizacion, setActualizacion ]} />
+                            <Outlet context={[ actualizacion, setActualizacion, pendiente ]} />
                         </div>
                         {
                             mostrarMensaje && (

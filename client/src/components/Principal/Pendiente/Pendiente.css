@@ -4,7 +4,7 @@
     display: flex;
 }
 
-.pendiente > section {
+.pendiente > .pendiente__section {
     height: 100%;
     width: 50%;
     display: flex;
@@ -14,7 +14,7 @@
     padding: 1rem;
 }
 
-.pendiente > section > h2 {
+.pendiente > .pendiente__section > h2 {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -28,12 +28,65 @@
     margin: 0 0 1rem;
 }
 
-.pendiente > section > div {
+.pendiente > .pendiente__section > div {
     height: inherit;
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
     border: 1px solid var(--negro);
     border-radius: 2px;
     overflow-y: scroll;
     scrollbar-width: thin;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 15px 25px -16px inset, rgba(0, 0, 0, 0.3) 0px 15px 20px -18px inset;
+    padding: 1.5rem;
+}
+
+.pendiente > .pendiente__section > div > .estancia_simple {
+    height: 6rem;
+    width: 100%;
+}
+
+.pendiente > .pendiente__section > div > .estancia_simple > .estancia_simple__imagen {
+    height: 6rem;
+    width: 6rem;
+}
+
+.pendiente > .pendiente__section > div > .estancia_simple > .estancia_simple__estado__entrada {
+    width: 6rem;
+}
+
+.pendiente > .pendiente__section > div > .estancia_simple > .estancia_simple__informacion {
+    width: calc(100% - 12rem);
+}
+
+.pendiente > .pendiente__section > div > .estancia_simple > .estancia_simple__informacion > div:nth-child(2n+1) {
+    padding: 0 1rem;
+}
+
+.pendiente > .pendiente__section > div > .estancia_simple > .estancia_simple__informacion > div:nth-child(2n+1) p {
+    font-size: 16px;
+}
+
+.estancias_vacias {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.estancias_vacias > p {
+    font-family: var(--Montserrat);
+    font-size: 22px;
+    font-weight: bolder;
+    color: var(--negro);
+    margin: 0 0 1.5rem;
+}
+
+.estancias_vacias > img {
+    height: 20rem;
+    filter: drop-shadow(0 4px 4px rgb(0, 0, 0, 0.5));
 }

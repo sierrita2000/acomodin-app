@@ -295,6 +295,8 @@ function ZonaParcelas ({ zona, fecha_inicio, fecha_fin }) {
         }
     }, [fecha_inicio, fecha_fin])
 
+    console.log(dias)
+
     return(
         <section className="calendario__zona_parcelas">   
             <h6>{zona.zona.nombre}</h6>
@@ -335,7 +337,7 @@ function ZonaParcelas ({ zona, fecha_inicio, fecha_fin }) {
                                                                     <div className="dias_parcela__dias">
                                                                         {
                                                                             dias_.dias.map(dia => {
-                                                                                return <DiaCuadrado mes={dias_.mes} dia={dia} ano={dias_.ano} parcela={parcela} />
+                                                                                return <DiaCuadrado mes={dias_.mes} dia={(dia < 10) ? `0${dia}` : dia} ano={dias_.ano} parcela={parcela} />
                                                                             })
                                                                         }
                                                                     </div>
@@ -365,8 +367,8 @@ function DiaCuadrado ({ mes, dia, ano, parcela }) {
 
     const [ estado, setEstado ] = useState(0) // 0 --> libre; 1 --> ocupada; 2 --> reservada; 3 --> ultimo día; 4 --> último día//reservada; 5 --> último día//ocupada 
 
-    let [ dataParcela ] = useFetch(`${import.meta.env.VITE_API_HOST}estancia/id_parcela/${parcela._id}/fecha/${ano}-${mes}-${(dia < 9) ? `0${dia}` : dia}`)
-
+    let [ dataParcela ] = useFetch(`${import.meta.env.VITE_API_HOST}estancia/id_parcela/${parcela._id}/fecha/${ano}-${mes}-${dia}`)
+    
     useEffect(() => {
         if(dataParcela) {
             if(dataParcela.results.length === 1) {

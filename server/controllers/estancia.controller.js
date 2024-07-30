@@ -421,19 +421,38 @@ const devolverEstanciasConAccionPendiente = async (req, res, next) => {
 
         const estancias = await Estancia.find({ id_camping }).exec()
 
-        estancias.forEach(async estancia => {
+        const estancias_promises = estancias.map(async estancia => {
             const estancia_accion_lista = await EstanciasAccion.find({ id_estancia: estancia._id }).exec()
             const estancia_accion = estanciaAccionMasReciente(estancia_accion_lista)
 
             // Reserva sin llegar
-            if((estancia_accion.estado === 'reserva') && (new Date(estancia.fecha_inicio) < new Date())) {
-                entradas_sin_registrar.push({ estancia, estancia_accion })
+            if((estancia_accion.estado === 'reserva') && (new Date(estancia.fecha_inicio) < new Date(formatearFecha(new Date())))) {
+                return [{ estancia, estancia_accion }, 1]
             }
             // Entradas sin salir
-            if((estancia_accion.estado === 'entrada') && (new Date(estancia.fecha_fin) < new Date())) {
-                salidas_sin_registrar.push({ estancia, estancia_accion })
+            else if((estancia_accion.estado === 'entrada') && (new Date(estancia.fecha_fin) < new Date(formatearFecha(new Date())))) {
+                return [{ estancia, estancia_accion }, 2]
+            } 
+            // Estancia no válida
+            else {
+                return [null, 0]
             }
         })
+
+        Promise.all(estancias_promises)
+            .then(values => {
+
+                values.forEach(value => {
+                    if(value[1] === 1) entradas_sin_registrar.push(value[0])
+                    else if(value[1] === 2) salidas_sin_registrar.push(value[0])
+                })
+            })  
+            .catch(error => {
+                throw new Error(error)
+            })  
+            .finally(() => {
+                res.status(200).send(new ResponseAPI('ok', 'Tareas pendientes', (entradas_sin_registrar.length > 0 || salidas_sin_registrar.length > 0) ? [entradas_sin_registrar, salidas_sin_registrar] : null))
+            })    
     } catch(error) {
         next(error)
     }
@@ -466,15 +485,13 @@ const devolverEstado = (estancia_accion, estancia, fecha) => {
         } else {
             estado = 'reservada'
         }
-    } else if (estancia_accion.estado === 'entrada') {
+    } else {
         if (fecha === estancia.fecha_fin) {
             estado = 'salida prevista para hoy'
         } else {
             estado = 'ocupada'
         }
-    } else if (estancia_accion.estado === 'salida') {
-        estado = 'libre'
-    }
+    } 
 
     return estado
 }

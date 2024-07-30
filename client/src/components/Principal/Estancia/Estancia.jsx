@@ -62,11 +62,11 @@ export default function Estancia () {
     }
 
     /**
-     * Devuelve la fecha mínima que puede seleccionar el usuario de salida.s
+     * Devuelve la fecha mínima que puede seleccionar el usuario de salida.
      * @returns String
      */
     const fechaMinimaSalida = () => {
-        let fecha_minima = new Date(fechaInicio) < new Date() ? new Date() : new Date(fechaInicio)
+        let fecha_minima = fechaInicio ? new Date(fechaInicio) : new Date()
         fecha_minima.setDate(fecha_minima.getDate() + 1)
         formatearFecha(fecha_minima)
         return formatearFecha(fecha_minima)
@@ -80,7 +80,7 @@ export default function Estancia () {
         setFechaInicio(e.target.value)
 
         // Si después de introducir la fecha de inicio de nuevo, supera a la de salida, esta última se borra
-        if(new Date(fechaInicio) < new Date(fechaFin)) {
+        if(new Date(fechaInicio) > new Date(fechaFin)) {
             setFechaFin('')
         }
     }
@@ -109,6 +109,20 @@ export default function Estancia () {
     }
 
     /**
+     * Comprueba que la fecha de inicio sea menor que la final.
+     * @returns boolean
+     */
+    const comprobarFechasValidas = () => {
+        if(new Date(fechaInicio) > new Date(fechaFin)) {
+            return false
+        }
+
+        console.log(new Date(fechaInicio) > new Date(fechaFin))
+
+        return true
+    }
+
+    /**
      * Comprueba que al menos en la reserva hay seleccionado un adulto y un tipo de acomodación
      * @returns Boolean
      */
@@ -120,8 +134,6 @@ export default function Estancia () {
 
         const tipos_acomodacion_reserva = conceptos.filter(c => tipos_acomodacion.includes(c[0]) && (c[1] > 0))
         const concepto_adulto_reserva = conceptos.filter(c => (c[0] === concepto_adulto) && (c[1] > 0))
-        
-        console.log(conceptos.filter(c => (c[0] === concepto_adulto)), conceptos)
 
         if((tipos_acomodacion_reserva.length === 0) || (concepto_adulto_reserva.length === 0)) {
             comprobacion = false
@@ -170,8 +182,8 @@ export default function Estancia () {
         const data = await response.json()
 
         if(data.status === 'ok') {
-            setMensaje(((estado === 'entrada') ? `Reserva a nombre de ${nombre} instalada en la parcela ${dataParcela?.results.nombre}` : `Estancia a nombre de ${nombre} ha dejado libre la parcela ${dataParcela?.results.nombre}`))
-            (estado === 'entrada') ? navigate('/principal/entradas/entradas', { replace: true }) : navigate('/principal/salidas/salidas', { replace: true }) 
+            setMensaje((estado === 'entrada') ? `Reserva a nombre de ${nombre} instalada en la parcela ${dataParcela?.results.nombre}` : `Estancia a nombre de ${nombre} ha dejado libre la parcela ${dataParcela?.results.nombre}`)
+            setAccionAceptar((estado === 'entrada') ? 8 : 9)
         } else if(data.status === 'not-allowed') {
             setMensaje(`Debes marcar antes la salida que hay prevista en la parcela "${dataParcela?.results.nombre}"`)
             setAccionAceptar(0)
@@ -283,12 +295,19 @@ export default function Estancia () {
             return
         }
 
+        if(!comprobarFechasValidas()) {
+            setError(3)
+            document.getElementById('datosReservaTitulo').scrollIntoView({ behavior: 'smooth' })
+            return
+        }
+
         if(!comprobarConceptosValidos()) {
             setError(2)
             document.getElementById('conceptosReservaTitulo').scrollIntoView({ behavior: 'smooth' })
             return
         }
 
+        setError(0)
         setMensaje(`¿Seguro que quieres editar esta estancia?`)
         setAccionAceptar(3)
     }
@@ -388,7 +407,7 @@ export default function Estancia () {
                 </div>
                 <div className="estancia__estancia__informacion">
                     <h2 id='datosReservaTitulo'>DATOS RESERVA</h2>
-                    { error === 1 && <p className='estancia_error'>*Los campos nombre, telefono y las fechas deben estar rellenos</p> }
+                    { (error === 1) ? <p className='estancia_error'>*Los campos nombre, telefono y las fechas deben estar rellenos</p> : (error === 3) && <p className='estancia_error'>*La fecha de inicio debe ser menor que la de fin</p> }
                     <div className="estancia__estancia__informacion__datos">
                         <div>
                             <i className="fa-solid fa-user"></i>
@@ -406,7 +425,7 @@ export default function Estancia () {
                         </div>
                     </div>
                     <h2 id='conceptosReservaTitulo'>CONCEPTOS</h2>
-                    { error === 2 && <p className='estancia_error'>*Debes seleccionar mínimo un adulto y un tipo de acomodación</p> }
+                    { (error === 2) && <p className='estancia_error'>*Debes seleccionar mínimo un adulto y un tipo de acomodación</p> }
                     <div className="estancia__estancia__informacion__conceptos">
                         {
                             dataConceptos?.results.filter(c => conceptos.map(c => c[0]).includes(c._id)).map(concepto => {
@@ -499,7 +518,7 @@ export default function Estancia () {
                 }
             </div>
             {
-                mensaje && <Mensaje mensaje={mensaje} accionCancelar={() => {setMensaje(''); setAccionAceptar(0)}} accionAceptar={(accionAceptar === 0) ? () => {setMensaje('')} : (accionAceptar === 1) ? funcionEliminarEstancia : (accionAceptar === 2) ? () => {funcionMarcarEntradaOSalida('entrada')} : (accionAceptar === 3) ? funcionEditarEstancia : (accionAceptar === 4) ? () => {funcionMarcarEntradaOSalida('salida')} : (accionAceptar === 5) ? funcionEditarEstanciaSinParcela : (accionAceptar === 6) ? () => {navigate('..', { replace: true })} : (accionAceptar === 7) ? funcionDeshacerLlegadaSalida : null } />
+                mensaje && <Mensaje mensaje={mensaje} accionCancelar={() => {setMensaje(''); setAccionAceptar(0)}} accionAceptar={(accionAceptar === 0) ? () => {setMensaje('')} : (accionAceptar === 1) ? funcionEliminarEstancia : (accionAceptar === 2) ? () => {funcionMarcarEntradaOSalida('entrada')} : (accionAceptar === 3) ? funcionEditarEstancia : (accionAceptar === 4) ? () => {funcionMarcarEntradaOSalida('salida')} : (accionAceptar === 5) ? funcionEditarEstanciaSinParcela : (accionAceptar === 6) ? () => {navigate('..', { replace: true })} : (accionAceptar === 7) ? funcionDeshacerLlegadaSalida : (accionAceptar === 8) ? () => {navigate('/principal/entradas/entradas', { replace: true })} : (accionAceptar === 9) ? () => {navigate('/principal/salidas/salidas', { replace: true })} : null } />
             }
             {
                 modalParcelas && <ModalParcelas fecha_inicio={fechaInicio} fecha_fin={fechaFin} tipos={devolverTiposAcomodacionEstancia()} caracteristicas={caracteristicas} id_camping={dataCamping?.results._id} handlerCerrarModal={() => {setModalParcelas(false)}} parcela={parcela} setParcela={setParcela} parcelaAsignada={estancia.estancia.parcela} /> 

@@ -184,7 +184,14 @@ const router = createBrowserRouter([
       },
       {
         path: '/principal/pendiente',
-        element: <Pendiente />
+        element: <Pendiente />,
+        children: [
+          {
+            path: '/principal/pendiente/:id_estancia_accion',
+            element: <Estancia />,
+            loader: estanciaLoader
+          }
+        ]
       }
     ]
   }
