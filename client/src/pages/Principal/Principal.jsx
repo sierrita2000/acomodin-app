@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from 'react'
 import './Principal.css'
-import { LoginContext } from '../../context/LoginContext'
+import { LoginContext } from '@context/LoginContext'
 import { Outlet, NavLink, Link, useNavigate, useLocation } from 'react-router-dom'
-import Mensaje from '../../components/Mensaje/Mensaje'
-import { useFetch } from '../../hooks/useFetch'
+import Mensaje from '@components/Mensaje/Mensaje'
+import { useFetch } from '@hooks/useFetch'
 
 export default function Principal () {
 

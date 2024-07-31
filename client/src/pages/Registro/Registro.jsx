@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import './Registro.css'
-import DatosCamping from '../../components/Registro/Datos-camping/DatosCamping'
-import Parcelas from '../../components/Registro/Parcelas/Parcelas'
-import Zonas from '../../components/Registro/Zonas/Zonas'
-import Acomodadores from '../../components/Registro/Acomodadores/Acomodadores'
-import Finalizar from '../../components/Registro/Finalizar/Finalizar'
+import DatosCamping from '@components/Registro/Datos-camping/DatosCamping'
+import Parcelas from '@components/Registro/Parcelas/Parcelas'
+import Zonas from '@components/Registro/Zonas/Zonas'
+import Acomodadores from '@components/Registro/Acomodadores/Acomodadores'
+import Finalizar from '@components/Registro/Finalizar/Finalizar'
 import { Outlet } from 'react-router-dom'
 
 export default function Registro () {

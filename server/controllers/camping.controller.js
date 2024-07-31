@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt')
 const { ValidationError, DuplicatedError } = require('../errors/errors')
 
 /**
- * 
+ * Guarda un camping en la base de datos.
  * @param {Request} req 
  * @param {Response} res 
  * @param {Function} next 

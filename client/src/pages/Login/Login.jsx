@@ -1,8 +1,8 @@
 import { useContext, useState } from 'react'
 import './Login.css'
 import { useNavigate } from 'react-router-dom'
-import { LoginContext } from '../../context/LoginContext'
-import Mensaje from '../../components/Mensaje/Mensaje'
+import { LoginContext } from '@context/LoginContext'
+import Mensaje from '@components/Mensaje/Mensaje'
 
 export default function Login() {
 

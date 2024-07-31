@@ -3,6 +3,7 @@ require('dotenv').config()
 const cors = require('cors')
 const { router } = require('./routes/index.routes')
 const { errores } = require('./middlewares/errores')
+const { connection } = require('./connection/connection')
 
 const app = express()
 
@@ -24,4 +25,5 @@ app.use(errores)
 
 app.listen(PORT, () => {
     console.log(`server listening on port http://localhost:${PORT}`)
+    connection()
 })

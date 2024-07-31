@@ -1,5 +1,4 @@
 const { Router } = require('express')
-const { connection } = require('../connection/connection')
 const { registrarCamping, devolverCamping, devolverCampingPorID, actualizarDatosCamping, actualizarPasswordCamping, actualizarCamping } = require('../controllers/camping.controller')
 const { crearConceptos, devolverTodosLosConceptos } = require('../controllers/conceptos.controller')
 const multer = require('multer')
@@ -19,8 +18,6 @@ const storage = multer.diskStorage({
 })
 
 const upload = multer({ storage })
-
-connection()
 const router = Router()
 
 // RUTAS DE USUARIO CAMPING

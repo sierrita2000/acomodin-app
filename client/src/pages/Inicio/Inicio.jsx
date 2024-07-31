@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import './Inicio.css'
+import '@/pages/Inicio/Inicio.css'
 import { Link, useNavigate } from 'react-router-dom'
 
 export default function Inicio () {
