@@ -147,7 +147,7 @@ export default function Registro () {
                 !procesoFinalizado ? (
                     <>
                         <div className="registro__cabecera">
-                            <img src="../../figura-logo-circulo.png" alt="LOGO-ACOMODIN" />
+                            <img src="/figura-logo-circulo.png" alt="LOGO-ACOMODIN" />
                             <h1>ACOMODIN</h1>
                             <div className="registro__cabecera__pasos">
                                 <div className={`pasos__paso ${paso === pasos[0] && 'pasos__paso__activo'}`}><button className='pasos__paso__boton' value={pasos[0]} onClick={(e) => setPaso(e.target.value)}>{pasos[0]}</button></div>

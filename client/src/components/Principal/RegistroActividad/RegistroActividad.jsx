@@ -105,7 +105,7 @@ export default function RegistroActividad () {
                         ) : (
                             <div className="registro_actividad__estancias__vacias">
                                 <p>NO HAY REGISTROS PARA LOS FILTROS IMPUESTOS</p>
-                                <img src="../../../../figura-hoguera.png" alt="FIGURA-HOOGUERA" />
+                                <img src="/figura-hoguera.png" alt="FIGURA-HOOGUERA" />
                             </div>
                         )
                     )

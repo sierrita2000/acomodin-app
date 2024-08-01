@@ -63,7 +63,7 @@ export default function DatosCamping ( props ) {
                 </form>
             </div>
             <div className="datos_camping__imagen">
-                <img src="../../../figura-tienda-cesped.png" alt="FIGURA-TIENDA" />
+                <img src="/figura-tienda-cesped.png" alt="FIGURA-TIENDA" />
             </div>
         </div>
     )

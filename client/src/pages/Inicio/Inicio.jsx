@@ -28,7 +28,7 @@ export default function Inicio () {
     return (
         <section className="inicio">
             <section className="inicio__cabecera">
-                <img src="../../figura-logo-circulo.png" alt="LOGO" />
+                <img src="/figura-logo-circulo.png" alt="LOGO" />
                 <nav className="inicio__cabecera__menu">
                     <ul>
                         <li><Link to="/registro-camping">REGISTRATE</Link></li> 
@@ -45,9 +45,9 @@ export default function Inicio () {
                     <button onClick={() => navigate("/login")}>COMENZAR</button>
                 </div>
                 <div className='inicio__presentacion__der'>
-                    <img src="../../figura-tipi-cartel.png" alt="FIGURA TIPI" className="tipi" />
-                    <img src="../../figura-nube.png" alt="FIGURA NUBE" className="nube nube1" />
-                    <img src="../../figura-nube.png" alt="FIGURA NUBE" className="nube nube2" />
+                    <img src="/figura-tipi-cartel.png" alt="FIGURA TIPI" className="tipi" />
+                    <img src="/figura-nube.png" alt="FIGURA NUBE" className="nube nube1" />
+                    <img src="/figura-nube.png" alt="FIGURA NUBE" className="nube nube2" />
                 </div>
             </section>
             {/* Cambiar el div de videos por el video de explicación y el texto lorem */}
@@ -84,7 +84,7 @@ export default function Inicio () {
                     <div className="paso__contenido">
                         <div className="paso__contenido__video">
                             <div>
-                                <img src="../../../pantalla-login.png" />
+                                <img src="/pantalla-login.png" />
                             </div>
                         </div>
                         <div className="paso__contenido__texto">
@@ -122,7 +122,7 @@ export default function Inicio () {
                     </div>
                     <div className="procesos__video">
                         <div>
-                            <img src={`../../../pantalla-${proceso}.png`} />
+                            <img src={`/pantalla-${proceso}.png`} />
                         </div>
                         { (proceso === 'calendario') && <p>Podrás visualizar en un calendario el estado de tus parcelas entre un máximo de 31 días cualesquiera. Además, podrás filtrar que tipo de parcelas quieres visualizar.</p> }
                         { (proceso === 'estado') && <p>Podrás controlar la situación de tu camping cualquier día. En esta sección podrás filtrar la fecha que quieras para ver el hueco libre, las reservas, entradas y salidas de ese mismo día.</p> }
@@ -154,7 +154,7 @@ export default function Inicio () {
                 </div>
                 <div className="inicio__footer__logo">
                     <div>
-                        <img src="../../logo.png" alt="LOGO" />
+                        <img src="/logo.png" alt="LOGO" />
                     </div>
                 </div>
             </section>
@@ -194,7 +194,7 @@ function Slider ({ lista_imagenes }) {
             <div className="slider__imagenes">
                 {
                     lista_imagenes.map((imagen, indice) => {
-                        return <div key={`imagen${indice}`} className={`imagen${indice}`}><img src={`../../../${imagen}`} /></div>
+                        return <div key={`imagen${indice}`} className={`imagen${indice}`}><img src={`/${imagen}`} /></div>
                     })
                 }
             </div>

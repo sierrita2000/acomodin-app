@@ -113,7 +113,7 @@ export default function Parcelas () {
                                 ) : (
                                     <div className="parcelas__der__vacia">
                                         <p>SELECCIONA UNA PARCELA</p>
-                                        <img src="../../../../figura-hoguera.png" alt="FIGURA-HOGUERA" />
+                                        <img src="/figura-hoguera.png" alt="FIGURA-HOGUERA" />
                                     </div>
                                 )
                             }

@@ -8,7 +8,7 @@ export default function Completado () {
     return(
         <div className="completado">
             <h1>¡Enhorabuena!</h1>
-            <img src="../../../figura-logo-circulo.png" alt="LOGO-ACOMODIN" />
+            <img src="/figura-logo-circulo.png" alt="LOGO-ACOMODIN" />
             <h4>Los datos de "{nombre}" han sido registrados correctamente</h4>
             <p>Empieza a usar nuestros servicios</p>
             <Link className='completado__link' to={"/login"}>INICIAR SESIÓN</Link>

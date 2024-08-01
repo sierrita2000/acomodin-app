@@ -64,7 +64,7 @@ export default function Acomodadores ( props ) {
     return(
         <div className="acomodadores">
             <div className="acomodadores__imagen">
-                <img src="../../../figura-camper-cesped.png" alt="FIGRUA-CAMPER" />
+                <img src="/figura-camper-cesped.png" alt="FIGRUA-CAMPER" />
                 <button onClick={guardarCambios}><p>GUARDAR CAMBIOS</p>{ guardar && <div><i className="fa-solid fa-thumbs-up"></i></div> }</button>
             </div>
             <div className="acomodadores__contenido">

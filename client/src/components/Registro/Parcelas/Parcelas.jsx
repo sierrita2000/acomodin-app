@@ -24,7 +24,7 @@ export default function Parcelas ( props ) {
     return(
         <div className="parcelas">
             <div className="parcelas__imagen">
-                <img src="../../../figura-caravana-cesped.png" alt="FIGURA-CARAVANA" />
+                <img src="/figura-caravana-cesped.png" alt="FIGURA-CARAVANA" />
             </div>
             <div className="parcelas__caracteristicas">
                 <div className="parcelas__caracteristicas__tamanos">

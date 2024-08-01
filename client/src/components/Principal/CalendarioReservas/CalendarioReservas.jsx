@@ -354,7 +354,7 @@ function ZonaParcelas ({ zona, fecha_inicio, fecha_fin }) {
                         ) : (
                             <div className="calendario__zona_parcelas__vacias">
                                 <p>NO HAY PARCELAS QUE CUMPLAN LOS FILTROS</p>
-                                <img src="../../../../figura-hoguera.png" alt="FIGURA-HOGUERA" />
+                                <img src="/figura-hoguera.png" alt="FIGURA-HOGUERA" />
                             </div>
                         )
                 }

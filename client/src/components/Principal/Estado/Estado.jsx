@@ -268,7 +268,7 @@ function EstadoEstancias ({ titulo, texto_estancias_vacias, estancias }) {
                         ) : (
                             <div className="estado_estancias__listado__vacio">
                                 <p>{texto_estancias_vacias}</p>
-                                <img src="../../../../figura-hoguera.png" alt="FIGURA-HOGUERA" />
+                                <img src="/figura-hoguera.png" alt="FIGURA-HOGUERA" />
                             </div>
                         )
                     }

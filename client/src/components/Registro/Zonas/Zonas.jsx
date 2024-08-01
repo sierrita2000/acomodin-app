@@ -45,7 +45,7 @@ export default function Zonas ( props ) {
                 </div>
             </div>
             <div className="zonas__imagen">
-                <img src="../../../figura-bungalow-cesped.png" alt="FIGURA-BUNGALOW" />
+                <img src="/figura-bungalow-cesped.png" alt="FIGURA-BUNGALOW" />
                 <button onClick={guardarCambios}><p>GUARDAR CAMBIOS</p>{ guardar && <div><i className="fa-solid fa-thumbs-up"></i></div> }</button>
             </div>
         </div>

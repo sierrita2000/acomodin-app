@@ -76,9 +76,9 @@ export default function Reservas () {
     return(
         <div className="reservas">
             <section className='reservas__boton_add_reserva'>
-                <img src="../../../../../figura-tienda-cesped.png" alt="FIGURA-TIENDA" />
+                <img src="/figura-tienda-cesped.png" alt="FIGURA-TIENDA" />
                 <button onClick={() => navigate('/principal/reservas/crear-reserva')}>AÑADIR RESERVA</button>
-                <img src="../../../../../figura-caravana-cesped.png" alt="FIGURA-TIENDA" />
+                <img src="/figura-caravana-cesped.png" alt="FIGURA-TIENDA" />
             </section>
             <form className="reservas__filtros">
                 <section>
@@ -146,7 +146,7 @@ export default function Reservas () {
                         ) : (
                             <div className="reservas__reservas__vacias">
                                 <p>NO HAY RESERVAS PARA LOS FILTROS IMPUESTOS</p>
-                                <img src="../../../../figura-hoguera.png" alt="FIGURA-HOOGUERA" />
+                                <img src="/figura-hoguera.png" alt="FIGURA-HOOGUERA" />
                             </div>
                         )
                     )

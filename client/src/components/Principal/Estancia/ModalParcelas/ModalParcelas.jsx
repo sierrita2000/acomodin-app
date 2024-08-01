@@ -52,7 +52,7 @@ export default function ModalParcelas ({ fecha_inicio, fecha_fin, tipos, caracte
                             ): (
                                 <div className="modal_parcelas__modal__parcelas__lista_vacia">
                                     <p>NO HAY PARCELAS DISPONIBLES</p>
-                                    <img src="../../../../../figura-tienda-cesped.png" alt="FIGURA-TIENDA" />
+                                    <img src="/figura-tienda-cesped.png" alt="FIGURA-TIENDA" />
                                 </div>
                             )
                         )

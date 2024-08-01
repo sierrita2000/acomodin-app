@@ -24,7 +24,7 @@ export default function Pendiente() {
                                     ) : (
                                         <div className="estancias_vacias">
                                             <p>NO HAY ENTRADAS SIN REGISTRAR</p>
-                                            <img src="../../../../figura-hoguera.png"/>
+                                            <img src="/figura-hoguera.png"/>
                                         </div>
                                     )
                                 }
@@ -41,7 +41,7 @@ export default function Pendiente() {
                                     ) : (
                                         <div className="estancias_vacias">
                                             <p>NO HAY SALIDAS SIN REGISTRAR</p>
-                                            <img src="../../../../figura-hoguera.png"/>
+                                            <img src="/figura-hoguera.png"/>
                                         </div>
                                     )
                                 }
@@ -51,7 +51,7 @@ export default function Pendiente() {
                 ) : (
                     <div className="estancias_vacias">
                         <p>NO HAY ENTRADAS SIN REGISTRAR</p>
-                        <img src="../../../../figura-hoguera.png"/>
+                        <img src="/figura-hoguera.png"/>
                     </div>
                 )
             }

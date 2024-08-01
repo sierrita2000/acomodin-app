@@ -10,7 +10,7 @@ export default function Error (props) {
         <div className="error">
             <div className="error__dibujo">
                 <p>{props.primerNumero}</p>
-                <img src="../../figura-hoguera.png" alt="FIGURA-HOGUERA" />
+                <img src="/figura-hoguera.png" alt="FIGURA-HOGUERA" />
                 <p>{props.segundoNumero}</p>
             </div>
             <h1>{props.mensaje}</h1>

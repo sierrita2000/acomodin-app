@@ -35,7 +35,7 @@ export default function ListadoEstancias ({ estancias, loading, texto_estancias_
                     ) : (
                         <div className="listado_estancias__vacias">
                             <p>{texto_estancias_vacias}</p>
-                            <img src="../../../../../figura-hoguera.png" alt="FIGURA-HOGUERA" />
+                            <img src="/figura-hoguera.png" alt="FIGURA-HOGUERA" />
                         </div>
                     )
                 )
