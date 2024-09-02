@@ -14,7 +14,7 @@ const crearConceptos = async (req, res, next) => {
         const results = new Array()
 
         conceptos.forEach(async c => {
-            let concepto = new Concepto({ nombre: c[0], imagen: c[1] })
+            let concepto = new Concepto({ _id: c[2], nombre: c[0], imagen: c[1] })
             await concepto.save()
                 .then( result => console.log(results.push(result)))
                 .catch(error => { throw new Error(error) })

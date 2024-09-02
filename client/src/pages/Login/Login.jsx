@@ -40,15 +40,19 @@ export default function Login() {
         const usuario = document.getElementById('login_usuario')
         const password = document.getElementById('login_password')
     
-        const response = await fetch(`${import.meta.env.VITE_API_HOST}${tipoUsuario === 0 ? `acomodadores/usuario/${usuario.value}/password/${password.value}` : `camping/usuario/${usuario.value}/password/${password.value}`}`)
-        const data = await response.json()
-    
-        if (data.status === 'ok') {
-            loginContext[1]([data.results._id, tipoUsuario])
-            sessionStorage.setItem("usuario", [data.results._id, tipoUsuario].toString())
-            navigate('/principal/entradas/reservas-sin-llegar')
+        if (usuario.value && password.value) {
+            const response = await fetch(`${import.meta.env.VITE_API_HOST}${tipoUsuario === 0 ? `acomodadores/usuario/${usuario.value}/password/${password.value}` : `camping/usuario/${usuario.value}/password/${password.value}`}`)
+            const data = await response.json()
+        
+            if (data.status === 'ok') {
+                loginContext[1]([data.results._id, tipoUsuario])
+                sessionStorage.setItem("usuario", [data.results._id, tipoUsuario].toString())
+                navigate('/principal/entradas/reservas-sin-llegar')
+            } else {
+                setErrorLogin(data.message)
+            }
         } else {
-            setErrorLogin(data.message)
+            setErrorLogin("Debes rellenar todos los campos")
         }
     }
 
@@ -82,7 +86,7 @@ export default function Login() {
                 <div>
                     <h2>Crea desde aquí la cuenta de tu camping</h2>
                     <a href='/registro-camping'>REGISTRATE</a>
-                    <p>¿Aún no tienes cuenta?<br/><br/>Si eres acomodador deberás de pedirle al daministrador de tu camping que te cree una cuenta y acceder desde esta misma página.<br/><br/>Si por otro lado, quieres registrar tu camping, puedes hacerlo a través del botón de arriba.</p>
+                    <p>¿Aún no tienes cuenta?<br/><br/>Si eres acomodador deberás de pedirle al administrador de tu camping que te cree una cuenta y acceder desde esta misma página.<br/><br/>Si por otro lado, quieres registrar tu camping, puedes hacerlo a través del botón de arriba.</p>
                     <img src="/camper-artistica.png" alt="CAMPER-ARTISTICA" />
                 </div>
             </section>

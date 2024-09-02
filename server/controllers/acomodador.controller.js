@@ -36,6 +36,9 @@ const registrarAcomodadores = (req, res, next) => {
             
             const password_acomodador = crearPasswordAleatorio()
 
+            // Se muestra por consola el usuario y contraseña creados ya que a veces falla el sistema de email.
+            console.log(`ACOMODADOR:\nusuario: ${usuario_acomodador}\nconstraseña: ${password_acomodador}`)
+
             bcrypt.hash(password_acomodador, 10)
                 .then(async password_acomodador_encriptada => {
                     const new_acomodador = new Acomodador({
@@ -286,7 +289,8 @@ const actualizarAcomodadoresCamping = async (req, res, next) => {
                         } while(existe)
                         const password_acomodador = crearPasswordAleatorio()
 
-                        console.log(usuario_acomodador, password_acomodador)
+                        // Se muestra por consola el usuario y contraseña creados ya que a veces falla el sistema de email.
+                        console.log(`ACOMODADOR:\nusuario: ${usuario_acomodador}\nconstraseña: ${password_acomodador}`)
 
                         bcrypt.hash(password_acomodador, 10)
                             .then(async password_acomodador_encriptada => {
