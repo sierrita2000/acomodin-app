@@ -117,8 +117,6 @@ export default function Estancia () {
             return false
         }
 
-        console.log(new Date(fechaInicio) > new Date(fechaFin))
-
         return true
     }
 

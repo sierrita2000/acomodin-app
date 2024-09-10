@@ -11,7 +11,7 @@ export default function CalendarioReservas () {
     * @returns String
     */
     const formatearFecha = (fecha) => {
-        return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() + 1 < 10) ? '0' : ''}${fecha.getDate()}`
+        return `${fecha.getFullYear()}-${((fecha.getMonth() + 1) < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() < 10) ? '0' : ''}${fecha.getDate()}`
     }
 
     const [ fechaInicio, setFechaInicio ] = useState(formatearFecha(new Date()))

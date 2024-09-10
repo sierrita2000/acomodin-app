@@ -75,7 +75,7 @@ const crearEstancia = async (req, res, next) => {
     try {
         const { estancia, estancia_accion } = req.body
 
-        const tipos_acomodacion_estancia = estancia.conceptos.filter(c => ['665a0165c5f8973c88844b82', '665a0165c5f8973c88844b81', '665a0165c5f8973c88844b86', '665a0165c5f8973c88844b85', '665a0165c5f8973c88844b87', '665a0165c5f8973c88844b84', '665a0165c5f8973c88844b83'].includes(c[0])).map(tipo => tipo[0])
+        const tipos_acomodacion_estancia = estancia.conceptos.filter(c => (['665a0165c5f8973c88844b82', '665a0165c5f8973c88844b81', '665a0165c5f8973c88844b86', '665a0165c5f8973c88844b85', '665a0165c5f8973c88844b87', '665a0165c5f8973c88844b84', '665a0165c5f8973c88844b83'].includes(c[0]) && (c[1] > 0))).map(tipo => tipo[0])
 
         huecosLibresCampingPorFecha(estancia.id_camping, estancia.fecha_inicio, estancia.fecha_fin) // Comprobamos si queda hueco libre en el camping
             .then(resultHuecosLibresCamping => {
@@ -469,7 +469,7 @@ module.exports = { devolverEstanciaActualYReservasFuturasDeParcela, crearEstanci
 * @returns String
 */
 const formatearFecha = (fecha) => {
-    return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() + 1 < 10) ? '0' : ''}${fecha.getDate()}`
+    return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() < 10) ? '0' : ''}${fecha.getDate()}`
 }
 
 /**
@@ -649,7 +649,7 @@ const parcelasLibresPorFechaYTipos = async (id_camping, fecha_inicio, fecha_fin,
     const resultsEstancias = await Estancia.find({ id_camping }).exec()
 
     if(resultsEstancias.length > 0) {
-        // Estancias con parcela asignada dentro de las fechas
+        // Estancias para esas fechas
         const estancias_dentro_de_fecha = resultsEstancias.filter(estancia => (estancia.parcela) && ((new Date(estancia.fecha_inicio) < fecha_fin_nueva_estancia) && (new Date(estancia.fecha_fin) > fecha_inicio_nueva_estancia)))
         
         // Parcelas ocupadas dentro de las fechas
@@ -675,39 +675,4 @@ const parcelasLibresPorFechaYTipos = async (id_camping, fecha_inicio, fecha_fin,
     }
 
     return lista_parcelas
-}
-
-/**
- * Devuelve las estancias sin parcela asignada que incluyan los tipos dados entre dos fechas
- * @param {string} id_camping 
- * @param {Date} fecha_inicio 
- * @param {Date} fecha_fin 
- * @param {Array} tipos 
- * @returns Array 
- */
-const reservasSinParcelaPorFechaYtipo = async (id_camping, fecha_inicio, fecha_fin, tipos) => {
-    let lista_estancias = new Array()
-
-    const fecha_inicio_nueva_estancia = new Date(fecha_inicio)
-    const fecha_fin_nueva_estancia = new Date(fecha_fin)
-
-    const resultsEstancias = await Estancia.find({ id_camping, parcela: null }).exec()
-
-    if(resultsEstancias.length > 0) {
-        // Estancias dentro de fechas sin parcela asignada
-        const estancias_dentro_de_fecha = resultsEstancias.filter(estancia => (new Date(estancia.fecha_inicio) < fecha_fin_nueva_estancia) && (new Date(estancia.fecha_fin) > fecha_inicio_nueva_estancia))
-    
-        // Sacamos las estancias que incluyan los tipos de la reserva
-        estancias_dentro_de_fecha.forEach(estancia => {
-            let estancia_valida = true
-
-            tipos.forEach(tipo => {
-                if(!estancia.conceptos.includes(tipo)) estancia_valida = false
-            })
-
-            estancia_valida && lista_estancias.push(estancia)
-        })
-    }
-
-    return lista_estancias
 }

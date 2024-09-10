@@ -38,7 +38,7 @@ export function SalidasSinRealizar () {
 
             fetch(`${import.meta.env.VITE_API_HOST}estancias/devolver-entradas-hoy-sin-salir/id_camping/${dataCamping?.results._id}`)
                 .then(response => response.json())
-                .then(data => setEntradas(data.results))
+                .then(data => {setEntradas(data.results); console.log(data)})
                 .finally(() => setLoading(false))
         }
     }, [dataCamping, location])
@@ -65,7 +65,7 @@ export function SalidasRealizadas () {
      * @returns String
      */
     const formatearFecha = (fecha) => {
-        return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() + 1 < 10) ? '0' : ''}${fecha.getDate()}`
+        return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() < 10) ? '0' : ''}${fecha.getDate()}`
     }
 
     useEffect(() => {

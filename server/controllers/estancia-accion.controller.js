@@ -47,7 +47,7 @@ const crearLlegadaSalidaReserva = async (req, res, next) => {
         })
 
         if(estado === 'entrada') {
-            estanciaParcelaEnFecha(parcela, formatearFecha(new Date()))
+            estanciaParcelaEnFecha(parcela, formatearFecha(new Date()), id_estancia)
                 .then(async estancia_parcela => {
                     if(!estancia_parcela) {
                         await obj_estancia_accion.save()
@@ -121,14 +121,15 @@ module.exports = { devolverEstanciaPorIdAccion, crearLlegadaSalidaReserva, desha
  * @param {Date} fecha
  * @returns Object
  */
-const estanciaParcelaEnFecha = async (parcela, fecha) => {
+const estanciaParcelaEnFecha = async (parcela, fecha, id_estancia) => {
     let estancia = null
     const fecha_ = new Date(fecha)
 
     const resultsEstancias = await Estancia.find({ parcela }).exec()
+    const estancia_en_fecha = resultsEstancias.filter(e => e._id != id_estancia)
 
-    if (resultsEstancias.length > 0) {
-        estancia = resultsEstancias.find(estancia => (new Date(estancia.fecha_inicio) <= fecha_) && (new Date(estancia.fecha_fin) >= fecha_))
+    if (estancia_en_fecha.length > 0) {
+        estancia = estancia_en_fecha.find(estancia => (new Date(estancia.fecha_inicio) <= fecha_) && (new Date(estancia.fecha_fin) >= fecha_))
         if(estancia) {
             const estancia_accion = await EstanciasAccion.find({ id_estancia: estancia._id }).exec()
             estancia = { estancia, estancia_accion }
@@ -143,5 +144,5 @@ const estanciaParcelaEnFecha = async (parcela, fecha) => {
 * @returns String
 */
 const formatearFecha = (fecha) => {
-    return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() + 1 < 10) ? '0' : ''}${fecha.getDate()}`
+    return `${fecha.getFullYear()}-${(fecha.getMonth() + 1 < 10) ? '0' : ''}${fecha.getMonth() + 1}-${(fecha.getDate() < 10) ? '0' : ''}${fecha.getDate()}`
 }
